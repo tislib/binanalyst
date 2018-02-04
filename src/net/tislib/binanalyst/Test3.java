@@ -3,8 +3,10 @@ package net.tislib.binanalyst;
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
@@ -41,10 +43,14 @@ public class Test3 {
 
     }
 
-    private static Map<Long, Byte> cache = new HashMap<>();
+    private static Map<Holder, Byte> cache = new HashMap<>();
 
     private static byte checkRecursive(long num[], int i) {
-//        if (cache.containsKey(sum(num))) return cache.get(sum(num));
+        Holder holder = new Holder();
+        holder.num = num;
+        holder.i = i;
+        if (cache.containsKey(holder)) return cache.get(holder);
+
         int N = num.length;
         byte r[], ri[], si[] = new byte[N - 1];
 
@@ -55,23 +61,16 @@ public class Test3 {
         }
 
         r = getBits(num, i - 1);
-//        si[0] = checkRecursive(new long[]{
-//                num[0], num[1]
-//        }, i - 1);
-//        si[1] = checkRecursive(new long[]{
-//                num[0], num[1], num[2]
-//        }, i - 1);
-//        si[2] = checkRecursive(new long[]{
-//                num[0], num[1], num[2], num[3]
-//        }, i - 1);
 
-        si[0] = BinValueHelper.getBit(num[0] + num[1], i);
-        si[1] = BinValueHelper.getBit(num[0] + num[1] + num[2], i);
-        si[2] = BinValueHelper.getBit(num[0] + num[1] + num[2] + num[3], i);
+        si[0] = checkRecursive(new long[]{num[0], num[1]}, i - 1);
+        if (si.length > 1)
+            si[1] = checkRecursive(new long[]{num[0], num[1], num[2]}, i - 1);
+        if (si.length > 2)
+            si[2] = checkRecursive(new long[]{num[0], num[1], num[2], num[3]}, i - 1);
 
 
         byte result = BinCalc.getAddMultiPosBit(r, si, ri)[N - 2];
-        cache.put(sum(num), result);
+        cache.put(holder, result);
         return result;
     }
 
@@ -83,13 +82,6 @@ public class Test3 {
         return s;
     }
 
-    private static Long sum(long[] nums) {
-        long s = 0;
-        for (int i = 0; i < nums.length; i++) {
-            s += nums[i];
-        }
-        return s;
-    }
 
 
     public static byte[] getBits(long nums[], int index) {
@@ -98,6 +90,28 @@ public class Test3 {
             bits[i] = BinValueHelper.getBit(nums[i], index);
         }
         return bits;
+    }
+
+    static class Holder {
+        public long num[];
+        public int i;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Holder holder = (Holder) o;
+            return i == holder.i &&
+                    Arrays.equals(num, holder.num);
+        }
+
+        @Override
+        public int hashCode() {
+
+            int result = Objects.hash(i);
+            result = 31 * result + Arrays.hashCode(num);
+            return result;
+        }
     }
 
 }
