@@ -36,13 +36,20 @@ public class Test2 {
 
     }
 
-    private static byte check(long a, long b, long c, long d, int i) {
+
+    public static byte check(long a, long b, long c, long d, int i) {
 
         int N = 4;
         byte r[] = new byte[N], ri[] = new byte[N], si[] = new byte[N - 1];
 
+
+        r[0] = BinValueHelper.getBit(a, i);
+        r[1] = BinValueHelper.getBit(b, i);  // <- x11
+        r[2] = BinValueHelper.getBit(c, i); // <- x21
+        r[3] = BinValueHelper.getBit(d, i);
+
         if (i == 0) {
-            return BinValueHelper.getBit(a + b + c + d, i);
+            return BinValueHelper.getBit(r[0] ^ r[1] ^ r[2] ^ r[3], i);
         }
         i--;
 
