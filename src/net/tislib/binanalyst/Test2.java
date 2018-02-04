@@ -39,33 +39,33 @@ public class Test2 {
 
     private static byte check(long a, long b, long c, long d, int i) {
 
-        long s = a + b ;//+ c;
+        long s = a + b  + c + d;
 
         if (i == 0) {
             return BinValueHelper.getBit(s, i);
         }
         i--;
 
-        int N = 2;
+        int N = 4;
         byte r[] = new byte[N], ri[] = new byte[N], si[] = new byte[N - 1], si1;
 
         r[0] = BinValueHelper.getBit(a, i);
         r[1] = BinValueHelper.getBit(b, i);  // <- x11
-//        r[2] = BinValueHelper.getBit(c, i); // <- x21
-//        r[3] = BinValueHelper.getBit(d, i);
+        r[2] = BinValueHelper.getBit(c, i); // <- x21
+        r[3] = BinValueHelper.getBit(d, i);
         si[0] = BinValueHelper.getBit(a + b, i);
-//        si[1] = BinValueHelper.getBit(a + b + c, i);
-//        si[2] = BinValueHelper.getBit(a + b + c + d, i);
+        si[1] = BinValueHelper.getBit(a + b + c, i);
+        si[2] = BinValueHelper.getBit(a + b + c + d, i);
 
         ri[0] = BinValueHelper.getBit(a, i + 1);
         ri[1] = BinValueHelper.getBit(b, i + 1);
-//        ri[2] = BinValueHelper.getBit(c, i + 1);
-//        ri[3] = BinValueHelper.getBit(d, i + 1);
+        ri[2] = BinValueHelper.getBit(c, i + 1);
+        ri[3] = BinValueHelper.getBit(d, i + 1);
         si1 = BinValueHelper.getBit(s, i + 1);
 
 
-//        byte sip = BinCalc.getAddMultiPosBit(r, si, ri)[N - 2];
-        byte sip = BinCalc.getAddPosBit(r[0], r[1], si[0], ri[0], ri[1]);
+        byte sip = BinCalc.getAddMultiPosBit(r, si, ri)[N - 2];
+//        byte sip = BinCalc.getAddPosBit(r[0], r[1], si[0], ri[0], ri[1]);
         System.out.println(sip == si1);
         return si1;
 
