@@ -73,8 +73,23 @@ public class BinValueHelper {
     public static void print(byte[] binArr) {
         System.out.print("0x");
         for (int i = 0; i < binArr.length; i++) {
-            System.out.print(binArr[binArr.length - i - 1]);
+            System.out.print(binArr[i]);
         }
         System.out.println();
+    }
+
+    public static void printError(byte[] res, long s) {
+        byte[] binArr = getBinArray(s);
+        if (binArr.length != res.length) {
+            System.out.println("different length!");
+            return;
+        }
+        for (int i = 0; i < binArr.length; i++) {
+            if (res[i] != binArr[i]) {
+                System.out.println("First error on: " + i);
+                return;
+            }
+        }
+        System.out.println("SAME!");
     }
 }
