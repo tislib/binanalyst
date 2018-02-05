@@ -11,6 +11,15 @@ public class BinCalc {
         return (byte) (ai1 ^ bi1 ^ ((ai | bi) & ((ai & bi) | ~si)));
     }
 
+     public static Bit getAddPosBit(Bit ai, Bit bi, Bit si, Bit ai1, Bit bi1) {
+
+//        return  (ai1 ^ bi1 ^ ((ai | bi) & ((ai & bi) | ~si)));
+         return null;
+    }
+
+
+
+
     public static byte[] getAddMultiPosBit(byte ri[], byte[] si, byte ri1[]) {
         if (ri.length != ri1.length) {
             throw new RuntimeException("incorrect parameter length");

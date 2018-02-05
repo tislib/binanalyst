@@ -16,10 +16,10 @@ public class Test3 {
 
     public static void main(String... args) {
 
-        long a = 433235423;
-        long b = 784341251;
+        long a = 433235823;
+        long b = 784871251;
         long c = 243434878;
-        long d = 134653421;
+        long d = 136553421;
         long s = a + b + c + d;
 
         BinValueHelper.print(a);
@@ -40,6 +40,7 @@ public class Test3 {
         }
         BinValueHelper.print(res);
         BinValueHelper.printError(res, s);
+        System.out.println(cache.size() + " OPS");
 
     }
 

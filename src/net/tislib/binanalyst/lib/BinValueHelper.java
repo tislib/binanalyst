@@ -70,11 +70,20 @@ public class BinValueHelper {
         return num;
     }
 
+    private static long toLong(Bit[] bits) {
+        long num = 0;
+        for (int i = 0; i < bits.length; i++) {
+            num += (bits[bits.length - i - 1].getValue() ? 1 : 0) * (1 << i);
+        }
+        return num;
+    }
+
     public static void print(byte[] binArr) {
         System.out.print("0x");
         for (int i = 0; i < binArr.length; i++) {
             System.out.print(binArr[i]);
         }
+        System.out.print(" : " + toLong(binArr));
         System.out.println();
     }
 
@@ -92,4 +101,14 @@ public class BinValueHelper {
         }
         System.out.println("SAME!");
     }
+
+    public static void print(Bit... bits) {
+        System.out.print("0x");
+        for (int i = 0; i < bits.length; i++) {
+            System.out.print(bits[i].getValue() ? "1" : "0");
+        }
+        System.out.print(" : " + toLong(bits));
+        System.out.println();
+    }
+
 }
