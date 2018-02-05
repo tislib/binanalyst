@@ -6,7 +6,7 @@ package net.tislib.binanalyst.lib;
  */
 public class BitOps {
 
-    private static BitOpsCalculator calculator = new SimpleBitOpsCalculator();
+    private static GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
     public static Bit xor(Bit... bits) {
         return calculator.xor(bits);
