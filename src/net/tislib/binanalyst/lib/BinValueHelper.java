@@ -77,7 +77,7 @@ public class BinValueHelper {
         return num;
     }
 
-    private static long toLong(Bit[] bits) {
+    public static long toLong(Bit[] bits) {
         long num = 0;
         for (int i = 0; i < bits.length; i++) {
             num += (bits[bits.length - i - 1].getValue() ? 1 : 0) * (1 << i);
@@ -127,10 +127,33 @@ public class BinValueHelper {
     public static void print(Bit... bits) {
         System.out.print("0x");
         for (int i = 0; i < bits.length; i++) {
-            System.out.print(bits[i].getValue() ? "1" : "0");
+            System.out.print(bits[i].toString());
         }
         System.out.print(" : " + toLong(bits));
         System.out.println();
     }
 
+    public static Bit[] getBits(long num) {
+        return BitOps.wrap(getBinArray(num));
+    }
+
+    public static void print(Bit[][] m) {
+        for (Bit[] line : m) {
+            print(line);
+        }
+    }
+
+    public static Bit[] trim(Bit[] bits) {
+        int i = 0;
+        for (; i < bits.length; i++) {
+            if (bits[i].getValue()) {
+                break;
+            }
+        }
+        Bit[] newBits = new Bit[bits.length - i];
+        for (int j = 0; j < bits.length - i; j++) {
+            newBits[j] = bits[i + j];
+        }
+        return newBits;
+    }
 }

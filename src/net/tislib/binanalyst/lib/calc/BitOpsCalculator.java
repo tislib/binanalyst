@@ -1,4 +1,6 @@
-package net.tislib.binanalyst.lib;
+package net.tislib.binanalyst.lib.calc;
+
+import net.tislib.binanalyst.lib.Bit;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.

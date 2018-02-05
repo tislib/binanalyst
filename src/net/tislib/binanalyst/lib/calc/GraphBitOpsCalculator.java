@@ -1,12 +1,16 @@
-package net.tislib.binanalyst.lib;
+package net.tislib.binanalyst.lib.calc;
 
-import static net.tislib.binanalyst.lib.ConstantBit.*;
+import net.tislib.binanalyst.lib.Bit;
+import net.tislib.binanalyst.lib.CompositeBit;
+
+import static net.tislib.binanalyst.lib.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
  * Email: me@talehibrahimli.com
  */
-public class SimpleBitOpsCalculator implements BitOpsCalculator {
+public class GraphBitOpsCalculator implements BitOpsCalculator {
     @Override
     public Bit xor(Bit... bits) {
         CompositeBit compositeBit = new CompositeBit();

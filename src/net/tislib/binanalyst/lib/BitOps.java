@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib;
 
+import net.tislib.binanalyst.lib.calc.GraphBitOpsCalculator;
+
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
  * Email: me@talehibrahimli.com
