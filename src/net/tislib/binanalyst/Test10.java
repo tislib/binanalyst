@@ -11,7 +11,7 @@ import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
  * Created by Taleh Ibrahimli on 2/4/18.
  * Email: me@talehibrahimli.com
  */
-public class Test8 {
+public class Test10 {
 
     public static void main(String... args) {
 
@@ -26,23 +26,12 @@ public class Test8 {
         System.out.print("Pre:");
 
 
-        Bit M[][] = BinMul.getMultiplicationMatrix(trim(getBits(a)), trim(getBits(b)));
-
-        Bit[] r = BinAdd.add(M);
+        Bit[] r = BinMul.multiply(trim(getBits(a)), trim(getBits(b)));
 
         print(c);
         print(r);
         printError(r, c);
 
-//        print(M);
     }
-
-
-    private static Bit mul(long a, long b, int i) {
-        Bit M[][] = BinMul.getMultiplicationMatrix(getBits(a), getBits(b));
-
-        return ZERO;
-    }
-
 
 }

@@ -3,6 +3,7 @@ package net.tislib.binanalyst.lib;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.tislib.binanalyst.lib.BitOps.wrap;
 import static net.tislib.binanalyst.lib.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
 
@@ -110,13 +111,14 @@ public class BinValueHelper {
     }
 
     public static void printError(Bit[] res, long s) {
-        byte[] binArr = getBinArray(s);
-        if (binArr.length != res.length) {
+        res = trim(res);
+        Bit[] bitArr = trim(wrap(getBinArray(s)));
+        if (bitArr.length != res.length) {
             System.out.println("different length!");
             return;
         }
-        for (int i = 0; i < binArr.length; i++) {
-            if ((res[i].getValue() ? 1 : 0) != binArr[i]) {
+        for (int i = 0; i < bitArr.length; i++) {
+            if (res[i].getValue() != bitArr[i].getValue()) {
                 System.out.println("First error on: " + i);
                 return;
             }
@@ -134,7 +136,7 @@ public class BinValueHelper {
     }
 
     public static Bit[] getBits(long num) {
-        return BitOps.wrap(getBinArray(num));
+        return wrap(getBinArray(num));
     }
 
     public static void print(Bit[][] m) {

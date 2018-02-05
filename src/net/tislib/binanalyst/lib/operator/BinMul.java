@@ -36,4 +36,8 @@ public class BinMul {
 
         return M;
     }
+
+    public static Bit[] multiply(Bit[] a, Bit[] b) {
+        return BinAdd.add(getMultiplicationMatrix(a, b));
+    }
 }
