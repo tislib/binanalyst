@@ -28,4 +28,28 @@ public class BitOps {
         return calculator.equal(bits);
     }
 
+    public static Bit wrap(byte num) {
+        return calculator.wrap(num);
+    }
+
+    public static Bit[] wrap(byte... nums) {
+        Bit bits[] = new Bit[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            bits[i] = wrap(nums[i]);
+        }
+        return bits;
+    }
+
+    public static byte convert(Bit bit) {
+        return (byte) (bit.getValue() ? 1 : 0);
+    }
+
+    public static byte[] convert(Bit... bits) {
+        byte nums[] = new byte[bits.length];
+        for (int i = 0; i < bits.length; i++) {
+            nums[i] = convert(bits[i]);
+        }
+        return nums;
+    }
+
 }

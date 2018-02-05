@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib;
 
+import static net.tislib.binanalyst.lib.BitOps.*;
+
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
  * Email: me@talehibrahimli.com
@@ -8,27 +10,27 @@ public class BinCalc {
 
 
     public static byte getAddPosBit(byte ai, byte bi, byte si, byte ai1, byte bi1) {
-        return (byte) (ai1 ^ bi1 ^ ((ai | bi) & ((ai & bi) | ~si)));
+        return convert(getAddPosBit(wrap(ai), wrap(bi), wrap(si), wrap(ai1), wrap(bi1)));
     }
 
-     public static Bit getAddPosBit(Bit ai, Bit bi, Bit si, Bit ai1, Bit bi1) {
-
-//        return  (ai1 ^ bi1 ^ ((ai | bi) & ((ai & bi) | ~si)));
-         return null;
+    public static Bit getAddPosBit(Bit ai, Bit bi, Bit si, Bit ai1, Bit bi1) {
+        return xor(ai1, bi1, and(or(ai, bi), (or(and(ai, bi), not(si)))));
     }
-
-
 
 
     public static byte[] getAddMultiPosBit(byte ri[], byte[] si, byte ri1[]) {
+        return convert(getAddMultiPosBit(wrap(ri), wrap(si), wrap(ri1)));
+    }
+
+    public static Bit[] getAddMultiPosBit(Bit ri[], Bit[] si, Bit ri1[]) {
         if (ri.length != ri1.length) {
             throw new RuntimeException("incorrect parameter length");
         }
         if (ri.length == 2) {
-            byte res = getAddPosBit(ri[0], ri[1], si[0], ri1[0], ri1[1]);
-            return new byte[]{res};
+            Bit res = getAddPosBit(ri[0], ri[1], si[0], ri1[0], ri1[1]);
+            return new Bit[]{res};
         }
-        byte xi[] = new byte[ri.length - 1];
+        Bit xi[] = new Bit[ri.length - 1];
 
 
         xi[0] = getAddPosBit(ri[0], ri[1], si[0], ri1[0], ri1[1]);

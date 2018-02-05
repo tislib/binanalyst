@@ -2,6 +2,10 @@ package net.tislib.binanalyst;
 
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
+import net.tislib.binanalyst.lib.Bit;
+
+import static net.tislib.binanalyst.lib.BinValueHelper.getConstBit;
+import static net.tislib.binanalyst.lib.BitOps.equal;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
@@ -11,8 +15,8 @@ public class Test5 {
 
     public static void main(String... args) {
 
-        long a = 4332323;
-        long b = 7843451;
+        long a = 4332327;
+        long b = 7843651;
         long c = a + b;
 
         BinValueHelper.print(a);
@@ -31,20 +35,20 @@ public class Test5 {
 
         long c = a + b;
 
-        byte ai, bi, ci, ai1, bi1, ci1;
+        Bit ai, bi, ci, ai1, bi1, ci1;
 
-        ai = BinValueHelper.getBit(a, i);
-        bi = BinValueHelper.getBit(b, i);
-        ci = BinValueHelper.getBit(c, i);
-        ai1 = BinValueHelper.getBit(a, i + 1);
-        bi1 = BinValueHelper.getBit(b, i + 1);
-        ci1 = BinValueHelper.getBit(c, i + 1);
+        ai = getConstBit(a, i);
+        bi = getConstBit(b, i);
+        ci = getConstBit(c, i);
+        ai1 = getConstBit(a, i + 1);
+        bi1 = getConstBit(b, i + 1);
+        ci1 = getConstBit(c, i + 1);
 
-        byte cip = BinCalc.getAddPosBit(ai, bi, ci, ai1, bi1);
-        if(cip != ci1){
+        Bit cip = BinCalc.getAddPosBit(ai, bi, ci, ai1, bi1);
+        if (!equal(cip, ci1).getValue()) {
             System.out.println(cip + " <> " + ci1);
         }
-        return cip == ci1;
+        return equal(cip, ci1).getValue();
 
     }
 

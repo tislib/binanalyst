@@ -3,6 +3,9 @@ package net.tislib.binanalyst.lib;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.tislib.binanalyst.lib.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
+
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
  * Email: me@talehibrahimli.com
@@ -53,6 +56,10 @@ public class BinValueHelper {
         return binArr[index];
     }
 
+    public static Bit getConstBit(long a, int i) {
+        return getBit(a, i) == 0 ? ZERO : ONE;
+    }
+
     public static byte xor(byte ai, byte bi) {
         return (byte) ((ai + bi) % 2);
     }
@@ -95,6 +102,21 @@ public class BinValueHelper {
         }
         for (int i = 0; i < binArr.length; i++) {
             if (res[i] != binArr[i]) {
+                System.out.println("First error on: " + i);
+                return;
+            }
+        }
+        System.out.println("SAME!");
+    }
+
+    public static void printError(Bit[] res, long s) {
+        byte[] binArr = getBinArray(s);
+        if (binArr.length != res.length) {
+            System.out.println("different length!");
+            return;
+        }
+        for (int i = 0; i < binArr.length; i++) {
+            if ((res[i].getValue() ? 1 : 0) != binArr[i]) {
                 System.out.println("First error on: " + i);
                 return;
             }
