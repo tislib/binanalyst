@@ -1,9 +1,9 @@
 package net.tislib.binanalyst.lib.operator;
 
-import net.tislib.binanalyst.lib.Bit;
+import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.BitOps;
 
-import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/6/18.

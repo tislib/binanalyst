@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib;
 
+import net.tislib.binanalyst.lib.bit.Bit;
+
 import static net.tislib.binanalyst.lib.BitOps.*;
 
 /**

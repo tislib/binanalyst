@@ -1,11 +1,14 @@
 package net.tislib.binanalyst.lib;
 
+import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.VarBit;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static net.tislib.binanalyst.lib.BitOps.wrap;
-import static net.tislib.binanalyst.lib.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
@@ -135,6 +138,24 @@ public class BinValueHelper {
         System.out.println();
     }
 
+    public static void printSpaced(Bit... bits) {
+        System.out.print("0x");
+        for (int i = 0; i < bits.length; i++) {
+            System.out.print(bits[i].toString() + "     ");
+        }
+        System.out.print(" : " + toLong(bits));
+        System.out.println();
+    }
+
+    public static void printValues(Bit... bits) {
+        System.out.print("0x");
+        for (int i = 0; i < bits.length; i++) {
+            System.out.print(bits[i].getValue() ? "1" : "0");
+        }
+        System.out.print(" : " + toLong(bits));
+        System.out.println();
+    }
+
     public static Bit[] getBits(long num) {
         return wrap(getBinArray(num));
     }
@@ -157,5 +178,13 @@ public class BinValueHelper {
             newBits[j] = bits[i + j];
         }
         return newBits;
+    }
+
+    public static void setVal(VarBit[] bits, long value) {
+        Bit[] bitArr = trim(wrap(getBinArray(value)));
+        for (int i = 0; i < Math.min(bitArr.length, bits.length); i++) {
+            boolean val = bitArr[bitArr.length - 1 - i].getValue();
+            bits[bits.length - 1 - i].setValue(val);
+        }
     }
 }

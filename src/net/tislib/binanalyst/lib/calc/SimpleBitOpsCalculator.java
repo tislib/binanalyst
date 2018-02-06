@@ -1,9 +1,9 @@
 package net.tislib.binanalyst.lib.calc;
 
-import net.tislib.binanalyst.lib.Bit;
-import net.tislib.binanalyst.lib.CompositeBit;
+import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.CompositeBit;
 
-import static net.tislib.binanalyst.lib.ConstantBit.*;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.*;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.

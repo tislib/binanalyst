@@ -1,8 +1,7 @@
 package net.tislib.binanalyst;
 
 import net.tislib.binanalyst.lib.BinCalc;
-import net.tislib.binanalyst.lib.Bit;
-import net.tislib.binanalyst.lib.BitOps;
+import net.tislib.binanalyst.lib.bit.Bit;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.*;
 import static net.tislib.binanalyst.lib.BitOps.xor;

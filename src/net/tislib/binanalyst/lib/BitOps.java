@@ -1,5 +1,6 @@
 package net.tislib.binanalyst.lib;
 
+import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.calc.GraphBitOpsCalculator;
 
 /**

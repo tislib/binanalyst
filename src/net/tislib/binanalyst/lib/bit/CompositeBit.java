@@ -1,6 +1,4 @@
-package net.tislib.binanalyst.lib;
-
-import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
+package net.tislib.binanalyst.lib.bit;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.

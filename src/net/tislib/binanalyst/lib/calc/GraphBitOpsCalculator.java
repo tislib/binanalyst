@@ -1,10 +1,11 @@
 package net.tislib.binanalyst.lib.calc;
 
-import net.tislib.binanalyst.lib.Bit;
-import net.tislib.binanalyst.lib.CompositeBit;
+import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.CompositeBit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
 
-import static net.tislib.binanalyst.lib.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
@@ -13,44 +14,27 @@ import static net.tislib.binanalyst.lib.ConstantBit.ZERO;
 public class GraphBitOpsCalculator implements BitOpsCalculator {
     @Override
     public Bit xor(Bit... bits) {
-        CompositeBit compositeBit = new CompositeBit();
-        for (Bit bit : bits) {
-            if (bit.getValue()) compositeBit.setValue(!compositeBit.getValue());
-        }
-        return compositeBit;
+        return OperationalBit.xor(bits);
     }
 
     @Override
     public Bit and(Bit... bits) {
-        for (Bit bit : bits) {
-            if (!bit.getValue()) {
-                return ZERO;
-            }
-        }
-        return ONE;
+        return OperationalBit.and(bits);
     }
 
     @Override
     public Bit or(Bit... bits) {
-        for (Bit bit : bits) {
-            if (bit.getValue()) {
-                return ONE;
-            }
-        }
-        return ZERO;
+        return OperationalBit.or(bits);
     }
 
     @Override
     public Bit not(Bit bit) {
-        return new CompositeBit(!bit.getValue());
+        return OperationalBit.not(bit);
     }
 
     @Override
     public Bit equal(Bit... bits) {
-        for (Bit bit : bits) {
-            if (xor(bits[0], bit).getValue()) return ZERO;
-        }
-        return ONE;
+        return OperationalBit.equal(bits);
     }
 
     @Override
