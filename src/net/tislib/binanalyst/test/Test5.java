@@ -1,8 +1,9 @@
-package net.tislib.binanalyst;
+package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.getConstBit;
 import static net.tislib.binanalyst.lib.BitOps.equal;
@@ -44,11 +45,11 @@ public class Test5 {
         bi1 = getConstBit(b, i + 1);
         ci1 = getConstBit(c, i + 1);
 
-        Bit cip = BinCalc.getAddPosBit(ai, bi, ci, ai1, bi1);
-        if (!equal(cip, ci1).getValue()) {
+        Bit cip = BinCalc.getAddPosBit(BitOpsCalculator.getDefault(), ai, bi, ci, ai1, bi1);
+        if (!equal(BitOpsCalculator.getDefault(), cip, ci1).getValue()) {
             System.out.println(cip + " <> " + ci1);
         }
-        return equal(cip, ci1).getValue();
+        return equal(BitOpsCalculator.getDefault(), cip, ci1).getValue();
 
     }
 

@@ -22,6 +22,9 @@ public class SimpleBitOpsCalculator implements BitOpsCalculator {
     @Override
     public Bit and(Bit... bits) {
         for (Bit bit : bits) {
+            if(bit == null){
+                throw new RuntimeException();
+            }
             if (!bit.getValue()) {
                 return ZERO;
             }

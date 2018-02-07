@@ -1,8 +1,9 @@
-package net.tislib.binanalyst;
+package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class Test7 {
             }, i);
         }
         BinValueHelper.print(res);
-        BinValueHelper.printError(res, s);
+        BinValueHelper.printError(BitOpsCalculator.getDefault(), res, s);
         System.out.println(cache.size() + " OPS");
 
     }
@@ -61,7 +62,7 @@ public class Test7 {
         ri = getConstBits(num, i);
 
         if (i == 0) {
-            return xor(ri);
+            return xor(BitOpsCalculator.getDefault(), ri);
         }
 
         r = getConstBits(num, i - 1);
@@ -73,7 +74,7 @@ public class Test7 {
             si[2] = checkRecursive(new long[]{num[0], num[1], num[2], num[3]}, i - 1);
 
 
-        Bit result = BinCalc.getAddMultiPosBit(r, si, ri)[N - 2];
+        Bit result = BinCalc.getAddMultiPosBit(BitOpsCalculator.getDefault(), r, si, ri)[N - 2];
         cache.put(holder, result);
         return result;
     }

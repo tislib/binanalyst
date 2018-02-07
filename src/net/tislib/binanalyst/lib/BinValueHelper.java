@@ -2,6 +2,7 @@ package net.tislib.binanalyst.lib;
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,9 +114,9 @@ public class BinValueHelper {
         System.out.println("SAME!");
     }
 
-    public static void printError(Bit[] res, long s) {
+    public static void printError(BitOpsCalculator calculator, Bit[] res, long s) {
         res = trim(res);
-        Bit[] bitArr = trim(wrap(getBinArray(s)));
+        Bit[] bitArr = trim(wrap(calculator, getBinArray(s)));
         if (bitArr.length != res.length) {
             System.out.println("different length!");
             return;
@@ -139,12 +140,9 @@ public class BinValueHelper {
     }
 
     public static void printSpaced(Bit... bits) {
-        System.out.print("0x");
         for (int i = 0; i < bits.length; i++) {
-            System.out.print(bits[i].toString() + "     ");
+            System.out.println(i + ":" + bits[i].toString());
         }
-        System.out.print(" : " + toLong(bits));
-        System.out.println();
     }
 
     public static void printValues(Bit... bits) {
@@ -156,8 +154,8 @@ public class BinValueHelper {
         System.out.println();
     }
 
-    public static Bit[] getBits(long num) {
-        return wrap(getBinArray(num));
+    public static Bit[] getBits(BitOpsCalculator calculator, long num) {
+        return wrap(calculator, getBinArray(num));
     }
 
     public static void print(Bit[][] m) {
@@ -180,8 +178,8 @@ public class BinValueHelper {
         return newBits;
     }
 
-    public static void setVal(VarBit[] bits, long value) {
-        Bit[] bitArr = trim(wrap(getBinArray(value)));
+    public static void setVal(BitOpsCalculator calculator, VarBit[] bits, long value) {
+        Bit[] bitArr = trim(wrap(calculator, getBinArray(value)));
         for (int i = 0; i < Math.min(bitArr.length, bits.length); i++) {
             boolean val = bitArr[bitArr.length - 1 - i].getValue();
             bits[bits.length - 1 - i].setValue(val);

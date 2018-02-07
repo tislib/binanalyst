@@ -17,31 +17,30 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 public final class OperationalBit implements Bit {
     private final Bit[] bits;
     private final Operation operation;
-    private static final BitOpsCalculator calculator = new SimpleBitOpsCalculator();
 
-    private OperationalBit(Operation operation, Bit... bits) {
+    private OperationalBit(Operation operation,Bit... bits) {
         this.bits = bits;
         this.operation = operation;
     }
 
     public static Bit and(Bit... bits) {
-        return new OperationalBit(Operation.AND, bits);
+        return new OperationalBit(Operation.AND,  bits);
     }
 
     public static Bit or(Bit... bits) {
-        return new OperationalBit(Operation.OR, bits);
+        return new OperationalBit(Operation.OR,  bits);
     }
 
     public static Bit not(Bit bit) {
-        return new OperationalBit(Operation.NOT, bit);
+        return new OperationalBit(Operation.NOT,  bit);
     }
 
     public static Bit equal(Bit bitA, Bit bitB) {
-        return or(and(bitA, bitB), and(not(bitA), not(bitB)));
+        return or( and( bitA, bitB), and( not( bitA), not( bitB)));
     }
 
     public static Bit xor(Bit bitA, Bit bitB) {
-        return or(and(bitA, not(bitB)), and(not(bitA), bitB));
+        return or( and( bitA, not( bitB)), and( not( bitA), bitB));
     }
 
     public static Bit equal(Bit... bits) {
@@ -50,7 +49,7 @@ public final class OperationalBit implements Bit {
         }
         Bit result = bits[0];
         for (int i = 1; i < bits.length; i++) {
-            result = equal(result, bits[i]);
+            result = equal( result, bits[i]);
         }
         return result;
     }
@@ -61,27 +60,16 @@ public final class OperationalBit implements Bit {
         }
         Bit result = bits[0];
         for (int i = 1; i < bits.length; i++) {
-            result = xor(result, bits[i]);
+            result = xor( result, bits[i]);
         }
         return result;
     }
-
-//    public static Bit[] xor(Bit[]... bits) {
-//        Bit[] result = new Bit[bits[0].length];
-//        for (int i = 0; i < bits.length; i++) {
-//            Bit[] barr = new Bit[bits[i].length];
-//            for (int j = 0; j < bits[i].length; j++) {
-//
-//            }
-//        }
-//        return result;
-//    }
-
     public enum Operation {
         AND, OR, NOT
     }
 
     public Bit calculate() {
+        SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
         switch (operation) {
             case OR:
                 return calculator.or(bits);
@@ -97,22 +85,14 @@ public final class OperationalBit implements Bit {
         return calculate().getValue();
     }
 
-    private static final Map<OperationalBit, String> cache = new HashMap<>();
-
     @Override
     public String toString() {
-        if (cache.containsKey(this)) {
-            System.out.println("cached " + cache.get(this));
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return cache.get(this);
-        }
-        String val = getStringValue();
-        cache.put(this, val);
-        return val;
+        return getStringValue();
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 
     private String getStringValue() {
@@ -128,7 +108,7 @@ public final class OperationalBit implements Bit {
                 str = join(bits, " & ");
                 break;
             default:
-                str = "!" + bits[0].toString();
+                str = "~" + bits[0].toString();
                 break;
         }
         if (bits.length > 1) {

@@ -1,7 +1,8 @@
-package net.tislib.binanalyst;
+package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
@@ -66,7 +67,7 @@ public class Test2 {
         ri[2] = BinValueHelper.getBit(c, i + 1);
         ri[3] = BinValueHelper.getBit(d, i + 1);
 
-        return BinCalc.getAddMultiPosBit(r, si, ri)[N - 2];
+        return BinCalc.getAddMultiPosBit(BitOpsCalculator.getDefault(), r, si, ri)[N - 2];
 
     }
 

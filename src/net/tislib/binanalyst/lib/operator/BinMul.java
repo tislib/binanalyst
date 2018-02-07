@@ -2,6 +2,7 @@ package net.tislib.binanalyst.lib.operator;
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.BitOps;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
@@ -16,7 +17,7 @@ public class BinMul {
         return null;
     }
 
-    public static Bit[][] getMultiplicationMatrix(Bit[] a, Bit[] b) {
+    public static Bit[][] getMultiplicationMatrix(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
         int COL_SIZE = a.length + b.length;
 
         Bit[/*ROW*/][/*COLUMN*/] M = new Bit[a.length][COL_SIZE];
@@ -30,14 +31,14 @@ public class BinMul {
             for (int i = 0; i < a.length; i++) { // COLUMN
                 int aIndex = a.length - 1 - i;
                 int bIndex = b.length - 1 - j;
-                M[j][COL_SIZE - i - 1 - j] = BitOps.and(b[bIndex], a[aIndex]);
+                M[j][COL_SIZE - i - 1 - j] = BitOps.and(calculator, b[bIndex], a[aIndex]);
             }
         }
 
         return M;
     }
 
-    public static Bit[] multiply(Bit[] a, Bit[] b) {
-        return BinAdd.add(getMultiplicationMatrix(a, b));
+    public static Bit[] multiply(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
+        return BinAdd.add(calculator, getMultiplicationMatrix(calculator, a, b));
     }
 }

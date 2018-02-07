@@ -1,6 +1,7 @@
-package net.tislib.binanalyst;
+package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.operator.BinAdd;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.*;
@@ -22,10 +23,10 @@ public class Test9 {
         System.out.println("+");
         print(b);
         System.out.println("=");
-        Bit[] r = BinAdd.add(getBits(a), getBits(b), getBits(c));
+        Bit[] r = BinAdd.add(BitOpsCalculator.getDefault(), getBits(BitOpsCalculator.getDefault(), a), getBits(BitOpsCalculator.getDefault(), b), getBits(BitOpsCalculator.getDefault(), c));
         print(s);
         print(r);
-        printError(r, s);
+        printError(BitOpsCalculator.getDefault(), r, s);
 
 
     }

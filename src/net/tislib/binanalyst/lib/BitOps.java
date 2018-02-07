@@ -1,7 +1,7 @@
 package net.tislib.binanalyst.lib;
 
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.calc.GraphBitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
@@ -9,36 +9,36 @@ import net.tislib.binanalyst.lib.calc.GraphBitOpsCalculator;
  */
 public class BitOps {
 
-    private static GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
+//    private static GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
-    public static Bit xor(Bit... bits) {
+    public static Bit xor(BitOpsCalculator calculator, Bit... bits) {
         return calculator.xor(bits);
     }
 
-    public static Bit and(Bit... bits) {
+    public static Bit and(BitOpsCalculator calculator, Bit... bits) {
         return calculator.and(bits);
     }
 
-    public static Bit or(Bit... bits) {
+    public static Bit or(BitOpsCalculator calculator, Bit... bits) {
         return calculator.or(bits);
     }
 
-    public static Bit not(Bit bit) {
+    public static Bit not(BitOpsCalculator calculator, Bit bit) {
         return calculator.not(bit);
     }
 
-    public static Bit equal(Bit... bits) {
+    public static Bit equal(BitOpsCalculator calculator, Bit... bits) {
         return calculator.equal(bits);
     }
 
-    public static Bit wrap(byte num) {
+    public static Bit wrap(BitOpsCalculator calculator, byte num) {
         return calculator.wrap(num);
     }
 
-    public static Bit[] wrap(byte... nums) {
+    public static Bit[] wrap(BitOpsCalculator calculator, byte... nums) {
         Bit bits[] = new Bit[nums.length];
         for (int i = 0; i < nums.length; i++) {
-            bits[i] = wrap(nums[i]);
+            bits[i] = wrap(calculator, nums[i]);
         }
         return bits;
     }

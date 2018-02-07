@@ -1,7 +1,8 @@
-package net.tislib.binanalyst;
+package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class Test3 {
             si[2] = checkRecursive(new long[]{num[0], num[1], num[2], num[3]}, i - 1);
 
 
-        byte result = BinCalc.getAddMultiPosBit(r, si, ri)[N - 2];
+        byte result = BinCalc.getAddMultiPosBit(BitOpsCalculator.getDefault(), r, si, ri)[N - 2];
         cache.put(holder, result);
         return result;
     }
@@ -82,7 +83,6 @@ public class Test3 {
         }
         return s;
     }
-
 
 
     public static byte[] getBits(long nums[], int index) {

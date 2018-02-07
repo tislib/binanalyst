@@ -18,4 +18,8 @@ public interface BitOpsCalculator {
     Bit equal(Bit[] bits);
 
     Bit wrap(Number num);
+
+    static BitOpsCalculator getDefault() {
+        return new SimpleBitOpsCalculator();
+    }
 }

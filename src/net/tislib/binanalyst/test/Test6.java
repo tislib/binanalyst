@@ -1,7 +1,8 @@
-package net.tislib.binanalyst;
+package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.*;
 import static net.tislib.binanalyst.lib.BitOps.xor;
@@ -35,7 +36,7 @@ public class Test6 {
             res[l - i - 1] = check(a, b, c, d, i);
         }
         print(res);
-        printError(res, s);
+        printError(BitOpsCalculator.getDefault(), res, s);
 
     }
 
@@ -52,7 +53,7 @@ public class Test6 {
         r[3] = getConstBit(d, i);
 
         if (i == 0) {
-            return xor(r);
+            return xor(BitOpsCalculator.getDefault(), r);
         }
         i--;
 
@@ -69,7 +70,7 @@ public class Test6 {
         ri[2] = getConstBit(c, i + 1);
         ri[3] = getConstBit(d, i + 1);
 
-        return BinCalc.getAddMultiPosBit(r, si, ri)[N - 2];
+        return BinCalc.getAddMultiPosBit(BitOpsCalculator.getDefault(), r, si, ri)[N - 2];
 
     }
 

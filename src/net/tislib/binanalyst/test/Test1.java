@@ -1,7 +1,8 @@
-package net.tislib.binanalyst;
+package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
@@ -40,8 +41,8 @@ public class Test1 {
         bi1 = BinValueHelper.getBit(b, i + 1);
         ci1 = BinValueHelper.getBit(c, i + 1);
 
-        byte cip = BinCalc.getAddPosBit(ai, bi, ci, ai1, bi1);
-        if(cip != ci1){
+        byte cip = BinCalc.getAddPosBit(BitOpsCalculator.getDefault(), ai, bi, ci, ai1, bi1);
+        if (cip != ci1) {
             System.out.println(cip + " <> " + ci1);
         }
         return cip == ci1;

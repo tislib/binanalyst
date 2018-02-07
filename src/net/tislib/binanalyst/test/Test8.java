@@ -1,6 +1,7 @@
-package net.tislib.binanalyst;
+package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.operator.BinAdd;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
@@ -26,22 +27,14 @@ public class Test8 {
         System.out.print("Pre:");
 
 
-        Bit M[][] = BinMul.getMultiplicationMatrix(trim(getBits(a)), trim(getBits(b)));
+        Bit M[][] = BinMul.getMultiplicationMatrix(BitOpsCalculator.getDefault(), trim(getBits(BitOpsCalculator.getDefault(), a)), trim(getBits(BitOpsCalculator.getDefault(), b)));
 
-        Bit[] r = BinAdd.add(M);
+        Bit[] r = BinAdd.add(BitOpsCalculator.getDefault(), M);
 
         print(c);
         print(r);
-        printError(r, c);
+        printError(BitOpsCalculator.getDefault(), r, c);
 
-//        print(M);
-    }
-
-
-    private static Bit mul(long a, long b, int i) {
-        Bit M[][] = BinMul.getMultiplicationMatrix(getBits(a), getBits(b));
-
-        return ZERO;
     }
 
 

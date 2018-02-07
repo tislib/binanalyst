@@ -23,4 +23,8 @@ public final class ConstantBit implements Bit {
     public String toString() {
         return this == ZERO ? "0" : "1";
     }
+
+    public static Bit not(ConstantBit bit) {
+        return bit == ZERO ? ONE : ZERO;
+    }
 }

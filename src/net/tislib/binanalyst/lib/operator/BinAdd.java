@@ -2,6 +2,7 @@ package net.tislib.binanalyst.lib.operator;
 
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import static net.tislib.binanalyst.lib.BitOps.xor;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
@@ -13,13 +14,13 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 public class BinAdd {
 
 
-    public static Bit[] add(Bit[] a, Bit[] b) {
+    public static Bit[] add(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
         a = flip(a);
         b = flip(b);
         int L = Math.max(a.length, b.length);
         Bit[] result = new Bit[L];
 
-        result[0] = xor(a[0], b[0]);
+        result[0] = xor(calculator, a[0], b[0]);
         for (int i = 0; i < L - 1; i++) {
             Bit ai, bi, ci, ai1, bi1;
 
@@ -31,7 +32,7 @@ public class BinAdd {
 
             ci = result[i];
 
-            Bit r = BinCalc.getAddPosBit(ai, bi, ci, ai1, bi1);
+            Bit r = BinCalc.getAddPosBit(calculator, ai, bi, ci, ai1, bi1);
             result[i + 1] = r;
         }
 
@@ -46,7 +47,7 @@ public class BinAdd {
         return result;
     }
 
-    public static Bit[] add(Bit[]... nums) {
+    public static Bit[] add(BitOpsCalculator calculator, Bit[]... nums) {
         if (nums.length == 0) return new Bit[0];
         if (nums.length == 1) return nums[0];
         int L = maxLength(nums);
@@ -55,7 +56,7 @@ public class BinAdd {
             result[i] = ZERO;
         }
         for (int i = 0; i < nums.length; i++) {
-            result = add(result, nums[i]);
+            result = add(calculator, result, nums[i]);
         }
         return result;
     }

@@ -13,7 +13,7 @@ public class VarBit extends CompositeBit {
 
     @Override
     public String toString() {
-        return getValue() ? "1" : "0";
+        return name;
     }
 
     public static VarBit[] list(String name, int count, Bit initialValue) {
