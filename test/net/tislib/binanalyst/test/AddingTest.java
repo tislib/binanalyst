@@ -3,29 +3,44 @@ package net.tislib.binanalyst.test;
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
  * Email: me@talehibrahimli.com
  */
-public class Test1 {
+@RunWith(Parameterized.class)
+public class AddingTest {
 
-    public static void main(String... args) {
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {4332323, 7843451}, {23121, 13454}, {5462, 232131}, {54543, 2565}, {67674, 2313}, {434345, 4545455}, {6, 82313123}
+        });
+    }
 
-        long a = 4332323;
-        long b = 7843451;
-        long c = a + b;
+    private final long a;
+    private final long b;
 
-        BinValueHelper.print(a);
-        BinValueHelper.print(b);
-        BinValueHelper.print(c);
+    public AddingTest(long a, long b){
+        this.a = a;
+        this.b = b;
+    }
 
+    @Test
+    public void test() {
         int l = BinValueHelper.binLength(a);
 
         for (int i = 0; i < l - 1; i++) {
-            System.out.println((i + 1) + " => " + check(a, b, i));
+            assertTrue(check(a, b, i));
         }
-
     }
 
     private static boolean check(long a, long b, int i) {
@@ -42,9 +57,6 @@ public class Test1 {
         ci1 = BinValueHelper.getBit(c, i + 1);
 
         byte cip = BinCalc.getAddPosBit(BitOpsCalculator.getDefault(), ai, bi, ci, ai1, bi1);
-        if (cip != ci1) {
-            System.out.println(cip + " <> " + ci1);
-        }
         return cip == ci1;
 
     }

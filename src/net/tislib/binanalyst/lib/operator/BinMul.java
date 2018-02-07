@@ -20,10 +20,14 @@ public class BinMul {
     public static Bit[][] getMultiplicationMatrix(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
         int COL_SIZE = a.length + b.length;
 
-        Bit[/*ROW*/][/*COLUMN*/] M = new Bit[a.length][COL_SIZE];
+        Bit[/*ROW*/][/*COLUMN*/] M = new Bit[b.length][COL_SIZE];
         for (int j = 0; j < b.length; j++) { // ROW
             for (int i = 0; i < COL_SIZE; i++) { // COLUMN
-                M[j][i] = ZERO;
+                try {
+                    M[j][i] = ZERO;
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
 
