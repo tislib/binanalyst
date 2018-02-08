@@ -2,14 +2,18 @@ package net.tislib.binanalyst.lib.calc.graph;
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.CompositeBit;
-import net.tislib.binanalyst.lib.bit.ConstantBit;
-import net.tislib.binanalyst.lib.bit.OperationalBit;
+import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
@@ -19,29 +23,77 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
  * Email: me@talehibrahimli.com
  */
 public class GraphBitOpsCalculator implements BitOpsCalculator {
+
+    private final Layer input = new Layer("input");
+    private final Layer middle = new Layer("middle");
+    private final Layer output = new Layer("input");
+
+    private int operationCount = 0;
+
+    public void setInputBits(VarBit[]... bits) {
+        input.setBits(bits);
+    }
+
+    public void setOutputBits(Bit... bits) {
+
+    }
+
     @Override
     public Bit xor(Bit... bits) {
-        return OperationalBit.xor(bits);
+        operationCount += 5;
+        for (Bit bit : bits) {
+            Integer id = getBitId(bit);
+        }
+        CompositeBit compositeBit = new CompositeBit();
+        for (Bit bit : bits) {
+            if (bit.getValue()) compositeBit.setValue(!compositeBit.getValue());
+        }
+        return compositeBit;
+    }
+
+    private Integer getBitId(Bit bit) {
+        Integer id = input.getBitId(bit);
+        return null;
     }
 
     @Override
     public Bit and(Bit... bits) {
-        return OperationalBit.and(bits);
+        operationCount++;
+        for (Bit bit : bits) {
+            if (bit == null) {
+                throw new RuntimeException();
+            }
+            if (!bit.getValue()) {
+                return ZERO;
+            }
+        }
+        return ONE;
     }
 
     @Override
     public Bit or(Bit... bits) {
-        return OperationalBit.or(bits);
+        operationCount++;
+        for (Bit bit : bits) {
+            if (bit.getValue()) {
+                return ONE;
+            }
+        }
+        return ZERO;
     }
 
     @Override
     public Bit not(Bit bit) {
-        return OperationalBit.not(bit);
+        operationCount++;
+        return new CompositeBit(!bit.getValue());
     }
 
     @Override
     public Bit equal(Bit... bits) {
-        return OperationalBit.equal(bits);
+        operationCount += 5;
+        for (Bit bit : bits) {
+            if (xor(bits[0], bit).getValue()) return ZERO;
+        }
+        return ONE;
     }
 
     @Override
@@ -49,96 +101,31 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         return num.longValue() == 0 ? ZERO : ONE;
     }
 
-    public Bit[] simplify(Bit[] bits) {
-        Bit[] newBits = new Bit[bits.length];
-        for (int i = 0; i < bits.length; i++) {
-            if (bits[i] instanceof OperationalBit) {
-                newBits[i] = simplify((OperationalBit) bits[i]);
-            } else {
-                newBits[i] = bits[i];
-            }
-        }
-        return newBits;
+    public void saveState(OutputStream outputStream) throws JAXBException {
+        GraphCalculatorState state = getState();
+
+        JAXBContext jc = JAXBContext.newInstance(GraphCalculatorState.class);
+        Marshaller marshaller = jc.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.marshal(state, outputStream);
     }
 
-    private Bit simplify(OperationalBit opBit) {
-        Bit result = simplifyX(opBit);
-        if (result instanceof OperationalBit) {
-            if (((OperationalBit) result).getBits().length == 0) {
-                return ZERO;
-            }
+    private GraphCalculatorState getState() {
+        GraphCalculatorState graphCalculatorState = new GraphCalculatorState();
+        for (Bit bit : input) {
+            VarBit varBit = (VarBit) bit;
+            GraphCalculatorState.BitInfo bitInfo = new GraphCalculatorState.BitInfo();
+            bitInfo.setName(bit.toString());
+            graphCalculatorState.getInput().getBit().add(bitInfo);
         }
-        return result;
+        return graphCalculatorState;
     }
 
-    private Bit simplifyX(OperationalBit opBit) {
-        //reconstruct
-        OperationalBit.Operation operation = opBit.getOperation();
-        Bit[] bits = simplify(opBit.getBits());
-        List<Bit> newBits = new ArrayList<>();
-
-        switch (operation) {
-            case AND:
-                if (cleanConstant(bits, newBits, ZERO)) return ZERO;
-                if (newBits.size() == 0) {
-                    return ZERO;
-                } else if (newBits.size() == 1) {
-                    return newBits.get(0);
-                }
-                return OperationalBit.and(newBits.toArray(new Bit[]{}));
-            case OR:
-                if (cleanConstant(bits, newBits, ONE)) return ONE;
-                if (newBits.size() == 0) {
-                    return ONE;
-                } else if (newBits.size() == 1) {
-                    return newBits.get(0);
-                }
-                return OperationalBit.or(newBits.toArray(new Bit[]{}));
-            case NOT:
-                if (bits.length != 1 || bits[0] == null) {
-                    throw new RuntimeException("incorrect bits for not operation");
-                }
-                if (bits[0] instanceof ConstantBit) {
-                    return ConstantBit.not((ConstantBit) bits[0]);
-                }
-                if (bits[0] instanceof OperationalBit && ((OperationalBit) bits[0]).getOperation() == OperationalBit.Operation.NOT) {
-                    return ((OperationalBit) bits[0]).getBits()[0];
-                }
-                return OperationalBit.not(bits[0]);
-            default:
-                return opBit;
-        }
+    public void loadState(InputStream inputStream) {
 
     }
 
-    private boolean cleanConstant(Bit[] bits, List<Bit> newBits, Bit zero) {
-        for (Bit bit : bits) {
-            if (bit instanceof ConstantBit) {
-                if (bit == zero) {
-                    return true;
-                }
-            } else {
-                newBits.add(bit);
-            }
-        }
-        return false;
-    }
-
-    public long countOps(Bit[] bits) {
-        return countOps(new HashSet<>(), bits);
-    }
-
-    public long countOps(Set<Integer> counted, Bit[] bits) {
-        long ops = 0;
-        for (int i = 0; i < bits.length; i++) {
-            if (bits[i] instanceof OperationalBit) {
-                OperationalBit opBit = (OperationalBit) (bits[i]);
-                if (counted.contains(opBit.hashCode())) continue;
-                counted.add(opBit.hashCode());
-                ops++;
-                ops += countOps(counted, opBit.getBits());
-            }
-        }
-        return ops;
+    public int getOperationCount() {
+        return operationCount;
     }
 }

@@ -14,21 +14,21 @@ public class Test10 {
 
     public static void main(String... args) {
 
-        long a = 1023;
-        long b = 1023;
+        long a = 343434;
+        long b = 45345345;
         long c = a * b;
 
         print(a);
         print(b);
-        System.out.print("Res:");
-        print(c);
-        System.out.print("Pre:");
 
 
         Bit[] r = BinMul.multiply(BitOpsCalculator.getDefault(), trim(getBits(BitOpsCalculator.getDefault(), a)), trim(getBits(BitOpsCalculator.getDefault(), b)));
 
+        System.out.print("Res:");
         print(c);
+        System.out.print("Pre:");
         print(r);
+
         printError(BitOpsCalculator.getDefault(), r, c);
 
     }

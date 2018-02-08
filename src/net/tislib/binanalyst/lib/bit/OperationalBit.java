@@ -3,9 +3,7 @@ package net.tislib.binanalyst.lib.bit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
@@ -14,33 +12,33 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
  * Created by Taleh Ibrahimli on 2/6/18.
  * Email: me@talehibrahimli.com
  */
-public final class OperationalBit implements Bit {
+public final class OperationalBit extends CompositeBit implements Bit {
     private final Bit[] bits;
     private final Operation operation;
 
-    private OperationalBit(Operation operation,Bit... bits) {
+    private OperationalBit(Operation operation, Bit... bits) {
         this.bits = bits;
         this.operation = operation;
     }
 
     public static Bit and(Bit... bits) {
-        return new OperationalBit(Operation.AND,  bits);
+        return new OperationalBit(Operation.AND, bits);
     }
 
     public static Bit or(Bit... bits) {
-        return new OperationalBit(Operation.OR,  bits);
+        return new OperationalBit(Operation.OR, bits);
     }
 
     public static Bit not(Bit bit) {
-        return new OperationalBit(Operation.NOT,  bit);
+        return new OperationalBit(Operation.NOT, bit);
     }
 
     public static Bit equal(Bit bitA, Bit bitB) {
-        return or( and( bitA, bitB), and( not( bitA), not( bitB)));
+        return or(and(bitA, bitB), and(not(bitA), not(bitB)));
     }
 
     public static Bit xor(Bit bitA, Bit bitB) {
-        return or( and( bitA, not( bitB)), and( not( bitA), bitB));
+        return or(and(bitA, not(bitB)), and(not(bitA), bitB));
     }
 
     public static Bit equal(Bit... bits) {
@@ -49,7 +47,7 @@ public final class OperationalBit implements Bit {
         }
         Bit result = bits[0];
         for (int i = 1; i < bits.length; i++) {
-            result = equal( result, bits[i]);
+            result = equal(result, bits[i]);
         }
         return result;
     }
@@ -60,39 +58,52 @@ public final class OperationalBit implements Bit {
         }
         Bit result = bits[0];
         for (int i = 1; i < bits.length; i++) {
-            result = xor( result, bits[i]);
+            result = xor(result, bits[i]);
         }
         return result;
     }
+
     public enum Operation {
         AND, OR, NOT
     }
 
-    public Bit calculate() {
-        SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
-        switch (operation) {
-            case OR:
-                return calculator.or(bits);
-            case AND:
-                return calculator.and(bits);
-            default:
-                return calculator.not(bits[0]);
-        }
-    }
+//    public void calculate(BitOpsCalculator calculator, boolean recursive) {
+//        if (recursive) {
+//            for (Bit bit : bits) {
+//                if (bit instanceof OperationalBit) {
+//                    ((OperationalBit) bit).calculate(calculator, true);
+//                }
+//            }
+//        }
+//    }
+//
+//    private void calculate(BitOpsCalculator calculator) {
+//        switch (operation) {
+//            case OR:
+//                value = calculator.or(bits).getValue();
+//            case AND:
+//                value = calculator.and(bits).getValue();
+//            default:
+//                value = calculator.not(bits[0]).getValue();
+//        }
+//    }
 
-    @Override
-    public boolean getValue() {
-        return calculate().getValue();
-    }
 
     @Override
     public String toString() {
         return getStringValue();
     }
 
+    int hash = 0;
+
     @Override
     public int hashCode() {
-        return toString().hashCode();
+        if (hash == 0) {
+            Objects.hash(operation, Arrays.hashCode(getBits()));
+        } else {
+            System.out.println("hash calculated");
+        }
+        return hash;
     }
 
     private String getStringValue() {

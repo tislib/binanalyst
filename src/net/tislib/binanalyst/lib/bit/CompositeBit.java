@@ -27,4 +27,9 @@ public class CompositeBit implements Bit {
     public String toString() {
         return this.getValue() ? "1" : "0";
     }
+
+    @Override
+    public int hashCode() {
+        return value ? 1 : 0;
+    }
 }

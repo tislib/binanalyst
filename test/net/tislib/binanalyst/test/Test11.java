@@ -2,8 +2,12 @@ package net.tislib.binanalyst.test;
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.operator.BinMul;
+
+import javax.xml.bind.JAXBException;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.*;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
@@ -14,29 +18,30 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
  */
 public class Test11 {
 
-    public static void main(String... args) {
+    public static void main(String... args) throws JAXBException {
 //        while (true) {
-            long c = 1 * 3;
 
-            GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
-            VarBit[] a = VarBit.list("a", 2, ZERO);
-            VarBit[] b = VarBit.list("b", 2, ZERO);
+        GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
-            setVal(calculator, a, 1);
-            setVal(calculator, b, 3);
+        VarBit[] a = VarBit.list("a", 8, ZERO);
+        VarBit[] b = VarBit.list("b", 8, ZERO);
 
-            Bit[] r = BinMul.multiply(calculator, a, b);
+        long ax = 12;
+        long bx = 34;
 
-            r = calculator.simplify(r);
+        setVal(calculator, a, ax);
+        setVal(calculator, b, bx);
 
-            printSpaced(r);
+        Bit[] r = BinMul.multiply(calculator, a, b);
 
-            System.out.println("RESULT: ");
-            printValues(r);
-            System.out.println("OPS: " + calculator.countOps(r));
+        calculator.setInputBits(a, b);
+        calculator.setOutputBits(r);
 
-//        }
+
+        print(r);
+        print(ax * bx);
+        System.out.println(calculator.getOperationCount());
     }
 
 }

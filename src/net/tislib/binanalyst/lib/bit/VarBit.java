@@ -24,4 +24,9 @@ public class VarBit extends CompositeBit {
         }
         return bits;
     }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

@@ -4,6 +4,7 @@ import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,10 +83,12 @@ public class BinValueHelper {
         return num;
     }
 
-    public static long toLong(Bit[] bits) {
-        long num = 0;
+    public static BigInteger toLong(Bit[] bits) {
+        BigInteger num = BigInteger.ZERO;
         for (int i = 0; i < bits.length; i++) {
-            num += (bits[bits.length - i - 1].getValue() ? 1 : 0) * (1 << i);
+            int main = (bits[bits.length - i - 1].getValue() ? 1 : 0);
+            BigInteger power10 = BigInteger.ONE.add(BigInteger.ONE).pow(i);
+            num = num.add(power10.multiply(BigInteger.valueOf(main)));
         }
         return num;
     }

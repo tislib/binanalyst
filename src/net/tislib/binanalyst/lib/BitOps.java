@@ -9,7 +9,7 @@ import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
  */
 public class BitOps {
 
-//    private static GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
+//    private static GraphBitOpsOldCalculator calculator = new GraphBitOpsOldCalculator();
 
     public static Bit xor(BitOpsCalculator calculator, Bit... bits) {
         return calculator.xor(bits);
