@@ -2,6 +2,8 @@ package net.tislib.binanalyst.lib.calc.graph;
 
 import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
+import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -27,8 +29,8 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     private final Layer<OperationalBit> middle = new Layer<>("Middle");
     private final Layer<NamedBit> output = new Layer<>("Output");
 
-    private final VarBit ONE;
-    private final VarBit ZERO;
+    public final VarBit ONE;
+    public final VarBit ZERO;
 
     public GraphBitOpsCalculator() {
         ONE = new VarBit("ONE");
@@ -37,15 +39,13 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         ZERO.setValue(false);
     }
 
+    private List<Optimizer> optimizers = new ArrayList<>();
+
     private int operationCount = 0;
 
     public void setInputBits(VarBit[]... bits) {
         input.setBits(bits);
         input.addBits(ZERO, ONE);
-    }
-
-    public void init() {
-
     }
 
     public void setOutputBits(Bit[]... bitsArray) {
@@ -72,54 +72,22 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     }
 
     public Bit operation(Operation operation, NamedBit... bits) {
-        switch (operation) {
-            case AND:
-                if (contains(bits, ZERO)) return ZERO;
-                bits = remove(bits, ONE);
-                break;
-            case OR:
-                if (contains(bits, ONE)) return ONE;
-                bits = remove(bits, ZERO);
-                break;
-            case XOR:
-                bits = remove(bits, ZERO);
-                break;
-            case NOT:
-                if (contains(bits, ZERO)) {
-                    return ONE;
-                }
-                if (contains(bits, ONE)) {
-                    return ZERO;
-                }
-                break;
-        }
-        if (bits.length == 0) {
-            return ZERO;
-        }
-        if (operation != Operation.NOT && bits.length == 1) {
-            return bits[0];
-        }
-        operationCount++;
-        OperationalBit result = new OperationalBit(operation, bits);
-        middle.register(result);
-        return result;
-    }
-
-    private NamedBit[] remove(NamedBit[] bits, VarBit bit) {
-        List<NamedBit> namedBits = new ArrayList<>();
-        for (NamedBit namedBit : bits) {
-            if (!namedBit.equals(bit)) namedBits.add(namedBit);
-        }
-        return namedBits.toArray(new NamedBit[]{});
-    }
-
-    private boolean contains(NamedBit[] bits, Bit bit) {
-        for (NamedBit namedBit : bits) {
-            if (namedBit.equals(bit)) {
-                return true;
+        NamedBit result = null;
+        for (int i = 0; i < 10; i++) {
+            if (result != null && result instanceof OperationalBit) {
+                operation = ((OperationalBit) result).getOperation();
+                bits = ((OperationalBit) result).getBits();
+            }
+            for (Optimizer optimizer : this.optimizers) {
+                result = optimizer.optimize(this, operation, bits, result);
             }
         }
-        return false;
+        if (result == null) {
+            operationCount++;
+            result = new OperationalBit(operation, bits);
+            middle.register((OperationalBit) result);
+        }
+        return result;
     }
 
     @Override
@@ -199,5 +167,19 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         for (OperationalBit bit : middle) {
             bit.calculate();
         }
+    }
+
+    public void transform(Transformer transformer) {
+        transformer.transform(input, LayerType.INPUT);
+        transformer.transform(middle, LayerType.MIDDLE);
+        transformer.transform(output, LayerType.OUTPUT);
+    }
+
+    public List<Optimizer> getOptimizers() {
+        return optimizers;
+    }
+
+    public enum LayerType {
+        INPUT, MIDDLE, OUTPUT
     }
 }
