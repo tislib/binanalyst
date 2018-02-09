@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -31,40 +32,38 @@ public class MultiplicationTest {
         });
     }
 
-    private final long a;
-    private final long b;
+    private final BigInteger a;
+    private final BigInteger b;
 
     public MultiplicationTest(long a, long b) {
-        this.a = a;
-        this.b = b;
+        this.a = BigInteger.valueOf(a);
+        this.b = BigInteger.valueOf(b);
     }
 
     @Test
     public void simpleCalc() {
         SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
-        Bit[] r = BinMul.multiply(calculator, trim(getBits(calculator, a)), trim(getBits(calculator, b)));
-        assertEquals(toLong(r), a * b);
+        Bit[] r = BinMul.multiply(calculator, trim(getBits(calculator, a.longValue())), trim(getBits(calculator, b.longValue())));
+        assertEquals(toLong(r), a.multiply(b));
     }
 
     @Test
     public void graphCalc() {
         GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
-        VarBit[] aBits = VarBit.list("a", 3, ZERO);
-        VarBit[] bBits = VarBit.list("b", 3, ZERO);
+        VarBit[] aBits = VarBit.list("a", 64, ZERO);
+        VarBit[] bBits = VarBit.list("b", 64, ZERO);
 
-        setVal(calculator, aBits, a);
-        setVal(calculator, bBits, b);
+        setVal(calculator, aBits, a.longValue());
+        setVal(calculator, bBits, b.longValue());
 
         calculator.setInputBits(aBits, bBits);
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
-        System.out.println(calculator.getOperationCount());
+        calculator.calculate();
 
-        calculator.show();
-
-        assertEquals(a * b, toLong(r));
+        assertEquals(a.multiply(b), toLong(r));
     }
 
 

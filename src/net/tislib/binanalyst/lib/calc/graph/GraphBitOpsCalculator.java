@@ -50,7 +50,7 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     public void setOutputBits(Bit[]... bitsArray) {
         NamedBit newBitsArray[][] = new NamedBit[bitsArray.length][];
-        for(int i=0;i<bitsArray.length;i++){
+        for (int i = 0; i < bitsArray.length; i++) {
             NamedBit[] result = resolveBits(bitsArray[i]);
             newBitsArray[i] = result;
         }
@@ -72,41 +72,45 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     }
 
     public Bit operation(Operation operation, NamedBit... bits) {
-//        switch (operation) {
-//            case AND:
-//                if (contains(bits, ZERO)) return ZERO;
-//                if (contains(bits, ONE)) {
-//                    return and(remove(bits, ONE));
-//                }
-//            case OR:
-//                if (contains(bits, ONE)) return ONE;
-//                if (contains(bits, ZERO)) {
-//                    return and(remove(bits, ZERO));
-//                }
-//            case XOR:
-//                if (contains(bits, ZERO)) {
-//                    return and(remove(bits, ZERO));
-//                }
-//            case NOT:
-//                if (contains(bits, ZERO)) {
-//                    return ONE;
-//                }
-//                if (contains(bits, ONE)) {
-//                    return ZERO;
-//                }
-//        }
+        switch (operation) {
+            case AND:
+                if (contains(bits, ZERO)) return ZERO;
+                bits = remove(bits, ONE);
+                break;
+            case OR:
+                if (contains(bits, ONE)) return ONE;
+                bits = remove(bits, ZERO);
+                break;
+            case XOR:
+                bits = remove(bits, ZERO);
+                break;
+            case NOT:
+                if (contains(bits, ZERO)) {
+                    return ONE;
+                }
+                if (contains(bits, ONE)) {
+                    return ZERO;
+                }
+                break;
+        }
+        if (bits.length == 0) {
+            return ZERO;
+        }
+        if (operation != Operation.NOT && bits.length == 1) {
+            return bits[0];
+        }
         operationCount++;
         OperationalBit result = new OperationalBit(operation, bits);
         middle.register(result);
         return result;
     }
 
-    private Bit[] remove(NamedBit[] bits, VarBit bit) {
-        List<Bit> namedBits = new ArrayList<>();
+    private NamedBit[] remove(NamedBit[] bits, VarBit bit) {
+        List<NamedBit> namedBits = new ArrayList<>();
         for (NamedBit namedBit : bits) {
             if (!namedBit.equals(bit)) namedBits.add(namedBit);
         }
-        return namedBits.toArray(new Bit[]{});
+        return namedBits.toArray(new NamedBit[]{});
     }
 
     private boolean contains(NamedBit[] bits, Bit bit) {
@@ -120,41 +124,22 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     @Override
     public Bit xor(Bit... bits) {
-        if (bits.length == 0) {
-            throw new UnsupportedOperationException("empty operation");
-        }
-        if (bits.length == 1) {
-            return bits[0];
-        }
         return operation(Operation.XOR, resolveBits(bits));
     }
 
     @Override
     public Bit and(Bit... bits) {
-        if (bits.length == 0) {
-            return ZERO;
-        }
-        if (bits.length == 1) {
-            return bits[0];
-        }
         return operation(Operation.AND, resolveBits(bits));
     }
 
     @Override
     public Bit or(Bit... bits) {
-        if (bits.length == 0) {
-            return ONE;
-        }
-        if (bits.length == 1) {
-            return bits[0];
-        }
         return operation(Operation.OR, resolveBits(bits));
     }
 
     @Override
     public Bit not(Bit bit) {
-        Bit result = operation(Operation.NOT, resolveBits(bit));
-        return result;
+        return operation(Operation.NOT, resolveBits(bit));
     }
 
     @Override
@@ -193,16 +178,19 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     public void show() {
         System.out.println("INPUT:");
         for (NamedBit bit : input) {
-            System.out.println(bit.toString() + " => " + bit.getValue());
+            System.out.println(bit.toString());
         }
         System.out.println("MIDDLE:");
         for (NamedBit bit : middle) {
-            System.out.println(bit.toString() + " => " + bit.getValue());
+            System.out.println(bit.toString());
         }
         System.out.println("OUTPUT:");
         for (NamedBit bit : output) {
-            System.out.println(bit.toString() + " => " + bit.getValue());
+            System.out.println(bit.toString());
         }
+    }
+
+    public void showResult() {
         System.out.println("RESULT");
         printValues(output.getBits().toArray(new NamedBit[]{}));
     }

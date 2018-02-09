@@ -37,13 +37,13 @@ public final class OperationalBit extends VarBit implements Bit {
     @Override
     public String toString() {
         if (operation == Operation.NOT) {
-            return getName() + " = " + "!" + bits[0].getName();
+            return getName() + " : " + "!" + bits[0].getName();
         }
         StringJoiner joiner = new StringJoiner(" " + getOperation().getSign() + " ");
         for (NamedBit bit : bits) {
             joiner.add(bit.getName());
         }
-        return getName() + " = " + joiner;
+        return getName() + " : " + joiner;
     }
 
     public void calculate() {

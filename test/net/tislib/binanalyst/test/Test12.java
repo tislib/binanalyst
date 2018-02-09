@@ -18,14 +18,14 @@ public class Test12 {
     public static void main(String... args){
         GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
-        long a = 13;
-        long b = 17;
+//        long a = 3;
+//        long b = 5;
 
-        VarBit[] aBits = VarBit.list("a", 16, ZERO);
-        VarBit[] bBits = VarBit.list("b", 16, ZERO);
+        VarBit[] aBits = VarBit.list("a", 2, ZERO);
+        VarBit[] bBits = VarBit.list("b", 2, ZERO);
 
-        setVal(calculator, aBits, a);
-        setVal(calculator, bBits, b);
+//        setVal(calculator, aBits, a);
+//        setVal(calculator, bBits, b);
 
         calculator.setInputBits(aBits, bBits);
 
