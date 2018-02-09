@@ -1,12 +1,10 @@
 package net.tislib.binanalyst.test;
 
-import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsOldCalculator;
 import net.tislib.binanalyst.lib.operator.BinMul;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +16,6 @@ import java.util.Collection;
 import static net.tislib.binanalyst.lib.BinValueHelper.*;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
@@ -51,15 +48,21 @@ public class MultiplicationTest {
 
     @Test
     public void graphCalc() {
-        BitOpsCalculator calculator = new GraphBitOpsCalculator();
+        GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
-        VarBit[] aBits = VarBit.list("a", 64, ZERO);
-        VarBit[] bBits = VarBit.list("b", 64, ZERO);
+        VarBit[] aBits = VarBit.list("a", 3, ZERO);
+        VarBit[] bBits = VarBit.list("b", 3, ZERO);
 
         setVal(calculator, aBits, a);
         setVal(calculator, bBits, b);
 
+        calculator.setInputBits(aBits, bBits);
+
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
+
+        System.out.println(calculator.getOperationCount());
+
+        calculator.show();
 
         assertEquals(a * b, toLong(r));
     }

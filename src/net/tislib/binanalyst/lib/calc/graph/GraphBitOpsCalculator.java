@@ -1,8 +1,6 @@
 package net.tislib.binanalyst.lib.calc.graph;
 
-import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.CompositeBit;
-import net.tislib.binanalyst.lib.bit.VarBit;
+import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import javax.xml.bind.JAXBContext;
@@ -11,10 +9,11 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import static net.tislib.binanalyst.lib.BinValueHelper.print;
+import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
@@ -24,81 +23,143 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
  */
 public class GraphBitOpsCalculator implements BitOpsCalculator {
 
-    private final Layer input = new Layer("input");
-    private final Layer middle = new Layer("middle");
-    private final Layer output = new Layer("input");
+    private final Layer<VarBit> input = new Layer<>("Input");
+    private final Layer<OperationalBit> middle = new Layer<>("Middle");
+    private final Layer<NamedBit> output = new Layer<>("Output");
+
+    private final VarBit ONE;
+    private final VarBit ZERO;
+
+    public GraphBitOpsCalculator() {
+        ONE = new VarBit("ONE");
+        ZERO = new VarBit("ZERO");
+        ONE.setValue(true);
+        ZERO.setValue(false);
+    }
 
     private int operationCount = 0;
 
     public void setInputBits(VarBit[]... bits) {
         input.setBits(bits);
+        input.addBits(ZERO, ONE);
     }
 
-    public void setOutputBits(Bit... bits) {
+    public void init() {
 
+    }
+
+    public void setOutputBits(Bit[]... bitsArray) {
+        NamedBit newBitsArray[][] = new NamedBit[bitsArray.length][];
+        for(int i=0;i<bitsArray.length;i++){
+            NamedBit[] result = resolveBits(bitsArray[i]);
+            newBitsArray[i] = result;
+        }
+        output.setBits(newBitsArray);
+    }
+
+    private NamedBit[] resolveBits(Bit... bits) {
+        NamedBit[] result = new NamedBit[bits.length];
+        for (int i = 0; i < bits.length; i++) {
+            if (bits[i] instanceof ConstantBit) {
+                result[i] = bits[i].getValue() ? ONE : ZERO;
+            } else if (bits[i] instanceof NamedBit) {
+                result[i] = (NamedBit) bits[i];
+            } else {
+                throw new UnsupportedOperationException("unsupported bit type");
+            }
+        }
+        return result;
+    }
+
+    public Bit operation(Operation operation, NamedBit... bits) {
+//        switch (operation) {
+//            case AND:
+//                if (contains(bits, ZERO)) return ZERO;
+//                if (contains(bits, ONE)) {
+//                    return and(remove(bits, ONE));
+//                }
+//            case OR:
+//                if (contains(bits, ONE)) return ONE;
+//                if (contains(bits, ZERO)) {
+//                    return and(remove(bits, ZERO));
+//                }
+//            case XOR:
+//                if (contains(bits, ZERO)) {
+//                    return and(remove(bits, ZERO));
+//                }
+//            case NOT:
+//                if (contains(bits, ZERO)) {
+//                    return ONE;
+//                }
+//                if (contains(bits, ONE)) {
+//                    return ZERO;
+//                }
+//        }
+        operationCount++;
+        OperationalBit result = new OperationalBit(operation, bits);
+        middle.register(result);
+        return result;
+    }
+
+    private Bit[] remove(NamedBit[] bits, VarBit bit) {
+        List<Bit> namedBits = new ArrayList<>();
+        for (NamedBit namedBit : bits) {
+            if (!namedBit.equals(bit)) namedBits.add(namedBit);
+        }
+        return namedBits.toArray(new Bit[]{});
+    }
+
+    private boolean contains(NamedBit[] bits, Bit bit) {
+        for (NamedBit namedBit : bits) {
+            if (namedBit.equals(bit)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public Bit xor(Bit... bits) {
-        operationCount += 5;
-        for (Bit bit : bits) {
-            Integer id = getBitId(bit);
+        if (bits.length == 0) {
+            throw new UnsupportedOperationException("empty operation");
         }
-        CompositeBit compositeBit = new CompositeBit();
-        for (Bit bit : bits) {
-            if (bit.getValue()) compositeBit.setValue(!compositeBit.getValue());
+        if (bits.length == 1) {
+            return bits[0];
         }
-        return compositeBit;
-    }
-
-    private Integer getBitId(Bit bit) {
-        Integer id = input.getBitId(bit);
-        return null;
+        return operation(Operation.XOR, resolveBits(bits));
     }
 
     @Override
     public Bit and(Bit... bits) {
-        operationCount++;
-        for (Bit bit : bits) {
-            if (bit == null) {
-                throw new RuntimeException();
-            }
-            if (!bit.getValue()) {
-                return ZERO;
-            }
+        if (bits.length == 0) {
+            return ZERO;
         }
-        return ONE;
+        if (bits.length == 1) {
+            return bits[0];
+        }
+        return operation(Operation.AND, resolveBits(bits));
     }
 
     @Override
     public Bit or(Bit... bits) {
-        operationCount++;
-        for (Bit bit : bits) {
-            if (bit.getValue()) {
-                return ONE;
-            }
+        if (bits.length == 0) {
+            return ONE;
         }
-        return ZERO;
+        if (bits.length == 1) {
+            return bits[0];
+        }
+        return operation(Operation.OR, resolveBits(bits));
     }
 
     @Override
     public Bit not(Bit bit) {
-        operationCount++;
-        return new CompositeBit(!bit.getValue());
-    }
-
-    @Override
-    public Bit equal(Bit... bits) {
-        operationCount += 5;
-        for (Bit bit : bits) {
-            if (xor(bits[0], bit).getValue()) return ZERO;
-        }
-        return ONE;
+        Bit result = operation(Operation.NOT, resolveBits(bit));
+        return result;
     }
 
     @Override
     public Bit wrap(Number num) {
-        return num.longValue() == 0 ? ZERO : ONE;
+        throw new UnsupportedOperationException("wrapping is not supported for " + this.getClass().getName());
     }
 
     public void saveState(OutputStream outputStream) throws JAXBException {
@@ -127,5 +188,28 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     public int getOperationCount() {
         return operationCount;
+    }
+
+    public void show() {
+        System.out.println("INPUT:");
+        for (NamedBit bit : input) {
+            System.out.println(bit.toString() + " => " + bit.getValue());
+        }
+        System.out.println("MIDDLE:");
+        for (NamedBit bit : middle) {
+            System.out.println(bit.toString() + " => " + bit.getValue());
+        }
+        System.out.println("OUTPUT:");
+        for (NamedBit bit : output) {
+            System.out.println(bit.toString() + " => " + bit.getValue());
+        }
+        System.out.println("RESULT");
+        printValues(output.getBits().toArray(new NamedBit[]{}));
+    }
+
+    public void calculate() {
+        for (OperationalBit bit : middle) {
+            bit.calculate();
+        }
     }
 }

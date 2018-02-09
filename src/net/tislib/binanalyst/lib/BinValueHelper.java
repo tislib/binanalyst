@@ -3,6 +3,7 @@ package net.tislib.binanalyst.lib;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
  */
 public class BinValueHelper {
 
+    static BitOpsCalculator simpleCalculator = new SimpleBitOpsCalculator();
 
     private static final int BIT_LENGTH = 64;
 
@@ -182,7 +184,7 @@ public class BinValueHelper {
     }
 
     public static void setVal(BitOpsCalculator calculator, VarBit[] bits, long value) {
-        Bit[] bitArr = trim(wrap(calculator, getBinArray(value)));
+        Bit[] bitArr = trim(wrap(simpleCalculator, getBinArray(value)));
         for (int i = 0; i < Math.min(bitArr.length, bits.length); i++) {
             boolean val = bitArr[bitArr.length - 1 - i].getValue();
             bits[bits.length - 1 - i].setValue(val);

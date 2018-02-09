@@ -27,10 +27,6 @@ public class BitOps {
         return calculator.not(bit);
     }
 
-    public static Bit equal(BitOpsCalculator calculator, Bit... bits) {
-        return calculator.equal(bits);
-    }
-
     public static Bit wrap(BitOpsCalculator calculator, byte num) {
         return calculator.wrap(num);
     }

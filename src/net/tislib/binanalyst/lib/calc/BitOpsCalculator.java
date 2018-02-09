@@ -15,8 +15,6 @@ public interface BitOpsCalculator {
 
     Bit not(Bit bit);
 
-    Bit equal(Bit[] bits);
-
     Bit wrap(Number num);
 
     static BitOpsCalculator getDefault() {

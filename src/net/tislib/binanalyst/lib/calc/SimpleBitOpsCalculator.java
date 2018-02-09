@@ -47,13 +47,6 @@ public class SimpleBitOpsCalculator implements BitOpsCalculator {
         return new CompositeBit(!bit.getValue());
     }
 
-    @Override
-    public Bit equal(Bit... bits) {
-        for (Bit bit : bits) {
-            if (xor(bits[0], bit).getValue()) return ZERO;
-        }
-        return ONE;
-    }
 
     @Override
     public Bit wrap(Number num) {
