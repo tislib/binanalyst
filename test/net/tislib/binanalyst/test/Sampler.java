@@ -45,4 +45,34 @@ public class Sampler {
 
         return graphExpression;
     }
+
+    public static  GraphExpression graphExpressionSampler(int bitCount, long a, long b) {
+        GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
+
+        VarBit[] aBits = VarBit.list("a", bitCount, ZERO);
+        VarBit[] bBits = VarBit.list("b", bitCount, ZERO);
+
+        setVal(calculator, aBits, a);
+        setVal(calculator, bBits, b);
+
+        calculator.setInputBits(aBits, bBits);
+
+        calculator.getOptimizers().add(new SimpleOptimizer());
+        calculator.getOptimizers().add(new LogicalOptimizer());
+
+        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
+
+        VarBit[] result = VarBit.list("c", r.length, ZERO);
+
+        setVal(calculator, result, a * b);
+
+        System.out.println(calculator.getOperationCount());
+
+        calculator.setOutputBits(r);
+
+        GraphExpression graphExpression = new GraphExpression();
+
+        graphExpression.setCalculation(calculator, result);
+        return graphExpression;
+    }
 }

@@ -8,6 +8,7 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.expression.GraphExpression;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
+import net.tislib.binanalyst.lib.calc.graph.solver.SimpleSolver;
 import net.tislib.binanalyst.lib.operator.BinMul;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -115,35 +116,17 @@ public class MultiplicationTest {
 
     @Test
     public void graphExpressionValidator() {
-        GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
-
-        VarBit[] aBits = VarBit.list("a", 64, ZERO);
-        VarBit[] bBits = VarBit.list("b", 64, ZERO);
-
-        setVal(calculator, aBits, a.longValue());
-        setVal(calculator, bBits, b.longValue());
-
-        calculator.setInputBits(aBits, bBits);
-
-        calculator.getOptimizers().add(new SimpleOptimizer());
-        calculator.getOptimizers().add(new LogicalOptimizer());
-
-        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
-
-        VarBit[] result = VarBit.list("c", r.length, ZERO);
-
-        setVal(calculator, result, a.longValue() * b.longValue());
-
-        System.out.println(calculator.getOperationCount());
-
-        calculator.setOutputBits(r);
-
-        GraphExpression graphExpression = new GraphExpression();
-
-        graphExpression.setCalculation(calculator, result);
-
+        GraphExpression graphExpression = Sampler.graphExpressionSampler(64, a.longValue(), b.longValue());
         assertTrue(graphExpression.check());
+    }
 
+
+    @Test
+    public void graphExpressionSimpleSolverValidator() {
+        GraphExpression graphExpression = Sampler.graphExpressionSampler(64, a.longValue(), b.longValue());
+        SimpleSolver solver = new SimpleSolver();
+        graphExpression = solver.solve(graphExpression);
+        assertTrue(graphExpression.check());
     }
 
 
