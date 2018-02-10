@@ -6,6 +6,7 @@ package net.tislib.binanalyst.lib.bit;
  */
 public interface NamedBit extends Bit {
 
-    public String getName();
-    public void setName(String name);
+    String getName();
+
+    void setName(String name);
 }

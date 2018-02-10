@@ -13,4 +13,19 @@ public enum Operation {
     public CharSequence getSign() {
         return sign;
     }
+
+    public String getSignName() {
+        switch (this) {
+            case XOR:
+                return "XOR";
+            case NOT:
+                return "NOT";
+            case AND:
+                return "AND";
+            case OR:
+                return "OR";
+            default:
+                throw new UnsupportedOperationException();
+        }
+    }
 }

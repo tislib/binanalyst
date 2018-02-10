@@ -190,4 +190,25 @@ public class BinValueHelper {
             bits[bits.length - 1 - i].setValue(val);
         }
     }
+
+    public static VarBit[] concat(VarBit[] aBits, VarBit[] bBits) {
+        VarBit[] result = new VarBit[aBits.length + bBits.length];
+        int i;
+        for (i = 0; i < aBits.length; i++) {
+            result[i] = aBits[i];
+        }
+
+        for (int j = 0; j < bBits.length; j++) {
+            result[i + j] = bBits[j];
+        }
+        return result;
+    }
+
+    public static VarBit[] reverse(VarBit[] bits) {
+        VarBit[] result = new VarBit[bits.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = bits[bits.length - i - 1];
+        }
+        return result;
+    }
 }

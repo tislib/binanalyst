@@ -29,12 +29,12 @@ public class LogicalOptimizer implements Optimizer {
             if (operation == Operation.OR) {
                 if (bits[0] instanceof OperationalBit && ((OperationalBit) bits[0]).getOperation() == Operation.NOT
                         && ((OperationalBit) bits[0]).getBits()[0] == bits[1]) {
-                    return graphBitOpsCalculator.ONE;
+                    return (NamedBit) graphBitOpsCalculator.not(graphBitOpsCalculator.ZERO);
                 }
 
                 if (bits[1] instanceof OperationalBit && ((OperationalBit) bits[1]).getOperation() == Operation.NOT
                         && ((OperationalBit) bits[1]).getBits()[0] == bits[0]) {
-                    return graphBitOpsCalculator.ONE;
+                    return (NamedBit) graphBitOpsCalculator.not(graphBitOpsCalculator.ZERO);
                 }
             }
         }

@@ -2,13 +2,8 @@ package net.tislib.binanalyst.lib.calc.graph;
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
-import net.tislib.binanalyst.lib.bit.OperationalBit;
-import net.tislib.binanalyst.lib.bit.VarBit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Taleh Ibrahimli on 2/8/18.
@@ -16,10 +11,16 @@ import java.util.List;
  */
 public class Layer<T extends NamedBit> implements Iterable<T> {
     private final String name;
-    private final List<T> bits = new ArrayList<>();
+    private final List<T> bits;
 
     public Layer(String name) {
         this.name = name;
+        bits = new ArrayList<>();
+    }
+
+    protected Layer(String name, List<T> bits) {
+        this.name = name;
+        this.bits = bits;
     }
 
     public Integer getBitId(T bit) {
@@ -38,14 +39,25 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
         return bits.iterator();
     }
 
-    public void register(T bit) {
-        check(bit);
-        bit.setName(name.toCharArray()[0] + "[" + (this.bits.size()) + "]");
+    public Bit register(T bit) {
+        Bit foundBit = check(bit);
+        if (foundBit != null) {
+            return foundBit;
+        }
+        if (bit.getName() == null) {
+            bit.setName(name.toCharArray()[0] + "[" + (this.bits.size()) + "]");
+        }
         this.bits.add(bit);
+        return bit;
     }
 
-    private void check(T bit) {
-
+    private Bit check(T bit) {
+//        for (Bit foundBit : bits) {
+//            if (foundBit == bit) {
+//                return foundBit;
+//            }
+//        }
+        return null;
     }
 
     @SafeVarargs
@@ -55,5 +67,16 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
 
     public List<T> getBits() {
         return bits;
+    }
+
+    public Layer<T> copy() {
+        return new Layer<>(name, new ArrayList<>(bits));
+    }
+
+    public void show(boolean showValues) {
+        System.out.println(name.toUpperCase() + ":");
+        for (NamedBit bit : this) {
+            System.out.println(bit.toString() + (showValues ? " => " + bit.getValue() : ""));
+        }
     }
 }

@@ -14,22 +14,12 @@ public class SimpleOptimizer implements Optimizer {
         switch (operation) {
             case AND:
                 if (contains(bits, graphBitOpsCalculator.ZERO)) return graphBitOpsCalculator.ZERO;
-                bits = remove(bits, graphBitOpsCalculator.ONE);
                 break;
             case OR:
-                if (contains(bits, graphBitOpsCalculator.ONE)) return graphBitOpsCalculator.ONE;
                 bits = remove(bits, graphBitOpsCalculator.ZERO);
                 break;
             case XOR:
                 bits = remove(bits, graphBitOpsCalculator.ZERO);
-                break;
-            case NOT:
-                if (contains(bits, graphBitOpsCalculator.ZERO)) {
-                    return graphBitOpsCalculator.ONE;
-                }
-                if (contains(bits, graphBitOpsCalculator.ONE)) {
-                    return graphBitOpsCalculator.ZERO;
-                }
                 break;
         }
         if (bits.length == 0) {

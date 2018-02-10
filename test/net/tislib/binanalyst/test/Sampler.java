@@ -3,34 +3,26 @@ package net.tislib.binanalyst.test;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.expression.GraphExpression;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
+import net.tislib.binanalyst.lib.neo.NeoGraphExpressionRenderer;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.print;
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
- * Created by Taleh Ibrahimli on 2/9/18.
+ * Created by Taleh Ibrahimli on 2/10/18.
  * Email: me@talehibrahimli.com
  */
-public class Test12 {
+public class Sampler {
 
-    public static void main(String... args) {
+    public static GraphExpression graphExpressionSampler(int bitCount, int multiplicationValue) {
         GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
-        long a = 3;
-        long b = 1;
-
-        VarBit[] aBits = VarBit.list("a", 4, ZERO);
-        VarBit[] bBits = VarBit.list("b", 4, ZERO);
-
-        VarBit[] result = VarBit.list("c", 143, ZERO);
-
-        setVal(calculator, aBits, a);
-        setVal(calculator, bBits, b);
-
+        VarBit[] aBits = VarBit.list("a", bitCount, ZERO);
+        VarBit[] bBits = VarBit.list("b", bitCount, ZERO);
         calculator.setInputBits(aBits, bBits);
 
         calculator.getOptimizers().add(new SimpleOptimizer());
@@ -38,15 +30,19 @@ public class Test12 {
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
+        VarBit[] result = VarBit.list("c", r.length, ZERO);
+
+        setVal(calculator, result, multiplicationValue);
+
+
         System.out.println(calculator.getOperationCount());
 
         calculator.setOutputBits(r);
 
-//        calculator.transform(new AndNotOptimizer());
+        GraphExpression graphExpression = new GraphExpression();
 
-        calculator.calculate();
+        graphExpression.setCalculation(calculator, result);
 
-        calculator.show();
-        calculator.showResult();
+        return graphExpression;
     }
 }

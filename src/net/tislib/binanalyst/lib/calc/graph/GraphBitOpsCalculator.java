@@ -8,16 +8,12 @@ import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.print;
 import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
@@ -29,14 +25,23 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     private final Layer<OperationalBit> middle = new Layer<>("Middle");
     private final Layer<NamedBit> output = new Layer<>("Output");
 
-    public final VarBit ONE;
     public final VarBit ZERO;
 
     public GraphBitOpsCalculator() {
-        ONE = new VarBit("ONE");
         ZERO = new VarBit("ZERO");
-        ONE.setValue(true);
         ZERO.setValue(false);
+    }
+
+    public Layer<VarBit> getInput() {
+        return input;
+    }
+
+    public Layer<OperationalBit> getMiddle() {
+        return middle;
+    }
+
+    public Layer<NamedBit> getOutput() {
+        return output;
     }
 
     private List<Optimizer> optimizers = new ArrayList<>();
@@ -45,7 +50,7 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     public void setInputBits(VarBit[]... bits) {
         input.setBits(bits);
-        input.addBits(ZERO, ONE);
+        input.addBits(ZERO);
     }
 
     public void setOutputBits(Bit[]... bitsArray) {
@@ -61,7 +66,7 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         NamedBit[] result = new NamedBit[bits.length];
         for (int i = 0; i < bits.length; i++) {
             if (bits[i] instanceof ConstantBit) {
-                result[i] = bits[i].getValue() ? ONE : ZERO;
+                result[i] = bits[i].getValue() ? (NamedBit) not(ZERO) : ZERO;
             } else if (bits[i] instanceof NamedBit) {
                 result[i] = (NamedBit) bits[i];
             } else {
@@ -85,7 +90,7 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         if (result == null) {
             operationCount++;
             result = new OperationalBit(operation, bits);
-            middle.register((OperationalBit) result);
+            return middle.register((OperationalBit) result);
         }
         return result;
     }
@@ -144,18 +149,9 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     }
 
     public void show() {
-        System.out.println("INPUT:");
-        for (NamedBit bit : input) {
-            System.out.println(bit.toString());
-        }
-        System.out.println("MIDDLE:");
-        for (NamedBit bit : middle) {
-            System.out.println(bit.toString());
-        }
-        System.out.println("OUTPUT:");
-        for (NamedBit bit : output) {
-            System.out.println(bit.toString());
-        }
+        input.show(false);
+        middle.show(false);
+        output.show(false);
     }
 
     public void showResult() {

@@ -6,7 +6,7 @@ import java.util.StringJoiner;
  * Created by Taleh Ibrahimli on 2/6/18.
  * Email: me@talehibrahimli.com
  */
-public class VarBit extends CompositeBit implements NamedBit {
+public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit> {
     private String name;
 
     public VarBit(String name) {
@@ -48,7 +48,7 @@ public class VarBit extends CompositeBit implements NamedBit {
 
     @Override
     public boolean getValue() {
-        if(!valueSetted){
+        if (!valueSetted) {
             throw new RuntimeException("Varbit: " + getName() + " has not value");
         }
         return super.getValue();
@@ -57,5 +57,10 @@ public class VarBit extends CompositeBit implements NamedBit {
     public void setValue(boolean value) {
         valueSetted = true;
         super.setValue(value);
+    }
+
+    @Override
+    public int compareTo(VarBit o) {
+        return this.name.compareTo(o.getName());
     }
 }

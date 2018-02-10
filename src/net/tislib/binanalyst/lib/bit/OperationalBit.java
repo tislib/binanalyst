@@ -1,15 +1,8 @@
 package net.tislib.binanalyst.lib.bit;
 
-import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
-import java.util.*;
-
-import static net.tislib.binanalyst.lib.BinValueHelper.print;
-import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+import java.util.StringJoiner;
 
 /**
  * Created by Taleh Ibrahimli on 2/6/18.
