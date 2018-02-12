@@ -2,6 +2,7 @@ package net.tislib.binanalyst.lib.calc.graph;
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
 
 import java.util.*;
 
@@ -28,9 +29,17 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     }
 
     public void setBits(T[][] bitsArray) {
+        setBits(bitsArray, false);
+    }
+
+    public void setBits(T[][] bitsArray, boolean setNames) {
         this.bits.clear();
         for (T[] bits : bitsArray) {
             this.bits.addAll(Arrays.asList(bits));
+        }
+
+        if(setNames){
+            this.rename();
         }
     }
 
@@ -77,6 +86,28 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
         System.out.println(name.toUpperCase() + ":");
         for (NamedBit bit : this) {
             System.out.println(bit.toString() + (showValues ? " => " + bit.getValue() : ""));
+        }
+    }
+
+    public void remove(T bit) {
+        if (!bits.remove(bit)) {
+            throw new RuntimeException("cannot remove bit: " + bit.getName());
+        }
+    }
+
+    public boolean contains(T bit2) {
+        for (T bit : bits) {
+            if (bit == bit2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void rename() {
+        for (int i = 0; i < this.bits.size(); i++) {
+            T bit = this.bits.get(i);
+            bit.setName(name.toCharArray()[0] + "[" + i + "]");
         }
     }
 }

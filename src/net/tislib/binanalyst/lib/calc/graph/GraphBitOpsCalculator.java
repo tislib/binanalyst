@@ -2,6 +2,7 @@ package net.tislib.binanalyst.lib.calc.graph;
 
 import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.optimizer.ConstantCleaner;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
 
@@ -59,7 +60,7 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
             NamedBit[] result = resolveBits(bitsArray[i]);
             newBitsArray[i] = result;
         }
-        output.setBits(newBitsArray);
+        output.setBits(newBitsArray, false);
     }
 
     private NamedBit[] resolveBits(Bit... bits) {
@@ -173,6 +174,36 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     public List<Optimizer> getOptimizers() {
         return optimizers;
+    }
+
+    public void clean() {
+        //clean for constants
+        for (OperationalBit bit : this.getMiddle().getBits()) {
+            ConstantCleaner.clean(this, bit);
+        }
+        // clean for unused middles
+        int removeCount;
+        do {
+            removeCount = 0;
+            for (int i = 0; i < this.getMiddle().getBits().size(); i++) {
+                OperationalBit bit = this.getMiddle().getBits().get(i);
+                int usage = getUsage(this.getMiddle().getBits(), bit);
+                if (!this.getOutput().contains(bit) && usage == 0) {
+                    removeCount++;
+                    this.getMiddle().remove(bit);
+                }
+            }
+        } while (removeCount > 0);
+    }
+
+    private int getUsage(List<OperationalBit> bits, OperationalBit bit) {
+        List<OperationalBit> result = new ArrayList<>();
+        for (OperationalBit operationalBit : bits) {
+            if (operationalBit.hasBit(bit)) {
+                result.add(operationalBit);
+            }
+        }
+        return result.size();
     }
 
     public enum LayerType {

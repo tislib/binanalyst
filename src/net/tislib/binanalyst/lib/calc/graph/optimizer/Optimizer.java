@@ -17,7 +17,7 @@ public interface Optimizer {
     NamedBit optimize(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain);
 
 
-    default NamedBit[] remove(NamedBit[] bits, VarBit bit) {
+    static NamedBit[] remove(NamedBit[] bits, VarBit bit) {
         List<NamedBit> namedBits = new ArrayList<>();
         for (NamedBit namedBit : bits) {
             if (!namedBit.equals(bit)) namedBits.add(namedBit);
@@ -25,7 +25,7 @@ public interface Optimizer {
         return namedBits.toArray(new NamedBit[]{});
     }
 
-    default boolean contains(NamedBit[] bits, Bit bit) {
+    static boolean contains(NamedBit[] bits, Bit bit) {
         for (NamedBit namedBit : bits) {
             if (namedBit.equals(bit)) {
                 return true;

@@ -10,7 +10,6 @@ public class SimpleSolver {
 
     public GraphExpression solve(GraphExpression expression) {
 
-
         return expression;
     }
 

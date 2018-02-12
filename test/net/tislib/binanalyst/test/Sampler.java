@@ -30,18 +30,23 @@ public class Sampler {
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
+
         VarBit[] result = VarBit.list("c", r.length, ZERO);
 
         setVal(calculator, result, multiplicationValue);
-
 
         System.out.println(calculator.getOperationCount());
 
         calculator.setOutputBits(r);
 
+        calculator.clean();
+
         GraphExpression graphExpression = new GraphExpression();
 
         graphExpression.setCalculation(calculator, result);
+
+        calculator.show();
+        System.out.println("========");
 
         return graphExpression;
     }

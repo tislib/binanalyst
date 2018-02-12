@@ -10,8 +10,8 @@ import java.util.StringJoiner;
  */
 public final class OperationalBit extends VarBit implements Bit {
 
-    private final Operation operation;
-    private final NamedBit[] bits;
+    private Operation operation;
+    private NamedBit[] bits;
 
     public OperationalBit(Operation operation, NamedBit[] bits) {
         super();
@@ -66,5 +66,17 @@ public final class OperationalBit extends VarBit implements Bit {
             default:
                 throw new UnsupportedOperationException();
         }
+    }
+
+    public void init(Operation operation, NamedBit[] bits) {
+        this.operation = operation;
+        this.bits = bits;
+    }
+
+    public boolean hasBit(NamedBit bit2) {
+        for (NamedBit bit : bits) {
+            if (bit == bit2) return true;
+        }
+        return false;
     }
 }

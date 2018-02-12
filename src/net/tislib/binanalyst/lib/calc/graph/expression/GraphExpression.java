@@ -1,6 +1,5 @@
 package net.tislib.binanalyst.lib.calc.graph.expression;
 
-import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
@@ -9,7 +8,6 @@ import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,5 +63,9 @@ public class GraphExpression {
         this.calculate();
         List<NamedBit> corruptedBits = Arrays.stream(truth.getBits()).filter(item -> !item.getValue()).collect(Collectors.toList());
         return corruptedBits.size() == 0;
+    }
+
+    public OperationalBit getTruth() {
+        return truth;
     }
 }

@@ -66,6 +66,8 @@ public class MultiplicationTest {
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
+//        calculator.clean();
+
         calculator.calculate();
 
         assertEquals(a.multiply(b), toLong(r));

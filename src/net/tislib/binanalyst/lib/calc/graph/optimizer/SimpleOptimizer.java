@@ -13,13 +13,13 @@ public class SimpleOptimizer implements Optimizer {
     public NamedBit optimize(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain) {
         switch (operation) {
             case AND:
-                if (contains(bits, graphBitOpsCalculator.ZERO)) return graphBitOpsCalculator.ZERO;
+                if (Optimizer.contains(bits, graphBitOpsCalculator.ZERO)) return graphBitOpsCalculator.ZERO;
                 break;
             case OR:
-                bits = remove(bits, graphBitOpsCalculator.ZERO);
+                bits = Optimizer.remove(bits, graphBitOpsCalculator.ZERO);
                 break;
             case XOR:
-                bits = remove(bits, graphBitOpsCalculator.ZERO);
+                bits = Optimizer.remove(bits, graphBitOpsCalculator.ZERO);
                 break;
         }
         if (bits.length == 0) {
