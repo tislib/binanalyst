@@ -1,8 +1,7 @@
 package net.tislib.binanalyst.lib.bit;
 
-import net.tislib.binanalyst.lib.calc.graph.Operation;
-
 import java.util.StringJoiner;
+import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 /**
  * Created by Taleh Ibrahimli on 2/6/18.
@@ -73,10 +72,36 @@ public final class OperationalBit extends VarBit implements Bit {
         this.bits = bits;
     }
 
+    public void reinit(NamedBit[] bits) {
+        this.bits = bits;
+    }
+
     public boolean hasBit(NamedBit bit2) {
         for (NamedBit bit : bits) {
             if (bit == bit2) return true;
         }
         return false;
+    }
+
+    public String showFull() {
+        return showFull(true);
+    }
+
+    public String showFull(boolean showSelf) {
+        if (operation == Operation.NOT) {
+            return showSelf ? getName() + " : " + "!" + showFull(bits[0]) : showFull(bits[0]);
+        }
+        StringJoiner joiner = new StringJoiner(" " + getOperation().getSign() + " ");
+        for (NamedBit bit : bits) {
+            joiner.add(showFull(bit));
+        }
+        return showSelf ? getName() + " : " + joiner : joiner.toString();
+    }
+
+    public static String showFull(NamedBit bit) {
+        if (bit instanceof OperationalBit) {
+            return "(" + ((OperationalBit) bit).showFull(false) + ")";
+        }
+        return bit.getName();
     }
 }

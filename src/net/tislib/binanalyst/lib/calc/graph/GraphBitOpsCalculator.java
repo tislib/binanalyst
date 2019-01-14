@@ -1,20 +1,24 @@
 package net.tislib.binanalyst.lib.calc.graph;
 
-import net.tislib.binanalyst.lib.bit.*;
+import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.ConstantBit;
+import net.tislib.binanalyst.lib.bit.NamedBit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
+import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.ConstantCleaner;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
@@ -29,8 +33,12 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     public final VarBit ZERO;
 
     public GraphBitOpsCalculator() {
-        ZERO = new VarBit("ZERO");
-        ZERO.setValue(false);
+        ZERO = new VarBit("ZERO") {
+            @Override
+            public boolean getValue() {
+                return false;
+            }
+        };
     }
 
     public Layer<VarBit> getInput() {
@@ -51,6 +59,11 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     public void setInputBits(VarBit[]... bits) {
         input.setBits(bits);
+        input.addBits(ZERO);
+    }
+
+    public void setInputBits(VarBit... bits) {
+        input.setBits(new VarBit[][]{bits});
         input.addBits(ZERO);
     }
 
@@ -80,12 +93,12 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     public Bit operation(Operation operation, NamedBit... bits) {
         NamedBit result = null;
         for (int i = 0; i < 10; i++) {
-            if (result != null && result instanceof OperationalBit) {
+            if (result instanceof OperationalBit) {
                 operation = ((OperationalBit) result).getOperation();
                 bits = ((OperationalBit) result).getBits();
             }
             for (Optimizer optimizer : this.optimizers) {
-                result = optimizer.optimize(this, operation, bits, result);
+                result = optimizer.optimizeOperation(this, operation, bits, result);
             }
         }
         if (result == null) {
@@ -94,6 +107,12 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
             return middle.register((OperationalBit) result);
         }
         return result;
+    }
+
+    public void optimize() {
+        for (Optimizer optimizer : this.optimizers) {
+            optimizer.optimizeCalculator(this);
+        }
     }
 
     @Override
@@ -204,6 +223,24 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
             }
         }
         return result.size();
+    }
+
+    public boolean isFictiveBit(OperationalBit item) {
+        return this.getMiddle().getBits().stream().noneMatch(oBit -> oBit != item &&
+                Arrays.asList(oBit.getBits()).contains(item))
+                &&
+                !this.getOutput().getBits().contains(item);
+    }
+
+    public void showOutputFull() {
+        System.out.println("FULL OUTPUT");
+        this.getOutput().forEach(item -> {
+            if (item instanceof OperationalBit) {
+                System.out.println(((OperationalBit) item).showFull());
+            } else {
+                System.out.println(item);
+            }
+        });
     }
 
     public enum LayerType {

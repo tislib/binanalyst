@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.test;
 
+import static junit.framework.TestCase.assertTrue;
+
 import net.tislib.binanalyst.lib.BinCalc;
 import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
@@ -9,8 +11,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.

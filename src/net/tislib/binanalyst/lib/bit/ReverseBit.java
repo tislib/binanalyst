@@ -1,19 +1,17 @@
 package net.tislib.binanalyst.lib.bit;
 
-import net.tislib.binanalyst.lib.calc.graph.Operation;
-
 import java.util.StringJoiner;
 
 /**
  * Created by Taleh Ibrahimli on 2/10/18.
  * Email: me@talehibrahimli.com
  */
-public class AnomalBit extends VarBit {
+public class ReverseBit extends VarBit {
 
     private final AnomalOperation operation;
     private final NamedBit[] bits;
 
-    public AnomalBit(AnomalOperation operation, NamedBit[] bits) {
+    public ReverseBit(AnomalOperation operation, NamedBit[] bits) {
         this.operation = operation;
         this.bits = bits;
     }
@@ -41,4 +39,11 @@ public class AnomalBit extends VarBit {
         return getName() + " : " + joiner;
     }
 
+    public NamedBit[] getBits() {
+        return bits;
+    }
+
+    public AnomalOperation getOperation() {
+        return operation;
+    }
 }

@@ -32,6 +32,11 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
         setBits(bitsArray, false);
     }
 
+    public void setBits(List<T> bits) {
+        this.bits.clear();
+        this.bits.addAll(bits);
+    }
+
     public void setBits(T[][] bitsArray, boolean setNames) {
         this.bits.clear();
         for (T[] bits : bitsArray) {

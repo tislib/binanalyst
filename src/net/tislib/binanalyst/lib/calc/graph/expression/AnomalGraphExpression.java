@@ -6,8 +6,8 @@ import net.tislib.binanalyst.lib.calc.graph.Layer;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.tislib.binanalyst.lib.bit.AnomalBit.AnomalOperation.RAND;
-import static net.tislib.binanalyst.lib.bit.AnomalBit.AnomalOperation.ROR;
+import static net.tislib.binanalyst.lib.bit.ReverseBit.AnomalOperation.RAND;
+import static net.tislib.binanalyst.lib.bit.ReverseBit.AnomalOperation.ROR;
 import static net.tislib.binanalyst.lib.calc.graph.Operation.*;
 
 /**
@@ -16,7 +16,7 @@ import static net.tislib.binanalyst.lib.calc.graph.Operation.*;
  */
 public class AnomalGraphExpression {
 
-    private final Layer<NamedBit> resolved = new Layer<>("Resolved");
+    private final Layer<VarBit> resolved = new Layer<>("Resolved");
     private final Layer<OperationalBit> middle;
     private final Layer<VarBit> root;
 
@@ -43,11 +43,11 @@ public class AnomalGraphExpression {
                         swap((OperationalBit) bit, newBit);
                         break;
                     case AND:
-                        newBit = new AnomalBit(RAND, swapBit(operationalBit, bit, operationalBit));
+                        newBit = new ReverseBit(RAND, swapBit(operationalBit, bit, operationalBit));
                         swap((OperationalBit) bit, newBit);
                         break;
                     case OR:
-                        newBit = new AnomalBit(ROR, swapBit(operationalBit, bit, operationalBit));
+                        newBit = new ReverseBit(ROR, swapBit(operationalBit, bit, operationalBit));
                         swap((OperationalBit) bit, newBit);
                         break;
                     case NOT:
@@ -90,5 +90,17 @@ public class AnomalGraphExpression {
         this.root.show(showValues);
         this.middle.show(showValues);
         this.resolved.show(showValues);
+    }
+
+    public Layer<VarBit> getResolved() {
+        return resolved;
+    }
+
+    public Layer<OperationalBit> getMiddle() {
+        return middle;
+    }
+
+    public Layer<VarBit> getRoot() {
+        return root;
     }
 }

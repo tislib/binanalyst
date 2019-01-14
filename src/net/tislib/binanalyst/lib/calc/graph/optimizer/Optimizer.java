@@ -14,7 +14,7 @@ import java.util.List;
  * Email: me@talehibrahimli.com
  */
 public interface Optimizer {
-    NamedBit optimize(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain);
+    NamedBit optimizeOperation(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain);
 
 
     static NamedBit[] remove(NamedBit[] bits, VarBit bit) {
@@ -33,4 +33,6 @@ public interface Optimizer {
         }
         return false;
     }
+
+    void optimizeCalculator(GraphBitOpsCalculator graphBitOpsCalculator);
 }

@@ -1,7 +1,5 @@
 package net.tislib.binanalyst.lib.bit;
 
-import java.util.StringJoiner;
-
 /**
  * Created by Taleh Ibrahimli on 2/6/18.
  * Email: me@talehibrahimli.com
@@ -17,6 +15,24 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
 
     public VarBit() {
 
+    }
+
+    public static VarBit wrap(String name, Bit bit) {
+        return new VarBit(name) {
+            @Override
+            public boolean getValue() {
+                return bit.getValue();
+            }
+        };
+    }
+
+    public static VarBit wrap(String name, boolean bit) {
+        return new VarBit(name) {
+            @Override
+            public boolean getValue() {
+                return bit;
+            }
+        };
     }
 
     public void setName(String name) {

@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph.optimizer;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
@@ -12,7 +14,7 @@ import net.tislib.binanalyst.lib.calc.graph.Operation;
 public class LogicalOptimizer implements Optimizer {
 
     @Override
-    public NamedBit optimize(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain) {
+    public NamedBit optimizeOperation(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain) {
 
         if (bits.length == 2) {
             if (operation == Operation.AND) {
@@ -39,6 +41,39 @@ public class LogicalOptimizer implements Optimizer {
             }
         }
 
+        if (operation == Operation.XOR && chain instanceof OperationalBit) {
+            OperationalBit operationalBit = (OperationalBit) chain;
+            operationalBit.reinit(Arrays.stream(operationalBit.getBits())
+                    .filter(item -> item != graphBitOpsCalculator.ZERO)
+                    .collect(Collectors.toList())
+                    .toArray(new NamedBit[]{}));
+        }
+
         return chain;
+    }
+
+    @Override
+    public void optimizeCalculator(GraphBitOpsCalculator calculator) {
+        for (int i = 0; i < 3; i++) {
+            calculator.getMiddle().setBits(
+                    calculator.getMiddle()
+                            .getBits()
+                            .stream()
+                            .filter(item -> {
+                                return !calculator.isFictiveBit(item);
+                            }).collect(Collectors.toList()));
+
+            calculator.getMiddle().forEach(oBit -> {
+                if (oBit.getOperation() != Operation.XOR) {
+                    return;
+                }
+                oBit.reinit(Arrays
+                        .stream(oBit.getBits())
+                        .filter(item -> item != calculator.ZERO)
+                        .collect(Collectors.toList())
+                        .toArray(new NamedBit[]{})
+                );
+            });
+        }
     }
 }

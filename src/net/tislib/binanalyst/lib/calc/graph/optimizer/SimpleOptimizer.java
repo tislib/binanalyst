@@ -10,7 +10,7 @@ import net.tislib.binanalyst.lib.calc.graph.Operation;
  */
 public class SimpleOptimizer implements Optimizer {
     @Override
-    public NamedBit optimize(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain) {
+    public NamedBit optimizeOperation(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain) {
         switch (operation) {
             case AND:
                 if (Optimizer.contains(bits, graphBitOpsCalculator.ZERO)) return graphBitOpsCalculator.ZERO;
@@ -29,5 +29,10 @@ public class SimpleOptimizer implements Optimizer {
             return bits[0];
         }
         return chain;
+    }
+
+    @Override
+    public void optimizeCalculator(GraphBitOpsCalculator graphBitOpsCalculator) {
+
     }
 }
