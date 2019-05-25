@@ -32,7 +32,7 @@ public class MultiplicationTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {23234, 34345}, {455, 65632}, {3, 23443244}, {32332324, 4}, {2, 3}, {5, 6}, {2, 422}
+                {23234, 34345}, {455, 65632}, {3, 23443244}, {32332324, 4}, {2, 3}, {5, 6}, {2, 422}, {1, 3}
         });
     }
 
@@ -86,7 +86,6 @@ public class MultiplicationTest {
 
         calculator.getOptimizers().add(new SimpleOptimizer());
         calculator.getOptimizers().add(new LogicalOptimizer());
-        calculator.getOptimizers().add(new NfOptimizer());
 
         calculator.setInputBits(aBits, bBits);
 
@@ -97,6 +96,38 @@ public class MultiplicationTest {
         calculator.optimize();
 
         calculator.calculate();
+
+        assertEquals(a.multiply(b), toLong(r));
+    }
+
+    @Test
+    public void graphCalcOptimized2() {
+        GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
+
+        final int BIN_SIZE = 3;
+
+        VarBit[] aBits = VarBit.list("a", BIN_SIZE, ZERO);
+        VarBit[] bBits = VarBit.list("b", BIN_SIZE, ZERO);
+
+        if (a.longValue() > 1 << BIN_SIZE | b.longValue() > 1 << BIN_SIZE) {
+            return;
+        }
+
+        setVal(calculator, aBits, a.longValue());
+        setVal(calculator, bBits, b.longValue());
+
+        calculator.getOptimizers().add(new SimpleOptimizer());
+        calculator.getOptimizers().add(new NfOptimizer());
+
+        calculator.setInputBits(aBits, bBits);
+
+        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
+
+        calculator.setOutputBits(r);
+
+        calculator.optimize();
+
+        r = calculator.calculate();
 
         assertEquals(a.multiply(b), toLong(r));
     }

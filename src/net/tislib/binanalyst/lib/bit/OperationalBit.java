@@ -12,7 +12,7 @@ public final class OperationalBit extends VarBit implements Bit {
     private Operation operation;
     private NamedBit[] bits;
 
-    public OperationalBit(Operation operation, NamedBit[] bits) {
+    public OperationalBit(Operation operation, NamedBit... bits) {
         super();
         this.operation = operation;
         this.bits = bits;
@@ -104,4 +104,27 @@ public final class OperationalBit extends VarBit implements Bit {
         }
         return bit.getName();
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof OperationalBit) {
+            OperationalBit otherBit = (OperationalBit) obj;
+            if (this.operation != otherBit.getOperation()) {
+                return false;
+            }
+            if (this.bits.length != otherBit.bits.length) {
+                return false;
+            }
+            for (int i = 0; i < this.bits.length; i++) {
+                if (this.bits[i] != (otherBit.bits[i])) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

@@ -10,8 +10,6 @@ import static net.tislib.binanalyst.lib.BitOps.*;
  * Email: me@talehibrahimli.com
  */
 public class BinCalc {
-
-
     public static byte getAddPosBit(BitOpsCalculator calculator, byte ai, byte bi, byte si, byte ai1, byte bi1) {
         return convert(getAddPosBit(calculator, wrap(calculator, ai), wrap(calculator, bi), wrap(calculator, si), wrap(calculator, ai1), wrap(calculator, bi1)));
     }
@@ -19,7 +17,6 @@ public class BinCalc {
     public static Bit getAddPosBit(BitOpsCalculator calculator, Bit ai, Bit bi, Bit si, Bit ai1, Bit bi1) {
         return xor(calculator, ai1, bi1, and(calculator, or(calculator, ai, bi), (or(calculator, and(calculator, ai, bi), not(calculator, si)))));
     }
-
 
     public static byte[] getAddMultiPosBit(BitOpsCalculator calculator, byte ri[], byte[] si, byte ri1[]) {
         return convert(getAddMultiPosBit(calculator, wrap(calculator, ri), wrap(calculator, si), wrap(calculator, ri1)));

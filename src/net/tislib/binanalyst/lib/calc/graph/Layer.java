@@ -66,11 +66,11 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     }
 
     private Bit check(T bit) {
-//        for (Bit foundBit : bits) {
-//            if (foundBit == bit) {
-//                return foundBit;
-//            }
-//        }
+        for (Bit foundBit : bits) {
+            if (foundBit.equals(bit)) {
+                return foundBit;
+            }
+        }
         return null;
     }
 

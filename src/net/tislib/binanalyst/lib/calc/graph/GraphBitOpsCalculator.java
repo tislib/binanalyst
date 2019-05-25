@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -27,10 +29,18 @@ import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
 public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     private final Layer<VarBit> input = new Layer<>("Input");
+    private final Layer<OperationalBit> negativeInput = new Layer<>("Input");
     private final Layer<OperationalBit> middle = new Layer<>("Middle");
     private final Layer<NamedBit> output = new Layer<>("Output");
+    private final Map<Bit, Bit> negativeBitMap = new HashMap<>();
+    private final Map<Bit, Bit> reverseBitMap = new HashMap<>();
 
     public final VarBit ZERO;
+    public final VarBit ONE;
+
+    private boolean dontUseNot = false;
+    private boolean dontUseXor = false;
+    private boolean reverseInsteadOfUsingNot = false;
 
     public GraphBitOpsCalculator() {
         ZERO = new VarBit("ZERO") {
@@ -39,10 +49,17 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
                 return false;
             }
         };
+        ONE = (VarBit) operation(Operation.NOT, ZERO);
+        negativeBitMap.put(ZERO, ONE);
+        negativeBitMap.put(ConstantBit.ZERO, ONE);
     }
 
     public Layer<VarBit> getInput() {
         return input;
+    }
+
+    public Layer<OperationalBit> getNegative() {
+        return negativeInput;
     }
 
     public Layer<OperationalBit> getMiddle() {
@@ -60,6 +77,17 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     public void setInputBits(VarBit[]... bits) {
         input.setBits(bits);
         input.addBits(ZERO);
+        if (dontUseNot) {
+            List<OperationalBit> negativeBits = new ArrayList<>();
+            input.getBits().forEach(bit -> {
+                OperationalBit nBit = new OperationalBit(Operation.NOT, bit);
+                nBit.setName("n" + bit.getName());
+                nBit.calculate();
+                negativeBits.add(nBit);
+                negativeBitMap.put(bit, nBit);
+            });
+            this.negativeInput.setBits(negativeBits);
+        }
     }
 
     public void setInputBits(VarBit... bits) {
@@ -98,7 +126,9 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
                 bits = ((OperationalBit) result).getBits();
             }
             for (Optimizer optimizer : this.optimizers) {
-                result = optimizer.optimizeOperation(this, operation, bits, result);
+                if (bits.length > 0) {
+                    result = optimizer.optimizeOperation(this, operation, bits, result);
+                }
             }
         }
         if (result == null) {
@@ -117,7 +147,21 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     @Override
     public Bit xor(Bit... bits) {
+        if (dontUseXor) {
+            NamedBit resBit = xorToAndOr(bits[0], bits[1]);
+            for (int i = 2; i < bits.length; i++) {
+                resBit = xorToAndOr(resBit, bits[i]);
+            }
+            return resBit;
+        }
         return operation(Operation.XOR, resolveBits(bits));
+    }
+
+    private NamedBit xorToAndOr(Bit bit1, Bit bit2) {
+        return (NamedBit) this.or(
+                this.and(bit1, this.not(bit2)),
+                this.and(this.not(bit1), bit2)
+        );
     }
 
     @Override
@@ -130,9 +174,19 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         return operation(Operation.OR, resolveBits(bits));
     }
 
-    @Override
     public Bit not(Bit bit) {
-        return operation(Operation.NOT, resolveBits(bit));
+        if (reverseInsteadOfUsingNot) {
+            if (bit instanceof OperationalBit) {
+                return OperationalBitReverser.reverse(this, bit);
+            } else {
+                if (!getNegativeBitMap().containsKey(bit)) {
+                    return new OperationalBit(Operation.NOT, (NamedBit) bit);
+                }
+                return this.getNegativeBitMap().get(bit);
+            }
+        } else {
+            return operation(Operation.NOT, resolveBits(bit));
+        }
     }
 
     @Override
@@ -179,10 +233,15 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         printValues(output.getBits().toArray(new NamedBit[]{}));
     }
 
-    public void calculate() {
+    public Bit[] calculate() {
         for (OperationalBit bit : middle) {
             bit.calculate();
         }
+        Bit[] res = new Bit[output.getBits().size()];
+        for (int i = 0; i < output.getBits().size(); i++) {
+            res[i] = output.getBits().get(i);
+        }
+        return res;
     }
 
     public void transform(Transformer transformer) {
@@ -241,6 +300,14 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
                 System.out.println(item);
             }
         });
+    }
+
+    public Map<Bit, Bit> getReverseBitMap() {
+        return reverseBitMap;
+    }
+
+    public Map<Bit, Bit> getNegativeBitMap() {
+        return negativeBitMap;
     }
 
     public enum LayerType {

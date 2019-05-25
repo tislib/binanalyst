@@ -49,6 +49,10 @@ public class LogicalOptimizer implements Optimizer {
                     .toArray(new NamedBit[]{}));
         }
 
+        if(bits.length == 0) {
+            System.out.println("YYY");
+        }
+
         return chain;
     }
 
