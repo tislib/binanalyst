@@ -40,7 +40,7 @@ public class BitOps {
     }
 
     public static byte convert(Bit bit) {
-        return (byte) (bit.getValue() ? 1 : 0);
+        return bit.getValue().toByteValue();
     }
 
     public static byte[] convert(Bit... bits) {

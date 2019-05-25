@@ -1,5 +1,6 @@
 package net.tislib.binanalyst.lib;
 
+import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
@@ -88,7 +89,7 @@ public class BinValueHelper {
     public static BigInteger toLong(Bit[] bits) {
         BigInteger num = BigInteger.ZERO;
         for (int i = 0; i < bits.length; i++) {
-            int main = (bits[bits.length - i - 1].getValue() ? 1 : 0);
+            int main = (bits[bits.length - i - 1].getValue().toByteValue());
             BigInteger power10 = BigInteger.ONE.add(BigInteger.ONE).pow(i);
             num = num.add(power10.multiply(BigInteger.valueOf(main)));
         }
@@ -153,7 +154,7 @@ public class BinValueHelper {
     public static void printValues(Bit... bits) {
         System.out.print("0x");
         for (int i = 0; i < bits.length; i++) {
-            System.out.print(bits[i].getValue() ? "1" : "0");
+            System.out.print(bits[i].getValue().toString());
         }
         System.out.print(" : " + toLong(bits));
         System.out.println();
@@ -172,7 +173,7 @@ public class BinValueHelper {
     public static Bit[] trim(Bit[] bits) {
         int i = 0;
         for (; i < bits.length; i++) {
-            if (bits[i].getValue()) {
+            if (bits[i].getValue().isTrue()) {
                 break;
             }
         }
@@ -186,7 +187,7 @@ public class BinValueHelper {
     public static void setVal(BitOpsCalculator calculator, VarBit[] bits, long value) {
         Bit[] bitArr = trim(wrap(simpleCalculator, getBinArray(value)));
         for (int i = 0; i < Math.min(bitArr.length, bits.length); i++) {
-            boolean val = bitArr[bitArr.length - 1 - i].getValue();
+            BinaryValue val = bitArr[bitArr.length - 1 - i].getValue();
             bits[bits.length - 1 - i].setValue(val);
         }
     }

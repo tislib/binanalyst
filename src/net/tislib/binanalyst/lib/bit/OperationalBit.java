@@ -42,26 +42,26 @@ public final class OperationalBit extends VarBit implements Bit {
         this.setValue(calculateInternal());
     }
 
-    private boolean calculateInternal() {
+    private BinaryValue calculateInternal() {
         switch (operation) {
             case AND:
                 for (NamedBit namedBit : bits) {
-                    if (!namedBit.getValue()) return false;
+                    if (namedBit.getValue() == BinaryValue.FALSE) return BinaryValue.FALSE;
                 }
-                return true;
+                return BinaryValue.TRUE;
             case OR:
                 for (NamedBit namedBit : bits) {
-                    if (namedBit.getValue()) return true;
+                    if (namedBit.getValue() == BinaryValue.TRUE) return BinaryValue.TRUE;
                 }
-                return false;
+                return BinaryValue.FALSE;
             case NOT:
-                return !bits[0].getValue();
+                return bits[0].getValue().reverse();
             case XOR:
                 int ONE_count = 0;
                 for (NamedBit namedBit : bits) {
-                    if (namedBit.getValue()) ONE_count++;
+                    if (namedBit.getValue() == BinaryValue.TRUE) ONE_count++;
                 }
-                return (ONE_count % 2) == 1;
+                return (ONE_count % 2) == 1 ? BinaryValue.TRUE : BinaryValue.FALSE;
             default:
                 throw new UnsupportedOperationException();
         }

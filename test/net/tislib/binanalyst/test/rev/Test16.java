@@ -1,5 +1,6 @@
 package net.tislib.binanalyst.test.rev;
 
+import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.RevOpsCalculator;
@@ -39,7 +40,7 @@ public class Test16 {
                 )
         );
 
-        VarBit rVal = VarBit.wrap("R", true);
+        VarBit rVal = VarBit.wrap("R", BinaryValue.TRUE);
 
         System.out.println(rVal.getValue());
 

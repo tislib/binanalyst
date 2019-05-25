@@ -20,16 +20,16 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
     public static VarBit wrap(String name, Bit bit) {
         return new VarBit(name) {
             @Override
-            public boolean getValue() {
+            public BinaryValue getValue() {
                 return bit.getValue();
             }
         };
     }
 
-    public static VarBit wrap(String name, boolean bit) {
+    public static VarBit wrap(String name, BinaryValue bit) {
         return new VarBit(name) {
             @Override
-            public boolean getValue() {
+            public BinaryValue getValue() {
                 return bit;
             }
         };
@@ -63,14 +63,14 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
     }
 
     @Override
-    public boolean getValue() {
+    public BinaryValue getValue() {
         if (!valueSetted) {
             throw new RuntimeException("Varbit: " + getName() + " has not value");
         }
         return super.getValue();
     }
 
-    public void setValue(boolean value) {
+    public void setValue(BinaryValue value) {
         valueSetted = true;
         super.setValue(value);
     }

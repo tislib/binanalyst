@@ -6,6 +6,6 @@ package net.tislib.binanalyst.lib.bit;
  */
 public interface Bit {
 
-    public boolean getValue();
+    public BinaryValue getValue();
 
 }

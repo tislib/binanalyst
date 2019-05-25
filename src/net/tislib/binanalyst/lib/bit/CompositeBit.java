@@ -5,9 +5,9 @@ package net.tislib.binanalyst.lib.bit;
  * Email: me@talehibrahimli.com
  */
 public class CompositeBit implements Bit {
-    private boolean value;
+    private BinaryValue value = BinaryValue.UNSET;
 
-    public CompositeBit(boolean value) {
+    public CompositeBit(BinaryValue value) {
         this.value = value;
     }
 
@@ -15,21 +15,21 @@ public class CompositeBit implements Bit {
     }
 
     @Override
-    public boolean getValue() {
+    public BinaryValue getValue() {
         return value;
     }
 
-    public void setValue(boolean value) {
+    public void setValue(BinaryValue value) {
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return this.getValue() ? "1" : "0";
+        return this.getValue().toString();
     }
 
     @Override
     public int hashCode() {
-        return value ? 1 : 0;
+        return value.hashCode();
     }
 }

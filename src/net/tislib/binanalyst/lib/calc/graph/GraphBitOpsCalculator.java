@@ -10,6 +10,7 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
@@ -35,8 +36,8 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
     public GraphBitOpsCalculator() {
         ZERO = new VarBit("ZERO") {
             @Override
-            public boolean getValue() {
-                return false;
+            public BinaryValue getValue() {
+                return BinaryValue.FALSE;
             }
         };
     }
@@ -80,7 +81,7 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         NamedBit[] result = new NamedBit[bits.length];
         for (int i = 0; i < bits.length; i++) {
             if (bits[i] instanceof ConstantBit) {
-                result[i] = bits[i].getValue() ? (NamedBit) not(ZERO) : ZERO;
+                result[i] = bits[i].getValue().isTrue() ? (NamedBit) not(ZERO) : ZERO;
             } else if (bits[i] instanceof NamedBit) {
                 result[i] = (NamedBit) bits[i];
             } else {

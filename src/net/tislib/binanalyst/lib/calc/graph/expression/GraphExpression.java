@@ -1,5 +1,6 @@
 package net.tislib.binanalyst.lib.calc.graph.expression;
 
+import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
@@ -27,12 +28,12 @@ public class GraphExpression {
         NamedBit[] tBits = new NamedBit[result.length];
         List<NamedBit> oBits = calculator.getOutput().getBits();
         for (int i = 0; i < oBits.size(); i++) {
-            tBits[i] = result[i].getValue() ? oBits.get(i) : (NamedBit) calculator.not(oBits.get(i));
+            tBits[i] = result[i].getValue().isTrue() ? oBits.get(i) : (NamedBit) calculator.not(oBits.get(i));
         }
         this.middle = calculator.getMiddle().copy();
         truth = new OperationalBit(Operation.AND, tBits);
         truth.setName("T");
-        truth.setValue(true);
+        truth.setValue(BinaryValue.TRUE);
         middle.register(truth);
     }
 
@@ -61,7 +62,7 @@ public class GraphExpression {
 
     public boolean check() {
         this.calculate();
-        List<NamedBit> corruptedBits = Arrays.stream(truth.getBits()).filter(item -> !item.getValue()).collect(Collectors.toList());
+        List<NamedBit> corruptedBits = Arrays.stream(truth.getBits()).filter(item -> item.getValue().isFalse()).collect(Collectors.toList());
         return corruptedBits.size() == 0;
     }
 

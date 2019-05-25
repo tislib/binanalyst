@@ -5,17 +5,17 @@ package net.tislib.binanalyst.lib.bit;
  * Email: me@talehibrahimli.com
  */
 public final class ConstantBit implements Bit {
-    public static final Bit ZERO = new ConstantBit(false);
-    public static final Bit ONE = new ConstantBit(true);
+    public static final Bit ZERO = new ConstantBit(BinaryValue.FALSE);
+    public static final Bit ONE = new ConstantBit(BinaryValue.TRUE);
 
-    private final boolean value;
+    private final BinaryValue value;
 
-    private ConstantBit(boolean value) {
+    private ConstantBit(BinaryValue value) {
         this.value = value;
     }
 
     @Override
-    public boolean getValue() {
+    public BinaryValue getValue() {
         return value;
     }
 

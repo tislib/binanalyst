@@ -1,5 +1,6 @@
 package net.tislib.binanalyst.lib.calc;
 
+import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.CompositeBit;
 
@@ -13,8 +14,9 @@ public class SimpleBitOpsCalculator implements BitOpsCalculator {
     @Override
     public Bit xor(Bit... bits) {
         CompositeBit compositeBit = new CompositeBit();
+        compositeBit.setValue(BinaryValue.FALSE);
         for (Bit bit : bits) {
-            if (bit.getValue()) compositeBit.setValue(!compositeBit.getValue());
+            if (bit.getValue().isTrue()) compositeBit.setValue(compositeBit.getValue().reverse());
         }
         return compositeBit;
     }
@@ -25,7 +27,7 @@ public class SimpleBitOpsCalculator implements BitOpsCalculator {
             if(bit == null){
                 throw new RuntimeException();
             }
-            if (!bit.getValue()) {
+            if (bit.getValue().isFalse()) {
                 return ZERO;
             }
         }
@@ -35,7 +37,7 @@ public class SimpleBitOpsCalculator implements BitOpsCalculator {
     @Override
     public Bit or(Bit... bits) {
         for (Bit bit : bits) {
-            if (bit.getValue()) {
+            if (bit.getValue().isTrue()) {
                 return ONE;
             }
         }
@@ -44,7 +46,7 @@ public class SimpleBitOpsCalculator implements BitOpsCalculator {
 
     @Override
     public Bit not(Bit bit) {
-        return new CompositeBit(!bit.getValue());
+        return new CompositeBit(bit.getValue().reverse());
     }
 
 
