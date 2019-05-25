@@ -6,6 +6,8 @@ package net.tislib.binanalyst.lib.bit;
  */
 public final class ConstantBit implements Bit {
     public static final Bit ZERO = new ConstantBit(BinaryValue.FALSE);
+    public static final Bit UNKNOWN = new ConstantBit(BinaryValue.UNKNOWN);
+    public static final Bit UNSET = new ConstantBit(BinaryValue.UNSET);
     public static final Bit ONE = new ConstantBit(BinaryValue.TRUE);
 
     private final BinaryValue value;

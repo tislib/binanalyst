@@ -1,18 +1,17 @@
 package net.tislib.binanalyst.lib;
 
+import static net.tislib.binanalyst.lib.BitOps.wrap;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-
-import static net.tislib.binanalyst.lib.BitOps.wrap;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
@@ -41,7 +40,12 @@ public class BinValueHelper {
     }
 
     public static int binLength(long num) {
-        return getBinArray(num).length;
+        int i = 0;
+        while (num > 0) {
+            num /= 2;
+            i++;
+        }
+        return i;
     }
 
     public static void print(long a, int length) {
@@ -209,6 +213,15 @@ public class BinValueHelper {
         VarBit[] result = new VarBit[bits.length];
         for (int i = 0; i < result.length; i++) {
             result[i] = bits[bits.length - i - 1];
+        }
+        return result;
+    }
+
+    public static VarBit[] clone(VarBit[] bits) {
+        VarBit[] result = new VarBit[bits.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = new VarBit(bits[i].getName());
+            result[i].setValue(bits[i].getValue());
         }
         return result;
     }

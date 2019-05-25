@@ -17,16 +17,16 @@ public interface Optimizer {
     NamedBit optimizeOperation(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain);
 
 
-    static NamedBit[] remove(NamedBit[] bits, VarBit bit) {
-        List<NamedBit> namedBits = new ArrayList<>();
-        for (NamedBit namedBit : bits) {
+    static Bit[] remove(Bit[] bits, Bit bit) {
+        List<Bit> namedBits = new ArrayList<>();
+        for (Bit namedBit : bits) {
             if (!namedBit.equals(bit)) namedBits.add(namedBit);
         }
-        return namedBits.toArray(new NamedBit[]{});
+        return namedBits.toArray(new Bit[]{});
     }
 
-    static boolean contains(NamedBit[] bits, Bit bit) {
-        for (NamedBit namedBit : bits) {
+    static boolean contains(Bit[] bits, Bit bit) {
+        for (Bit namedBit : bits) {
             if (namedBit.equals(bit)) {
                 return true;
             }

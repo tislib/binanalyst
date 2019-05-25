@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -16,7 +18,6 @@ import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
-import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.ConstantCleaner;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
@@ -25,11 +26,13 @@ import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
  * Created by Taleh Ibrahimli on 2/5/18.
  * Email: me@talehibrahimli.com
  */
-public class GraphBitOpsCalculator implements BitOpsCalculator {
+public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     private final Layer<VarBit> input = new Layer<>("Input");
     private final Layer<OperationalBit> middle = new Layer<>("Middle");
     private final Layer<NamedBit> output = new Layer<>("Output");
+
+    private final Map<String, OperationalBit> middleBitCache = new HashMap<>();
 
     public final VarBit ZERO;
 
@@ -42,14 +45,17 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         };
     }
 
+    @Override
     public Layer<VarBit> getInput() {
         return input;
     }
 
+    @Override
     public Layer<OperationalBit> getMiddle() {
         return middle;
     }
 
+    @Override
     public Layer<NamedBit> getOutput() {
         return output;
     }
@@ -58,16 +64,19 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     private int operationCount = 0;
 
+    @Override
     public void setInputBits(VarBit[]... bits) {
         input.setBits(bits);
         input.addBits(ZERO);
     }
 
+    @Override
     public void setInputBits(VarBit... bits) {
         input.setBits(new VarBit[][]{bits});
         input.addBits(ZERO);
     }
 
+    @Override
     public void setOutputBits(Bit[]... bitsArray) {
         NamedBit newBitsArray[][] = new NamedBit[bitsArray.length][];
         for (int i = 0; i < bitsArray.length; i++) {
@@ -91,6 +100,7 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         return result;
     }
 
+    @Override
     public Bit operation(Operation operation, NamedBit... bits) {
         NamedBit result = null;
         for (int i = 0; i < 10; i++) {
@@ -104,8 +114,12 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         }
         if (result == null) {
             operationCount++;
-            result = new OperationalBit(operation, bits);
-            return middle.register((OperationalBit) result);
+            OperationalBit newBit = new OperationalBit(operation, bits);
+            if (middleBitCache.containsKey(newBit.toString())) {
+                return middleBitCache.get(newBit.toString());
+            }
+            middleBitCache.put(newBit.toString(), newBit);
+            return middle.register(newBit);
         }
         return result;
     }
@@ -165,10 +179,12 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
 
     }
 
+    @Override
     public int getOperationCount() {
         return operationCount;
     }
 
+    @Override
     public void show() {
         input.show(false);
         middle.show(false);
@@ -180,6 +196,7 @@ public class GraphBitOpsCalculator implements BitOpsCalculator {
         printValues(output.getBits().toArray(new NamedBit[]{}));
     }
 
+    @Override
     public void calculate() {
         for (OperationalBit bit : middle) {
             bit.calculate();

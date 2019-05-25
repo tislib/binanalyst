@@ -12,17 +12,18 @@ import net.tislib.binanalyst.lib.calc.graph.Operation;
  */
 public class ConstantCleaner {
     public static void clean(GraphBitOpsCalculator calculator, OperationalBit bit) {
-        NamedBit[] bits = bit.getBits();
-        switch (bit.getOperation()) {
-            case AND:
-//                bit.init(bit.getOperation(), Optimizer.remove(bits, (VarBit) calculator.not(calculator.ZERO)));
-                break;
-            case OR:
-                bit.init(bit.getOperation(), Optimizer.remove(bits, calculator.ZERO));
-                break;
-            case XOR:
-                bit.init(bit.getOperation(), Optimizer.remove(bits, calculator.ZERO));
-                break;
-        }
+        throw new UnsupportedOperationException();
+//        NamedBit[] bits = bit.getBits();
+//        switch (bit.getOperation()) {
+//            case AND:
+////                bit.init(bit.getOperation(), Optimizer.remove(bits, (VarBit) calculator.not(calculator.ZERO)));
+//                break;
+//            case OR:
+//                bit.init(bit.getOperation(), Optimizer.remove(bits, calculator.ZERO));
+//                break;
+//            case XOR:
+//                bit.init(bit.getOperation(), Optimizer.remove(bits, calculator.ZERO));
+//                break;
+//        }
     }
 }

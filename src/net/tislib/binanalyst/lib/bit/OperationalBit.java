@@ -43,15 +43,28 @@ public final class OperationalBit extends VarBit implements Bit {
     }
 
     private BinaryValue calculateInternal() {
+        boolean unknownFound = false;
         switch (operation) {
             case AND:
                 for (NamedBit namedBit : bits) {
                     if (namedBit.getValue() == BinaryValue.FALSE) return BinaryValue.FALSE;
+                    if (namedBit.getValue() == BinaryValue.UNKNOWN) {
+                        unknownFound = true;
+                    }
+                }
+                if (unknownFound) {
+                    return BinaryValue.UNKNOWN;
                 }
                 return BinaryValue.TRUE;
             case OR:
                 for (NamedBit namedBit : bits) {
                     if (namedBit.getValue() == BinaryValue.TRUE) return BinaryValue.TRUE;
+                    if (namedBit.getValue() == BinaryValue.UNKNOWN) {
+                        unknownFound = true;
+                    }
+                }
+                if (unknownFound) {
+                    return BinaryValue.UNKNOWN;
                 }
                 return BinaryValue.FALSE;
             case NOT:
@@ -59,6 +72,8 @@ public final class OperationalBit extends VarBit implements Bit {
             case XOR:
                 int ONE_count = 0;
                 for (NamedBit namedBit : bits) {
+                    if (namedBit.getValue() == BinaryValue.UNKNOWN)
+                        return BinaryValue.UNKNOWN;
                     if (namedBit.getValue() == BinaryValue.TRUE) ONE_count++;
                 }
                 return (ONE_count % 2) == 1 ? BinaryValue.TRUE : BinaryValue.FALSE;
@@ -104,4 +119,5 @@ public final class OperationalBit extends VarBit implements Bit {
         }
         return bit.getName();
     }
+
 }

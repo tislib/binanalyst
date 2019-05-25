@@ -35,6 +35,19 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
         };
     }
 
+    public static <T extends Bit> VarBit[] wrap(T[] bits) {
+        VarBit[] result = new VarBit[bits.length];
+        for (int i = 0; i < bits.length; i++) {
+            if (bits[i] instanceof VarBit) {
+                result[i] = (VarBit) bits[i];
+            } else {
+                result[i] = new VarBit();
+                result[i].setValue(bits[i].getValue());
+            }
+        }
+        return result;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
