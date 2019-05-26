@@ -8,6 +8,7 @@ import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
@@ -24,14 +25,14 @@ public class XorOrSystemTest {
     public static void main(String... args) {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
-//        calculator = new XorAndCalculatorDecorator(calculator);
+        calculator = new AndOrCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
 
-        long a = 23;
-        long b = 37;
+        long a = 7;
+        long b = 5;
 
-        VarBit[] aBits = VarBit.list("a", 8, ZERO);
-        VarBit[] bBits = VarBit.list("b", 8, ZERO);
+        VarBit[] aBits = VarBit.list("a", 3, ZERO);
+        VarBit[] bBits = VarBit.list("b", 3, ZERO);
 
 
 
