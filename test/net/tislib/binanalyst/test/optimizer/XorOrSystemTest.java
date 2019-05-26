@@ -24,7 +24,7 @@ public class XorOrSystemTest {
     public static void main(String... args) {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
-        calculator = new XorAndCalculatorDecorator(calculator);
+//        calculator = new XorAndCalculatorDecorator(calculator);
         calculator = new SimpleOptimizationDecorator(calculator);
 
         long a = 23;

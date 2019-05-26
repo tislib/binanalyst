@@ -15,7 +15,6 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.expression.GraphExpression;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.NfOptimizer;
-import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.solver.SimpleSolver;
 import net.tislib.binanalyst.lib.operator.BinMul;
 import org.junit.Test;
@@ -32,7 +31,11 @@ public class MultiplicationTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {23234, 34345}, {455, 65632}, {3, 23443244}, {32332324, 4}, {2, 3}, {5, 6}, {2, 422}
+                {23234, 34345}, {455, 65632}, {3, 23443244}, {32932321, 1}, {2, 1}, {5, 6}, {2, 422},
+                {23235, 34335}, {415, 65532}, {2, 23473244}, {32832322, 2}, {1, 209}, {5, 6}, {2, 422},
+                {23236, 34345}, {425, 65032}, {1, 23483244}, {32732323, 3}, {2, 3}, {5, 6}, {2, 422},
+                {23237, 34355}, {435, 65732}, {3, 23493244}, {32632324, 4}, {3, 4}, {5, 6}, {2, 422},
+                {23238, 34365}, {445, 65832}, {5, 23403244}, {32532325, 5}, {4, 5}, {5, 6}, {2, 422},
         });
     }
 
@@ -67,7 +70,7 @@ public class MultiplicationTest {
 
         calculator.calculate();
 
-        assertEquals(a.multiply(b), toLong(r));
+        assertEquals(toLong(r), a.multiply(b));
     }
 
     @Test
@@ -84,7 +87,6 @@ public class MultiplicationTest {
         setVal(calculator, aBits, a.longValue());
         setVal(calculator, bBits, b.longValue());
 
-        calculator.getOptimizers().add(new SimpleOptimizer());
         calculator.getOptimizers().add(new LogicalOptimizer());
         calculator.getOptimizers().add(new NfOptimizer());
 
@@ -133,7 +135,6 @@ public class MultiplicationTest {
 
         calculator.setInputBits(aBits, bBits);
 
-        calculator.getOptimizers().add(new SimpleOptimizer());
         calculator.getOptimizers().add(new LogicalOptimizer());
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);

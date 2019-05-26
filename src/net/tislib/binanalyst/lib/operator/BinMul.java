@@ -12,11 +12,6 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
  */
 public class BinMul {
 
-
-    public Bit mulAndGetBit(long a, long b, int index) {
-        return null;
-    }
-
     public static Bit[][] getMultiplicationMatrix(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
         int COL_SIZE = a.length + b.length;
 

@@ -7,11 +7,11 @@ import net.tislib.binanalyst.lib.bit.Bit;
  * Email: me@talehibrahimli.com
  */
 public interface BitOpsCalculator {
-    Bit xor(Bit[] bits);
+    Bit xor(Bit... bits);
 
-    Bit and(Bit[] bits);
+    Bit and(Bit... bits);
 
-    Bit or(Bit[] bits);
+    Bit or(Bit... bits);
 
     Bit not(Bit bit);
 
