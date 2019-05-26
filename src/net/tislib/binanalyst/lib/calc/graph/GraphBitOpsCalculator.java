@@ -198,8 +198,16 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     @Override
     public void calculate() {
+        reIndex();
         for (OperationalBit bit : middle) {
             bit.calculate();
+        }
+    }
+
+    private void reIndex() {
+        //reindex
+        for (int i = 0; i < this.getMiddle().getBits().size(); i++) {
+            this.getMiddle().getBits().get(i).setName("M[" + i + "]");
         }
     }
 

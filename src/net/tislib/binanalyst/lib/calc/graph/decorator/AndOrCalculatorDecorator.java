@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph.decorator;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
@@ -12,6 +14,8 @@ public class AndOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
 
     private final boolean reverseInsteadOfNot;
 
+    private final Map<Bit, Bit> reverseBitMap = new HashMap<>();
+
     public AndOrCalculatorDecorator(BitOpsGraphCalculator calculator) {
         this(calculator, false);
     }
@@ -22,23 +26,9 @@ public class AndOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
     }
 
     @Override
-    public void setInputBits(VarBit[]... bits) {
-        super.setInputBits(bits);
-        if (reverseInsteadOfNot) {
-            prepareNegatives();
-        }
-    }
-
-    private void prepareNegatives() {
-        for (VarBit varBit : this.getInput()) {
-            not(varBit);
-        }
-    }
-
-    @Override
     public Bit not(Bit bit) {
         if (reverseInsteadOfNot) {
-            return reverse(bit);
+            return reverseBitMap.computeIfAbsent(bit, this::reverse);
         } else {
             return super.not(bit);
         }
@@ -61,9 +51,6 @@ public class AndOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
     }
 
     private Bit reverse(Bit bit) {
-        if (bit instanceof NamedBit) {
-//            System.out.println("reversing: " + ((NamedBit) bit).getName());
-        }
         if (bit instanceof OperationalBit) {
             OperationalBit operationalBit = (OperationalBit) bit;
             NamedBit[] bits = operationalBit.getBits();
@@ -71,7 +58,7 @@ public class AndOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
                 case NOT:
                     return bits[0];
                 case XOR: {
-                    not(xor(bits));
+                    return not(xor(bits));
                 }
                 case AND: {
                     Bit[] negatives = new Bit[bits.length];
@@ -93,13 +80,5 @@ public class AndOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
         } else {
             return super.not(bit);
         }
-    }
-
-    @Override
-    public void calculate() {
-        UsageFinder usageFinder = new UsageFinder(getInput(), getMiddle(), getOutput());
-        usageFinder.cleanUnusedMiddleBits();
-
-        super.calculate();
     }
 }

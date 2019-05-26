@@ -9,11 +9,8 @@ import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
-import net.tislib.binanalyst.lib.calc.graph.optimizer.NfOptimizer;
-import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
+import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
 /**
@@ -27,6 +24,7 @@ public class XorOrSystemTest {
 
         calculator = new AndOrCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new UnusedBitOptimizerDecorator(calculator);
 
         long a = 7;
         long b = 5;
@@ -35,11 +33,12 @@ public class XorOrSystemTest {
         VarBit[] bBits = VarBit.list("b", 3, ZERO);
 
 
-
         setVal(calculator, aBits, a);
         setVal(calculator, bBits, b);
 
         calculator.setInputBits(aBits, bBits);
+
+        prepareCommonOps(calculator);
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
@@ -47,11 +46,22 @@ public class XorOrSystemTest {
 
         calculator.calculate();
 
-        calculator.show();
+//        calculator.show();
 
         printValues(r);
         System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
         System.out.println(calculator.getOperationCount());
+    }
+
+    private static void prepareCommonOps(BitOpsGraphCalculator calculator) {
+        for (Bit bit : calculator.getInput()) {
+            calculator.not(bit);
+        }
+        for (Bit bit1 : calculator.getInput()) {
+            for (Bit bit2 : calculator.getInput()) {
+                calculator.and(bit1, bit2);
+            }
+        }
     }
 
 }

@@ -12,6 +12,7 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.operator.BinMul;
 import org.junit.Test;
@@ -49,15 +50,22 @@ public class CalculatorOptimizationTest {
     }
 
     @Test
+    public void UnusedBitOptimizer() {
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+
+        calculator = new UnusedBitOptimizerDecorator(calculator);
+
+        check(calculator);
+    }
+
+    @Test
     public void XorAndTestReverse() {
-        if (a.longValue() < 100 && b.longValue() < 100) {
-            BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
-            calculator = new XorAndCalculatorDecorator(calculator, true);
-            calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new XorAndCalculatorDecorator(calculator, true);
+        calculator = new SimpleOptimizationDecorator(calculator);
 
-            check(calculator);
-        }
+        check(calculator);
     }
 
     @Test
@@ -72,14 +80,12 @@ public class CalculatorOptimizationTest {
 
     @Test
     public void AndOrTestReverse() {
-        if (a.longValue() < 100 && b.longValue() < 100) {
-            BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
-            calculator = new AndOrCalculatorDecorator(calculator, true);
-            calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new AndOrCalculatorDecorator(calculator, true);
+        calculator = new SimpleOptimizationDecorator(calculator);
 
-            check(calculator);
-        }
+        check(calculator);
     }
 
     private void check(BitOpsGraphCalculator calculator) {

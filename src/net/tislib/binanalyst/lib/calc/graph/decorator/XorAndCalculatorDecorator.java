@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph.decorator;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
@@ -12,6 +14,8 @@ public class XorAndCalculatorDecorator extends AbstractBitOpsGraphCalculatorDeco
 
     private final boolean reverseInsteadOfNot;
 
+    private final Map<Bit, Bit> reverseBitMap = new HashMap<>();
+
     public XorAndCalculatorDecorator(BitOpsGraphCalculator calculator) {
         this(calculator, false);
     }
@@ -22,23 +26,9 @@ public class XorAndCalculatorDecorator extends AbstractBitOpsGraphCalculatorDeco
     }
 
     @Override
-    public void setInputBits(VarBit[]... bits) {
-        super.setInputBits(bits);
-        if (reverseInsteadOfNot) {
-            prepareNegatives();
-        }
-    }
-
-    private void prepareNegatives() {
-        for (VarBit varBit : this.getInput()) {
-            not(varBit);
-        }
-    }
-
-    @Override
     public Bit not(Bit bit) {
         if (reverseInsteadOfNot) {
-            return reverse(bit);
+            return reverseBitMap.computeIfAbsent(bit, this::reverse);
         } else {
             return xor(bit, ConstantBit.ONE);
         }
@@ -82,14 +72,6 @@ public class XorAndCalculatorDecorator extends AbstractBitOpsGraphCalculatorDeco
         } else {
             return super.not(bit);
         }
-    }
-
-    @Override
-    public void calculate() {
-        UsageFinder usageFinder = new UsageFinder(getInput(), getMiddle(), getOutput());
-        usageFinder.cleanUnusedMiddleBits();
-
-        super.calculate();
     }
 
     @Override
