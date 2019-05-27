@@ -43,10 +43,10 @@ public class LogicalOptimizer implements Optimizer {
 
         if (operation == Operation.XOR && chain instanceof OperationalBit) {
             OperationalBit operationalBit = (OperationalBit) chain;
-            operationalBit.reinit(Arrays.stream(operationalBit.getBits())
-                    .filter(item -> item != graphBitOpsCalculator.ZERO)
-                    .collect(Collectors.toList())
-                    .toArray(new NamedBit[]{}));
+//            operationalBit.reinit(Arrays.stream(operationalBit.getBits())
+//                    .filter(item -> item != graphBitOpsCalculator.ZERO)
+//                    .collect(Collectors.toList())
+//                    .toArray(new NamedBit[]{}));
         }
 
         return chain;
@@ -67,12 +67,12 @@ public class LogicalOptimizer implements Optimizer {
                 if (oBit.getOperation() != Operation.XOR) {
                     return;
                 }
-                oBit.reinit(Arrays
-                        .stream(oBit.getBits())
-                        .filter(item -> item != calculator.ZERO)
-                        .collect(Collectors.toList())
-                        .toArray(new NamedBit[]{})
-                );
+//                oBit.reinit(Arrays
+//                        .stream(oBit.getBits())
+//                        .filter(item -> item != calculator.ZERO)
+//                        .collect(Collectors.toList())
+//                        .toArray(new NamedBit[]{})
+//                );
             });
         }
     }

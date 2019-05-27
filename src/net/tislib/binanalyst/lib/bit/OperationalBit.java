@@ -9,8 +9,8 @@ import net.tislib.binanalyst.lib.calc.graph.Operation;
  */
 public final class OperationalBit extends VarBit implements Bit {
 
-    private Operation operation;
-    private NamedBit[] bits;
+    private final Operation operation;
+    private final NamedBit[] bits;
 
     public OperationalBit(Operation operation, NamedBit[] bits) {
         super();
@@ -80,15 +80,6 @@ public final class OperationalBit extends VarBit implements Bit {
             default:
                 throw new UnsupportedOperationException();
         }
-    }
-
-    public void init(Operation operation, NamedBit[] bits) {
-        this.operation = operation;
-        this.bits = bits;
-    }
-
-    public void reinit(NamedBit[] bits) {
-        this.bits = bits;
     }
 
     public boolean hasBit(NamedBit bit2) {

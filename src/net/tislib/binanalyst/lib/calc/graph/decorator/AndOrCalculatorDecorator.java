@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph.decorator;
 
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+
 import java.util.HashMap;
 import java.util.Map;
 import net.tislib.binanalyst.lib.bit.Bit;
@@ -37,7 +39,7 @@ public class AndOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
     @Override
     public Bit xor(Bit... bits) {
         if (bits.length == 0) {
-            throw new RuntimeException();
+            return ZERO;
         } else if (bits.length == 1) {
             return bits[0];
         }
@@ -74,11 +76,9 @@ public class AndOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
                     }
                     return and(negatives);
                 }
-                default:
-                    throw new RuntimeException();
             }
-        } else {
-            return super.not(bit);
         }
+
+        return super.not(bit);
     }
 }

@@ -46,7 +46,7 @@ public class XorOrSystemTest {
 
         calculator.calculate();
 
-//        calculator.show();
+        calculator.show();
 
         printValues(r);
         System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());

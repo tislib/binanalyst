@@ -113,7 +113,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
             }
         }
         if (result == null) {
-            operationCount++;
             OperationalBit newBit = new OperationalBit(operation, bits);
             if (middleBitCache.containsKey(newBit.toString())) {
                 return middleBitCache.get(newBit.toString());
@@ -201,6 +200,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
         reIndex();
         for (OperationalBit bit : middle) {
             bit.calculate();
+            operationCount++;
         }
     }
 
