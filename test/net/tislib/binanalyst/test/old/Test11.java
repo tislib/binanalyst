@@ -2,8 +2,6 @@ package net.tislib.binanalyst.test.old;
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
-import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
@@ -32,8 +30,8 @@ public class Test11 {
         long ax = 1;
         long bx = 3;
 
-        setVal(calculator, a, ax);
-        setVal(calculator, b, bx);
+        setVal(a, ax);
+        setVal(b, bx);
 
         calculator.getOptimizers().add(new SimpleOptimizer());
         calculator.getOptimizers().add(new LogicalOptimizer());

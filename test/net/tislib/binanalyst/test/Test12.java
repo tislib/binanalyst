@@ -28,8 +28,8 @@ public class Test12 {
 
         VarBit[] result = VarBit.list("c", 143, ZERO);
 
-        setVal(calculator, aBits, a);
-        setVal(calculator, bBits, b);
+        setVal(aBits, a);
+        setVal(bBits, b);
 
         calculator.setInputBits(aBits, bBits);
 

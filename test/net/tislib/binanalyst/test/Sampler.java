@@ -6,7 +6,6 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.expression.GraphExpression;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
-import net.tislib.binanalyst.lib.neo.NeoGraphExpressionRenderer;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
@@ -33,7 +32,7 @@ public class Sampler {
 
         VarBit[] result = VarBit.list("c", r.length, ZERO);
 
-        setVal(calculator, result, multiplicationValue);
+        setVal(result, multiplicationValue);
 
         System.out.println(calculator.getOperationCount());
 
@@ -57,8 +56,8 @@ public class Sampler {
         VarBit[] aBits = VarBit.list("a", bitCount, ZERO);
         VarBit[] bBits = VarBit.list("b", bitCount, ZERO);
 
-        setVal(calculator, aBits, a);
-        setVal(calculator, bBits, b);
+        setVal(aBits, a);
+        setVal(bBits, b);
 
         calculator.setInputBits(aBits, bBits);
 
@@ -68,7 +67,7 @@ public class Sampler {
 
         VarBit[] result = VarBit.list("c", r.length, ZERO);
 
-        setVal(calculator, result, a * b);
+        setVal(result, a * b);
 
         System.out.println(calculator.getOperationCount());
 

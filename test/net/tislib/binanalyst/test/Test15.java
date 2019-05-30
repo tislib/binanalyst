@@ -31,13 +31,13 @@ public class Test15 {
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
-        setVal(calculator, aBits, 13);
-        setVal(calculator, bBits, 11);
+        setVal(aBits, 13);
+        setVal(bBits, 11);
 
 
         VarBit[] result = VarBit.list("c", r.length, ZERO);
 
-        setVal(calculator, result, 3);
+        setVal(result, 3);
 
         System.out.println(calculator.getOperationCount());
 

@@ -2,7 +2,7 @@ package net.tislib.binanalyst.test.logickeeper;
 
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
-import java.util.Arrays;
+import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.logickeeper.BitLogicalKeeper;
@@ -29,7 +29,9 @@ public class SimpleLogicKeeperTest {
         bitLogicalKeeper.calculate();
 
         System.out.println("variation count: " + bitLogicalKeeper.getVariationCount());
-        System.out.println("result: " + Arrays.asList(bitLogicalKeeper.getResult()));
+        System.out.println("operation count: " + bitLogicalKeeper.getVariationCount());
+        System.out.println("result: ");
+        bitLogicalKeeper.getResult().forEach(BinValueHelper::printValues);
     }
 
 }

@@ -21,8 +21,8 @@ public class CalculatorHelper {
         calculator.getOptimizers().add(new SimpleOptimizer());
         calculator.getOptimizers().add(new LogicalOptimizer());
 
-        setVal(calculator, aBits, a);
-        setVal(calculator, bBits, b);
+        setVal(aBits, a);
+        setVal(bBits, b);
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 

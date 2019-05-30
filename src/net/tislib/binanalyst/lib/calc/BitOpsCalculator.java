@@ -20,4 +20,6 @@ public interface BitOpsCalculator {
     static BitOpsCalculator getDefault() {
         return new SimpleBitOpsCalculator();
     }
+
+    void calculate();
 }

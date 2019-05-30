@@ -54,4 +54,9 @@ public class SimpleBitOpsCalculator implements BitOpsCalculator {
     public Bit wrap(Number num) {
         return num.longValue() == 0 ? ZERO : ONE;
     }
+
+    @Override
+    public void calculate() {
+        throw new UnsupportedOperationException();
+    }
 }

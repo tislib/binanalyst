@@ -15,8 +15,6 @@ import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
-import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
 import net.tislib.binanalyst.lib.operator.BinMul;
 import net.tislib.binanalyst.test.CalculatorHelper;
 
@@ -110,7 +108,7 @@ public class Test33_UnkBit_BruteDegreeChecker {
         long maxValue = toLong(VarBit.list("a", bits.length, ONE)).longValue();
 
         for (long i = 0; i <= maxValue; i++) {
-            setVal(calculator, bits, i);
+            setVal(bits, i);
             result.calculate();
             if (result.getValue() == correctValue) {
                 boolean foundVariant = false;

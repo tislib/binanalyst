@@ -3,7 +3,6 @@ package net.tislib.binanalyst.test.unknownvalue;
 import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.UNKNOWN;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
@@ -71,8 +70,8 @@ public class Test31 {
         calculator.getOptimizers().add(new SimpleOptimizer());
         calculator.getOptimizers().add(new LogicalOptimizer());
 
-        setVal(calculator, aBits, 23);
-        setVal(calculator, bBits, 21);
+        setVal(aBits, 23);
+        setVal(bBits, 21);
 
         System.out.print("aBits: ");
         printValues(aBits);

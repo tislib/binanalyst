@@ -6,7 +6,6 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Collection;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
@@ -55,8 +54,8 @@ public class MultiplicationTest {
         VarBit[] aBits = VarBit.list("a", 64, ZERO);
         VarBit[] bBits = VarBit.list("b", 64, ZERO);
 
-        setVal(calculator, aBits, a.longValue());
-        setVal(calculator, bBits, b.longValue());
+        setVal(aBits, a.longValue());
+        setVal(bBits, b.longValue());
 
         calculator.setInputBits(aBits, bBits);
 
@@ -78,8 +77,8 @@ public class MultiplicationTest {
             return;
         }
 
-        setVal(calculator, aBits, a.longValue());
-        setVal(calculator, bBits, b.longValue());
+        setVal(aBits, a.longValue());
+        setVal(bBits, b.longValue());
 
         calculator.getOptimizers().add(new LogicalOptimizer());
         calculator.getOptimizers().add(new NfOptimizer());
@@ -104,8 +103,8 @@ public class MultiplicationTest {
         VarBit[] aBits = VarBit.list("a", 64, ZERO);
         VarBit[] bBits = VarBit.list("b", 64, ZERO);
 
-        setVal(calculator, aBits, a.longValue());
-        setVal(calculator, bBits, b.longValue());
+        setVal(aBits, a.longValue());
+        setVal(bBits, b.longValue());
 
         calculator.setInputBits(aBits, bBits);
 
@@ -124,8 +123,8 @@ public class MultiplicationTest {
         VarBit[] aBits = VarBit.list("a", 64, ZERO);
         VarBit[] bBits = VarBit.list("b", 64, ZERO);
 
-        setVal(calculator, aBits, a.longValue());
-        setVal(calculator, bBits, b.longValue());
+        setVal(aBits, a.longValue());
+        setVal(bBits, b.longValue());
 
         calculator.setInputBits(aBits, bBits);
 

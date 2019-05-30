@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
@@ -188,7 +189,10 @@ public class BinValueHelper {
         return newBits;
     }
 
-    public static void setVal(BitOpsCalculator calculator, VarBit[] bits, long value) {
+    public static void setVal(VarBit[] bits, long value) {
+        for (VarBit bit : bits) {
+            bit.setValue(BinaryValue.FALSE);
+        }
         Bit[] bitArr = trim(wrap(simpleCalculator, getBinArray(value)));
         for (int i = 0; i < Math.min(bitArr.length, bits.length); i++) {
             BinaryValue val = bitArr[bitArr.length - 1 - i].getValue();
@@ -223,6 +227,31 @@ public class BinValueHelper {
             result[i] = new VarBit(bits[i].getName());
             result[i].setValue(bits[i].getValue());
         }
+        return result;
+    }
+
+    public static Bit[] rasterize(Bit[] resultingBits) {
+        Bit[] result = new ConstantBit[resultingBits.length];
+        for (int i = 0; i < resultingBits.length; i++) {
+            result[i] = rasterize(resultingBits[i]);
+        }
+        return result;
+    }
+
+    private static Bit rasterize(Bit bit) {
+        if (bit instanceof ConstantBit) return (ConstantBit) bit;
+        return bit.getValue().isTrue() ? ONE : ZERO;
+    }
+
+    public static VarBit[] setLength(VarBit[] cBits, int length) {
+        VarBit[] result = new VarBit[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = new VarBit();
+            result[i].setValue(BinaryValue.FALSE);
+        }
+        int diff = length - cBits.length;
+
+        if (length - diff >= 0) System.arraycopy(cBits, 0, result, diff, length - diff);
         return result;
     }
 }

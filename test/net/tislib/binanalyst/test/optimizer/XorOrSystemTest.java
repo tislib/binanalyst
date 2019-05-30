@@ -1,7 +1,6 @@
 package net.tislib.binanalyst.test.optimizer;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
-import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
+import static net.tislib.binanalyst.lib.BinValueHelper.*;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import net.tislib.binanalyst.lib.bit.Bit;
@@ -11,6 +10,8 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.XorOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
 /**
@@ -22,19 +23,22 @@ public class XorOrSystemTest {
     public static void main(String... args) {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
-        calculator = new AndOrCalculatorDecorator(calculator, true);
+//        calculator = new XorAndCalculatorDecorator(calculator, true);
+        calculator = new XorOrCalculatorDecorator(calculator, false);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
 
-        long a = 7;
-        long b = 5;
+        long a = 23238;
+        long b = 34365;
 
-        VarBit[] aBits = VarBit.list("a", 3, ZERO);
-        VarBit[] bBits = VarBit.list("b", 3, ZERO);
+        //32532325, 23403244
+
+        VarBit[] aBits = VarBit.list("a", binLength(a), ZERO);
+        VarBit[] bBits = VarBit.list("b", binLength(b), ZERO);
 
 
-        setVal(calculator, aBits, a);
-        setVal(calculator, bBits, b);
+        setVal(aBits, a);
+        setVal(bBits, b);
 
         calculator.setInputBits(aBits, bBits);
 
@@ -46,7 +50,7 @@ public class XorOrSystemTest {
 
         calculator.calculate();
 
-        calculator.show();
+//        calculator.show();
 
         printValues(r);
         System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
