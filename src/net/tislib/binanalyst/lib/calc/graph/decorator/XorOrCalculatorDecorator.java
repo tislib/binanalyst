@@ -46,7 +46,7 @@ public class XorOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
                     NamedBit[] newBits = new NamedBit[bits.length];
                     System.arraycopy(bits, 0, newBits, 0, bits.length);
 
-                    newBits[0] = (NamedBit) not(newBits[0]);
+                    newBits[newBits.length - 1] = (NamedBit) not(newBits[newBits.length - 1]);
                     return xor(newBits);
                 }
                 case OR:

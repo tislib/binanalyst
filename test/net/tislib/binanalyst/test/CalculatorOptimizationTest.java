@@ -103,7 +103,7 @@ public class CalculatorOptimizationTest {
     public void XorOrTestReverse() {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
-        calculator = new XorOrCalculatorDecorator(calculator, false);
+        calculator = new XorOrCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
 

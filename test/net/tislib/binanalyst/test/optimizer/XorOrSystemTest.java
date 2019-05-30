@@ -24,12 +24,12 @@ public class XorOrSystemTest {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
 //        calculator = new XorAndCalculatorDecorator(calculator, true);
-        calculator = new XorOrCalculatorDecorator(calculator, false);
+        calculator = new XorOrCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
 
-        long a = 23238;
-        long b = 34365;
+        long a = 5;
+        long b = 7;
 
         //32532325, 23403244
 
@@ -50,7 +50,7 @@ public class XorOrSystemTest {
 
         calculator.calculate();
 
-//        calculator.show();
+        calculator.show();
 
         printValues(r);
         System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
