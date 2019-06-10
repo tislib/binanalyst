@@ -94,8 +94,11 @@ public final class OperationalBit extends VarBit implements Bit {
     }
 
     public String showFull(boolean showSelf) {
+//        if (!isFullMiddle()) {
+//            return getName();
+//        }
         if (operation == Operation.NOT) {
-            return showSelf ? getName() + " : " + "!" + showFull(bits[0]) : showFull(bits[0]);
+            return showSelf ? getName() + " : " + "!" + showFull(bits[0]) : "!" + showFull(bits[0]);
         }
         StringJoiner joiner = new StringJoiner(" " + getOperation().getSign() + " ");
         for (NamedBit bit : bits) {
@@ -111,4 +114,17 @@ public final class OperationalBit extends VarBit implements Bit {
         return bit.getName();
     }
 
+    public boolean isFullMiddle() {
+        for (NamedBit bit : bits) {
+            if (!(bit instanceof OperationalBit)) return false;
+        }
+        return true;
+    }
+
+    public boolean isTransitive() {
+        for (NamedBit bit : bits) {
+            if (bit instanceof OperationalBit) return false;
+        }
+        return this.getOperation() == Operation.NOT;
+    }
 }

@@ -48,6 +48,13 @@ public class MultiplicationTest {
     }
 
     @Test
+    public void binMul2() {
+        SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
+        Bit[] r = BinMul.multiply2(calculator, trim(getBits(calculator, a.longValue())), trim(getBits(calculator, b.longValue())));
+        assertEquals(toLong(r), a.multiply(b));
+    }
+
+    @Test
     public void graphCalc() {
         GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 

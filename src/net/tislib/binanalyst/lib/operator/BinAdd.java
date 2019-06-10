@@ -62,6 +62,50 @@ public class BinAdd {
         return flip(result);
     }
 
+
+    public static Bit[] add2(BitOpsCalculator calculator, Bit[]... bits) {
+        if (bits.length == 0) return new Bit[0];
+
+        int W = bits[0].length; // width
+        int H = bits.length; // height
+
+        Bit[] result = new Bit[W + H + 1];
+
+        for (int i = 0; i < W; i++) {
+            result[i] = ZERO;
+            for (int j = i; j >= 0; j--) {
+                Bit[] vertical = new Bit[H];
+                for (int vi = 0; vi < H; vi++) {
+                    vertical[vi] = bits[vi][j];
+                }
+                System.out.println("i: " + i + " , j: " + j);
+                result[i] = calculator.xor(result[i], getAddStageBit(calculator, vertical, i - j));
+            }
+        }
+        return null;
+    }
+
+    public static Bit getAddStageBit(BitOpsCalculator calculator, Bit[] bits, int dv) {
+        if (bits.length < 1 << dv) {
+            return ZERO;
+        }
+        Bit[] xl = new Bit[bits.length / 2];
+        Bit[] ml = new Bit[bits.length / 2];
+        for (int i = 0; i < bits.length; i += 2) {
+            Bit m = calculator.and(bits[i], bits[i + 1]);
+            Bit x = calculator.xor(bits[i], bits[i + 1]);
+            ml[i / 2] = m;
+            xl[i / 2] = x;
+        }
+
+        Bit result = calculator.xor(ml);
+        if (dv > 0) {
+            result = calculator.xor(result, getAddStageBit(calculator, xl, dv - 1));
+        }
+        return result;
+    }
+
+
     public static Bit addBits(BitOpsCalculator calculator, Bit... bits) {
         return calculator.xor(bits);
     }
@@ -95,5 +139,4 @@ public class BinAdd {
         }
         return max;
     }
-
 }

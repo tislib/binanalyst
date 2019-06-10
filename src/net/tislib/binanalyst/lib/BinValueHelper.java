@@ -10,6 +10,8 @@ import java.util.List;
 import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.ConstantBit;
+import net.tislib.binanalyst.lib.bit.NamedBit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
@@ -253,5 +255,17 @@ public class BinValueHelper {
 
         if (length - diff >= 0) System.arraycopy(cBits, 0, result, diff, length - diff);
         return result;
+    }
+
+    public static String formulaToString(Bit bit) {
+        if (bit instanceof OperationalBit) {
+            return ((OperationalBit) bit).showFull(false);
+        } else {
+            return bit.toString();
+        }
+    }
+
+    public static void printFormula(NamedBit bit) {
+        System.out.println(bit.getName() + " = " + formulaToString(bit));
     }
 }

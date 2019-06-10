@@ -64,7 +64,7 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
     public static VarBit[] list(String name, int count, Bit initialValue) {
         VarBit[] bits = new VarBit[count];
         for (int i = 0; i < bits.length; i++) {
-            bits[i] = new VarBit(name + "[" + (bits.length - i - 1) + "]");
+            bits[i] = new VarBit(name + (bits.length - i - 1));
             bits[i].setValue(initialValue.getValue());
         }
         return bits;
