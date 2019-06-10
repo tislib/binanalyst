@@ -10,10 +10,11 @@ import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
  * Created by Taleh Ibrahimli on 2/6/18.
  * Email: me@talehibrahimli.com
  */
-public class BinAdd {
+@SuppressWarnings("Duplicates")
+public class BinAdd2 {
 
 
-    public static Bit[] add(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
+    public static Bit[] chain(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
         a = flip(a);
         b = flip(b);
         int L = Math.max(a.length, b.length);
@@ -98,13 +99,49 @@ public class BinAdd {
     public static Bit[] add(BitOpsCalculator calculator, Bit[]... nums) {
         if (nums.length == 0) return new Bit[0];
         if (nums.length == 1) return nums[0];
-        int L = maxLength(nums);
-        Bit[] result = new Bit[L];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = ZERO;
-        }
+        Bit[][] numsTransposed = transpose(nums);
+
+        Bit[][] chainMatrix = new Bit[nums.length][nums.length];
+        Bit[][] resultMatrix = new Bit[nums.length][nums.length];
         for (int i = 0; i < nums.length; i++) {
-            result = add(calculator, result, nums[i]);
+            for (int j = 0; j < nums.length; j++) {
+                chainMatrix[i][j] = numsTransposed[i][j];
+                resultMatrix [i][j] = numsTransposed[i][j];
+            }
+        }
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 0; j < nums.length; j++) {
+                Bit ri = resultMatrix[i - 1][j];
+                chainMatrix[i][j] = chain(calculator, chainMatrix[i - 1][j], numsTransposed[i][j], ri);
+            }
+        }
+        return xorMatrix(calculator, chainMatrix);
+    }
+
+    private static Bit chain(BitOpsCalculator calculator, Bit ai, Bit bi, Bit ri) {
+        return calculator.or(calculator.and(calculator.not(ri), calculator.or(ai, bi)), calculator.and(ai, bi));
+    }
+
+    private static Bit[][] transpose(Bit[][] nums) {
+        int L = maxLength(nums);
+        Bit[][] numsTransposed = new Bit[L][nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < nums[i].length; j++) {
+                Bit r = nums[i][j];
+                numsTransposed[j][i] = r;
+            }
+        }
+        return numsTransposed;
+    }
+
+    private static Bit[] xorMatrix(BitOpsCalculator calculator, Bit[][] chainMatrix) {
+        Bit[] result = new Bit[chainMatrix.length];
+        for (int i = 0; i < chainMatrix.length; i++) {
+            Bit[] vert = new Bit[chainMatrix[i].length];
+            for (int j = 0; j < chainMatrix[i].length; j++) {
+                vert[j] = chainMatrix[i][j];
+            }
+            result[i] = xor(calculator, vert);
         }
         return result;
     }

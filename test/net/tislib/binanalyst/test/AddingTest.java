@@ -13,6 +13,7 @@ import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.operator.BinAdd;
+import net.tislib.binanalyst.lib.operator.BinAdd2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -87,7 +88,7 @@ public class AddingTest {
         setVal(cBits, c);
         setVal(dBits, d);
 
-        assertEquals(toLong(BinAdd.add2(BitOpsCalculator.getDefault(), aBits, bBits, cBits, dBits)).longValue(), a + b + c + d);
+        assertEquals(toLong(BinAdd2.add(BitOpsCalculator.getDefault(), aBits, bBits, cBits, dBits)).longValue(), a + b + c + d);
     }
 
     private static boolean check(long a, long b, int i) {

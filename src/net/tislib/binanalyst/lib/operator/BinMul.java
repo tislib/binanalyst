@@ -42,6 +42,6 @@ public class BinMul {
     }
 
     public static Bit[] multiply2(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
-        return BinAdd.add2(calculator, getMultiplicationMatrix(calculator, a, b));
+        return BinAdd2.add(calculator, getMultiplicationMatrix(calculator, a, b));
     }
 }
