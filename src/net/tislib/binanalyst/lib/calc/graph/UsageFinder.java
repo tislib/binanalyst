@@ -27,9 +27,15 @@ public class UsageFinder {
         }
         List<OperationalBit> newMiddleBits = this.middle.getBits().stream().filter(item -> markedBit.contains(item.getName())).collect(Collectors.toList());
         this.middle.setBits(newMiddleBits);
+
+        List<VarBit> newInputBits = this.input.getBits().stream().filter(item -> markedBit.contains(item.getName())).collect(Collectors.toList());
+        this.input.setBits(newInputBits);
     }
 
     private void markBit(NamedBit bit) {
+        if (!this.middle.contains(bit) && !this.output.contains(bit) && !this.input.contains(bit)) {
+            return;
+        }
         if (this.markedBit.contains(bit.getName())) {
             // it is already marked recursively
             return;

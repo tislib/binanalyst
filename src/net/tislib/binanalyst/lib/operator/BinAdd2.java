@@ -1,6 +1,6 @@
 package net.tislib.binanalyst.lib.operator;
 
-import static net.tislib.binanalyst.lib.BitOps.xor;
+import static net.tislib.binanalyst.lib.BinOps.xor;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import net.tislib.binanalyst.lib.bit.Bit;

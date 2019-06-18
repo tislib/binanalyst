@@ -5,7 +5,7 @@ import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.*;
-import static net.tislib.binanalyst.lib.BitOps.xor;
+import static net.tislib.binanalyst.lib.BinOps.xor;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.

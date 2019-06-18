@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static net.tislib.binanalyst.lib.BitOps.xor;
+import static net.tislib.binanalyst.lib.BinOps.xor;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.

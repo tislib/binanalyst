@@ -1,6 +1,11 @@
 package net.tislib.binanalyst.lib.bit;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.StringJoiner;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 /**
@@ -32,8 +37,13 @@ public final class OperationalBit extends VarBit implements Bit {
             return getName() + " : " + "!" + bits[0].getName();
         }
         StringJoiner joiner = new StringJoiner(" " + getOperation().getSign() + " ");
+        List<String> bitNames = new ArrayList<>();
         for (NamedBit bit : bits) {
-            joiner.add(bit.getName());
+            bitNames.add(bit.getName());
+        }
+        bitNames.sort(Comparator.comparing(Function.identity()));
+        for(String bitName: bitNames) {
+            joiner.add(bitName);
         }
         return getName() + " : " + joiner;
     }
@@ -119,6 +129,14 @@ public final class OperationalBit extends VarBit implements Bit {
             if (!(bit instanceof OperationalBit)) return false;
         }
         return true;
+    }
+
+    public boolean testBits(Predicate<Bit> bitTester) {
+        boolean val = true;
+        for (Bit bit : bits) {
+            val &= bitTester.test(bit);
+        }
+        return val;
     }
 
     public boolean isTransitive() {

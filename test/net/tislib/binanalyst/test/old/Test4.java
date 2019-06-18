@@ -3,7 +3,7 @@ package net.tislib.binanalyst.test.old;
 import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
-import static net.tislib.binanalyst.lib.BitOps.*;
+import static net.tislib.binanalyst.lib.BinOps.*;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.*;
 
 /**

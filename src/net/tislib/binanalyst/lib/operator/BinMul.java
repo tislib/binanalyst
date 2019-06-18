@@ -1,10 +1,11 @@
 package net.tislib.binanalyst.lib.operator;
 
-import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.BitOps;
-import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
-
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+
+import net.tislib.binanalyst.lib.BinOps;
+import net.tislib.binanalyst.lib.BinValueHelper;
+import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 /**
  * Created by Taleh Ibrahimli on 2/6/18.
@@ -20,7 +21,7 @@ public class BinMul {
             for (int i = 0; i < COL_SIZE; i++) { // COLUMN
                 try {
                     M[j][i] = ZERO;
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -30,7 +31,7 @@ public class BinMul {
             for (int i = 0; i < a.length; i++) { // COLUMN
                 int aIndex = a.length - 1 - i;
                 int bIndex = b.length - 1 - j;
-                M[j][COL_SIZE - i - 1 - j] = BitOps.and(calculator, b[bIndex], a[aIndex]);
+                M[j][COL_SIZE - i - 1 - j] = BinOps.and(calculator, b[bIndex], a[aIndex]);
             }
         }
 
@@ -38,7 +39,21 @@ public class BinMul {
     }
 
     public static Bit[] multiply(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
+        if (a.length == 1) {
+            return multiplyByBit(calculator, b, a[0]);
+        }
+        if (b.length == 1) {
+            return multiplyByBit(calculator, a, b[0]);
+        }
         return BinAdd.add(calculator, getMultiplicationMatrix(calculator, a, b));
+    }
+
+    private static Bit[] multiplyByBit(BitOpsCalculator calculator, Bit[] b, Bit bit) {
+        Bit[] res = new Bit[b.length];
+        for (int i = 0; i < b.length; i++) {
+            res[i] = calculator.and(b[i], bit);
+        }
+        return res;
     }
 
     public static Bit[] multiply2(BitOpsCalculator calculator, Bit[] a, Bit[] b) {

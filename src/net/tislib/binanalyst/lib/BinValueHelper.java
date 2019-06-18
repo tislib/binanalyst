@@ -1,6 +1,6 @@
 package net.tislib.binanalyst.lib;
 
-import static net.tislib.binanalyst.lib.BitOps.wrap;
+import static net.tislib.binanalyst.lib.BinOps.wrap;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
@@ -259,6 +259,9 @@ public class BinValueHelper {
 
     public static String formulaToString(Bit bit) {
         if (bit instanceof OperationalBit) {
+            if (((OperationalBit) bit).testBits(item -> !(item instanceof OperationalBit))) {
+                return ((OperationalBit) bit).getName();
+            }
             return ((OperationalBit) bit).showFull(false);
         } else {
             return bit.toString();

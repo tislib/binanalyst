@@ -5,6 +5,7 @@ import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 
 import java.util.*;
+import net.tislib.binanalyst.lib.bit.VarBit;
 
 /**
  * Created by Taleh Ibrahimli on 2/8/18.
@@ -58,7 +59,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
         if (foundBit != null) {
             return foundBit;
         }
-        if (bit.getName() == null) {
+        if (bit.getName() == null || name.toCharArray()[0] != bit.getName().toCharArray()[0]) {
             bit.setName(name.toCharArray()[0] + "[" + (this.bits.size()) + "]");
         }
         this.bits.add(bit);
@@ -100,7 +101,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
         }
     }
 
-    public boolean contains(T bit2) {
+    public boolean contains(Bit bit2) {
         for (T bit : bits) {
             if (bit == bit2) {
                 return true;

@@ -1,8 +1,9 @@
 package net.tislib.binanalyst.lib.operator;
 
-import static net.tislib.binanalyst.lib.BitOps.xor;
+import static net.tislib.binanalyst.lib.BinOps.xor;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
+import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
@@ -10,17 +11,19 @@ import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
  * Created by Taleh Ibrahimli on 2/6/18.
  * Email: me@talehibrahimli.com
  */
+@SuppressWarnings("Duplicates")
 public class BinAdd {
 
 
     public static Bit[] add(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
         a = flip(a);
         b = flip(b);
-        int L = Math.max(a.length, b.length);
+        int L = Math.max(a.length, b.length) + 1;
         Bit[] result = new Bit[L];
 
         result[0] = xor(calculator, a[0], b[0]);
         Bit carryBit = calculator.and(a[0], b[0]);
+        Bit[] carryBits = new Bit[L];
         for (int i = 1; i < L; i++) {
             Bit ai = i < a.length ? a[i] : ZERO;
 
@@ -33,7 +36,6 @@ public class BinAdd {
                     result[i] = carryBit;
                     carryBit = ZERO;
                 }
-                continue;
             } else if (ai == ZERO) {
                 if (carryBit == ZERO) {
                     result[i] = bi;
@@ -41,7 +43,6 @@ public class BinAdd {
                     result[i] = xor(calculator, bi, carryBit);
                     carryBit = calculator.and(bi, carryBit);
                 }
-                continue;
             } else if (bi == ZERO) {
                 if (carryBit == ZERO) {
                     result[i] = ai;
@@ -49,14 +50,32 @@ public class BinAdd {
                     result[i] = xor(calculator, ai, carryBit);
                     carryBit = calculator.and(ai, carryBit);
                 }
-                continue;
-            }
+            } else {
 
-            result[i] = addBits(calculator, carryBit, ai, bi);
+                result[i] = addBits(calculator, carryBit, ai, bi);
 
-            // ai and bi is prev values
+                // ai and bi is prev values
 //            carryBit = calculator.and(calculator.or(ai, bi), calculator.or(calculator.and(ai, bi), calculator.not(result[i])));
-            carryBit = calculator.or(calculator.and(calculator.not(result[i]), calculator.or(ai, bi)), calculator.and(ai, bi));
+//            carryBit = calculator.or(
+//                    calculator.and(calculator.not(result[i]), calculator.or(ai, bi)),
+//                    calculator.and(ai, bi)
+//            );
+                if (carryBit == ZERO) {
+                    carryBit = calculator.and(ai, bi);
+                } else {
+//                carryBit = calculator.or(
+//                        calculator.and(calculator.not(calculator.xor(carryBit, ai, bi)), calculator.or(ai, bi)),
+//                        calculator.and(ai, bi)
+//                );
+
+                    carryBit = calculator.or(
+                            calculator.and(ai, bi),
+                            calculator.and(ai, carryBit),
+                            calculator.and(bi, carryBit)
+                    );
+                }
+            }
+            carryBits[i] = carryBit;
         }
 
         return flip(result);

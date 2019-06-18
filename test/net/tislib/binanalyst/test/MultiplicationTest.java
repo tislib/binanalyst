@@ -15,7 +15,9 @@ import net.tislib.binanalyst.lib.calc.graph.expression.GraphExpression;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.NfOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.solver.SimpleSolver;
+import net.tislib.binanalyst.lib.operator.BinAdd;
 import net.tislib.binanalyst.lib.operator.BinMul;
+import net.tislib.binanalyst.lib.operator.BinMulRec;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -44,7 +46,41 @@ public class MultiplicationTest {
     public void simpleCalc() {
         SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
         Bit[] r = BinMul.multiply(calculator, trim(getBits(calculator, a.longValue())), trim(getBits(calculator, b.longValue())));
-        assertEquals(toLong(r), a.multiply(b));
+        assertEquals(a.multiply(b), toLong(r));
+    }
+
+    @Test
+    public void add2Simple() {
+        SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
+        Bit[] r = BinAdd.add(calculator, trim(getBits(calculator, a.longValue())), trim(getBits(calculator, b.longValue())));
+        System.out.println(a + " " + b);
+        assertEquals(a.add(b), toLong(r));
+
+    }
+
+    @Test
+    public void add2Tree() {
+        SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
+        Bit[] r = BinMulRec.add2(calculator, trim(getBits(calculator, a.longValue())), trim(getBits(calculator, b.longValue())));
+        System.out.println(a + " " + b);
+        assertEquals(a.add(b), toLong(r));
+
+    }
+
+    @Test
+    public void multiplyTree2() {
+        SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
+        Bit[] r = BinMulRec.multiplyTree2Rec(calculator, trim(getBits(calculator, a.longValue())), trim(getBits(calculator, b.longValue())), false);
+        System.out.println(a + " " + b);
+        assertEquals(a.multiply(b), toLong(r));
+    }
+
+    @Test
+    public void multiplyTree22() {
+        SimpleBitOpsCalculator calculator = new SimpleBitOpsCalculator();
+        Bit[] r = BinMulRec.multiplyTree2Rec(calculator, trim(getBits(calculator, a.longValue())), trim(getBits(calculator, b.longValue())), true);
+        System.out.println(a + " " + b);
+        assertEquals(a.multiply(b), toLong(r));
     }
 
 //    @Test

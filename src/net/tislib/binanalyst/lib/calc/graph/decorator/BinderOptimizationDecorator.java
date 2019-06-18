@@ -2,7 +2,6 @@ package net.tislib.binanalyst.lib.calc.graph.decorator;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
@@ -10,6 +9,8 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 public class BinderOptimizationDecorator extends AbstractBitOpsGraphCalculatorDecorator {
+    private boolean ignoreHalfMiddle = true;
+
     public BinderOptimizationDecorator(BitOpsGraphCalculator calculator) {
         super(calculator);
     }
@@ -43,8 +44,11 @@ public class BinderOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
 
     public List<Bit> explode(Bit bit, Operation operation) {
         List<Bit> newBits = new ArrayList<>();
-        if (bit instanceof OperationalBit && ((OperationalBit) bit).getOperation() == operation) {
-            for(Bit bit2: ((OperationalBit) bit).getBits()) {
+        if (bit instanceof OperationalBit
+                && ((OperationalBit) bit).getOperation() == operation
+                && (!ignoreHalfMiddle || !((OperationalBit) bit).testBits(a -> !(a instanceof OperationalBit)))
+        ) {
+            for (Bit bit2 : ((OperationalBit) bit).getBits()) {
                 newBits.addAll(explode(bit2, operation));
             }
         } else {
