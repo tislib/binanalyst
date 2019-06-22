@@ -75,21 +75,21 @@ public class AddingTest {
         assertEquals(toLong(BinAdd.add(BitOpsCalculator.getDefault(), aBits, bBits, cBits, dBits)).longValue(), a + b + c + d);
     }
 
-    @Test
-    public void binCalcAdd2() {
-        int l = BinValueHelper.binLength(a) + BinValueHelper.binLength(b) + BinValueHelper.binLength(c) + BinValueHelper.binLength(d);
-        VarBit[] aBits = VarBit.list("a", l, ConstantBit.ZERO);
-        VarBit[] bBits = VarBit.list("a", l, ConstantBit.ZERO);
-        VarBit[] cBits = VarBit.list("c", l, ConstantBit.ZERO);
-        VarBit[] dBits = VarBit.list("d", l, ConstantBit.ZERO);
-
-        setVal(aBits, a);
-        setVal(bBits, b);
-        setVal(cBits, c);
-        setVal(dBits, d);
-
-        assertEquals(toLong(BinAdd2.add(BitOpsCalculator.getDefault(), aBits, bBits, cBits, dBits)).longValue(), a + b + c + d);
-    }
+//    @Test
+//    public void binCalcAdd2() {
+//        int l = BinValueHelper.binLength(a) + BinValueHelper.binLength(b) + BinValueHelper.binLength(c) + BinValueHelper.binLength(d);
+//        VarBit[] aBits = VarBit.list("a", l, ConstantBit.ZERO);
+//        VarBit[] bBits = VarBit.list("a", l, ConstantBit.ZERO);
+//        VarBit[] cBits = VarBit.list("c", l, ConstantBit.ZERO);
+//        VarBit[] dBits = VarBit.list("d", l, ConstantBit.ZERO);
+//
+//        setVal(aBits, a);
+//        setVal(bBits, b);
+//        setVal(cBits, c);
+//        setVal(dBits, d);
+//
+//        assertEquals(toLong(BinAdd2.add(BitOpsCalculator.getDefault(), aBits, bBits, cBits, dBits)).longValue(), a + b + c + d);
+//    }
 
     private static boolean check(long a, long b, int i) {
 

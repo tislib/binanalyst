@@ -1,7 +1,10 @@
 package net.tislib.binanalyst.lib;
 
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import net.tislib.binanalyst.lib.operator.BinAdd;
 
 public class WordOpsHelper {
     private final BitOpsCalculator calculator;
@@ -11,22 +14,23 @@ public class WordOpsHelper {
     }
 
     public Bit[] wordToBits(int word) {
+        char[] chars = Integer.toBinaryString(word).toCharArray();
         Bit[] res = new Bit[32];
-        for (int i = res.length - 1; i >= 0; i--) {
-            res[i] = calculator.wrap(word >> i & 1);
+        for (int i = 0; i < res.length; i++) {
+            res[i] = ZERO;
+        }
+        for (int i = 0; i < chars.length; i++) {
+            res[i + (res.length - chars.length)] = calculator.wrap(chars[i] == '1' ? 1 : 0);
         }
         return res;
     }
 
     public int bitsToWord(Bit[] bits) {
-        int res = 0;
-        for (int i = 0; i < Math.min(bits.length, 33); i++) {
-            if (i > 0) {
-                res = res << 1;
-            }
-            res += bits[bits.length - i - 1].intVal();
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < bits.length; i++) {
+            str.append((byte) bits[i].intVal());
         }
-        return res;
+        return (int) Long.parseLong(str.toString(), 2);
     }
 
     public int[] bitsArrToWordArr(Bit[][] bits) {
@@ -56,56 +60,54 @@ public class WordOpsHelper {
     }
 
     public Bit[] add(Bit[]... bits) {
-        int[] ints = bitsArrToWordArr(bits);
-        int res = ints[0];
-        for (int i = 1; i < ints.length; i++) {
-            res = res + ints[i];
-        }
-        return wordToBits(res);
+        Bit[] z2 = BinAdd.add(calculator, bits);
+        Bit[] zx = new Bit[bits[0].length];
+        System.arraycopy(z2, z2.length - zx.length, zx, 0, zx.length);
+
+        return zx;
     }
 
     public Bit[] and(Bit[]... bits) {
-        int[] ints = bitsArrToWordArr(bits);
-        int res = ints[0];
-        for (int i = 1; i < ints.length; i++) {
-            res = res & ints[i];
-        }
-        return wordToBits(res);
+        return BinOps.and(calculator, bits);
     }
 
     public Bit[] or(Bit[]... bits) {
-        int[] ints = bitsArrToWordArr(bits);
-        int res = ints[0];
-        for (int i = 1; i < ints.length; i++) {
-            res = res | ints[i];
-        }
-        return wordToBits(res);
+        return BinOps.or(calculator, bits);
     }
 
     public Bit[] xor(Bit[]... bits) {
-        int[] ints = bitsArrToWordArr(bits);
-        int res = ints[0];
-        for (int i = 1; i < ints.length; i++) {
-            res = res ^ ints[i];
-        }
-        return wordToBits(res);
+        return BinOps.xor(calculator, bits);
     }
 
     public Bit[] not(Bit[] bits) {
-        int word = bitsToWord(bits);
-        int res = ~word;
-        return wordToBits(res);
+        return BinOps.not(calculator, bits);
     }
 
     public Bit[] rotateRight(Bit[] bits, int distance) {
-        int word = bitsToWord(bits);
-        int res = Integer.rotateRight(word, distance);
-        return wordToBits(res);
+        return or(
+                and(
+                        shrk(bits, distance),
+                        not(shlk(wordToBits(-1), (bits.length - distance)))
+                ),
+                shlk(bits, bits.length - distance)
+        );
     }
 
-    public Bit[] shr(Bit[] bits, int length) {
-        int word = bitsToWord(bits);
-        int res = word >> length;
-        return wordToBits(res);
+    public static Bit[] shlk(Bit[] bh, int l) {
+        Bit[] newBits = new Bit[bh.length];
+        for (int i = 0; i < newBits.length; i++) {
+            newBits[i] = ZERO;
+        }
+        System.arraycopy(bh, l, newBits, 0, bh.length - l);
+        return newBits;
+    }
+
+    public static Bit[] shrk(Bit[] bh, int l) {
+        Bit[] newBits = new Bit[bh.length];
+        for (int i = 0; i < newBits.length; i++) {
+            newBits[i] = bh[bh.length - 1];
+        }
+        System.arraycopy(bh, 0, newBits, l, bh.length - l);
+        return newBits;
     }
 }

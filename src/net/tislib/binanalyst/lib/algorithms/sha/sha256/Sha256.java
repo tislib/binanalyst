@@ -42,7 +42,7 @@ public class Sha256 {
         // let H = H0
         System.arraycopy(H0, 0, H, 0, H0.length);
 
-        System.out.println("state0:" + toHex(H));
+//        System.out.println("state0:" + toHex(H));
 
         // initialize all words
         int[] words = toIntArray(pad(message));
@@ -91,7 +91,7 @@ public class Sha256 {
                 H[t] += TEMP[t];
             }
 
-            System.out.println("roundState" + i + ":" + toHex(H));
+//            System.out.println("roundState" + i + ":" + toHex(H));
         }
 
         return H;

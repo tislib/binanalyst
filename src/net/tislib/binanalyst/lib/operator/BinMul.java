@@ -44,7 +44,7 @@ public class BinMul {
         if (b.length == 1) {
             return multiplyByBit(calculator, a, b[0]);
         }
-        return flip(BinAdd.add(calculator, flip(getMultiplicationMatrix(calculator, a, b))));
+        return BinAdd.add(calculator, getMultiplicationMatrix(calculator, a, b));
     }
 
     private static Bit[][] flip(Bit[][] matrix) {

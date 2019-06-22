@@ -162,13 +162,4 @@ public class BinOps {
         System.arraycopy(bh, 0, newBits, l, bh.length);
         return newBits;
     }
-
-    public static Bit[] shrk(Bit[] bh, int l) {
-        Bit[] newBits = new Bit[bh.length];
-        for (int i = 0; i < newBits.length; i++) {
-            newBits[i] = ZERO;
-        }
-        System.arraycopy(bh, 0, newBits, l, bh.length - l);
-        return newBits;
-    }
 }

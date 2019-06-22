@@ -2,7 +2,12 @@ package net.tislib.binanalyst.test.sha256;
 
 import static net.tislib.binanalyst.lib.WordOpsHelper.toHex;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import net.tislib.binanalyst.lib.WordOpsHelper;
 import net.tislib.binanalyst.lib.algorithms.sha.sha256.Sha256;
 import net.tislib.binanalyst.lib.algorithms.sha.sha256.Sha256Algorithm;
@@ -17,33 +22,39 @@ import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
 public class Sha256Test {
-    private final int a;
-    private final int b;
+    private final byte[] data;
     private final Sha256Algorithm sha256Algorithm;
 
     @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return TestData.testPairData();
+    public static Collection<Object[]> data() throws IOException {
+        List<Object[]> data = TestData.testPairData();
+
+        data = data.stream().map(item -> {
+            return new Object[]{("" + item[0] + item[1]).getBytes()};
+        }).collect(Collectors.toList());
+
+        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getResource("randfile1").getPath()))});
+        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getResource("randfile2").getPath()))});
+        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getResource("randfile3").getPath()))});
+
+        return data;
     }
 
     private final WordOpsHelper wordOpsHelper;
     private final SimpleBitOpsCalculator calculator;
 
-    public Sha256Test(long a, long b) {
+    public Sha256Test(byte[] data) {
         calculator = new SimpleBitOpsCalculator();
         wordOpsHelper = new WordOpsHelper(calculator);
         this.sha256Algorithm = new Sha256AlgorithmImpl(calculator);
-
-        this.a = (int) a;
-        this.b = (int) b;
+        this.data = data;
     }
 
     @Test
     public void testAlgorithm() {
-        String str = ("" + a + b);
-        int[] hash = Sha256.hash(str.getBytes());
+        int[] hash = Sha256.hash(data);
 
-        Bit[][] res = sha256Algorithm.hash(str.getBytes());
+        Bit[][] res = sha256Algorithm.hash(data);
 
         Assert.assertEquals(toHex(hash), wordOpsHelper.toHex(res));
     }

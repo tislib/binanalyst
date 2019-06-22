@@ -29,6 +29,7 @@ public class Sha256AlgorithmImpl implements Sha256Algorithm {
     private static final int[] STATE_0 = {0x6a09e667, 0xbb67ae85, 0x3c6ef372,
             0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
     private final WordOpsHelper wordOpsHelper;
+    private int rounds = 64;
 
     public Sha256AlgorithmImpl(BitOpsCalculator calculator) {
         this.calculator = calculator;
@@ -44,7 +45,7 @@ public class Sha256AlgorithmImpl implements Sha256Algorithm {
             state[i] = wordOpsHelper.wordToBits(STATE_0[i]);
         }
 
-        System.out.println("state0:" + wordOpsHelper.toHex(state));
+//        System.out.println("state0:" + wordOpsHelper.toHex(state));
 
         // initialize all words
 
@@ -68,7 +69,7 @@ public class Sha256AlgorithmImpl implements Sha256Algorithm {
 //            System.out.println("copy TEMP:" + wordOpsHelper.toHex(TEMP));
 
             // operate on TEMP
-            for (int t = 0; t < W.length; ++t) {
+            for (int t = 0; t < rounds; ++t) {
                 Bit[] t1 = wordOpsHelper.add(TEMP[7], bigSig1(TEMP[4]), ch(TEMP[4], TEMP[5], TEMP[6]), wordOpsHelper.wordToBits(K[t]), wordOpsHelper.wordToBits(W[t]));
 
 
@@ -171,4 +172,11 @@ public class Sha256AlgorithmImpl implements Sha256Algorithm {
         return result;
     }
 
+    public void setRounds(int rounds) {
+        this.rounds = rounds;
+    }
+
+    public int getRounds() {
+        return rounds;
+    }
 }
