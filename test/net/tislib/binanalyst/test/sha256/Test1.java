@@ -1,13 +1,14 @@
 package net.tislib.binanalyst.test.sha256;
 
+import net.tislib.binanalyst.lib.WordOpsHelper;
 import net.tislib.binanalyst.lib.algorithms.sha.sha256.Sha256AlgorithmImpl;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 
 public class Test1 {
@@ -17,13 +18,26 @@ public class Test1 {
 //        calculator = new BinderOptimizationDecorator(calculator);
 //        calculator = new XorAndCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
-        calculator = new UnusedBitOptimizerDecorator(calculator);
+        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
+//        calculator = new UnusedBitOptimizerDecorator(calculator);
+        WordOpsHelper wordOpsHelper = new WordOpsHelper(calculator);
 
         Sha256AlgorithmImpl sha256Algorithm = new Sha256AlgorithmImpl(calculator);
 
 //        sha256Algorithm.setRounds(8);
 
-        Bit[][] res = sha256Algorithm.hash("".getBytes());
+        Bit[][] constantDat = wordOpsHelper.toBitWordArray(wordOpsHelper.pad("test".getBytes()));
+        Bit[][] bits = new Bit[constantDat.length][32];
+
+        for (int i = 0; i < constantDat.length; i++) {
+            for (int j = 0; j < constantDat[i].length; j++) {
+                VarBit varBit = new VarBit("I[" + i + "][" + j + "]");
+                varBit.setValue(constantDat[i][j].getValue());
+                bits[i][j] = varBit;
+            }
+        }
+
+        Bit[][] res = sha256Algorithm.hash(bits);
 
         calculator.setOutputBits(res);
 

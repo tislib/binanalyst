@@ -1,5 +1,6 @@
 package net.tislib.binanalyst.lib.calc.graph.decorator;
 
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import net.tislib.binanalyst.lib.bit.Bit;
@@ -31,8 +32,11 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
         switch (operation) {
             case AND:
                 if (Optimizer.contains(bits, ZERO)) return ZERO;
+                bits = Optimizer.remove(bits, ONE);
                 break;
             case OR:
+                if (Optimizer.contains(bits, ONE)) return ONE;
+                bits = Optimizer.remove(bits, ZERO);
             case XOR:
                 bits = Optimizer.remove(bits, ZERO);
                 break;

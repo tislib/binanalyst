@@ -37,17 +37,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     private final Map<String, OperationalBit> middleBitCache = new HashMap<>();
 
-    public final VarBit ZERO;
-
-    public GraphBitOpsCalculator() {
-        ZERO = new VarBit("ZERO") {
-            @Override
-            public BinaryValue getValue() {
-                return BinaryValue.FALSE;
-            }
-        };
-    }
-
     @Override
     public Layer<VarBit> getInput() {
         return input;
@@ -70,13 +59,11 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     @Override
     public void setInputBits(VarBit[]... bits) {
         input.setBits(bits);
-        input.addBits(ZERO);
     }
 
     @Override
     public void setInputBits(VarBit... bits) {
         input.setBits(new VarBit[][]{bits});
-        input.addBits(ZERO);
     }
 
     @Override
@@ -93,7 +80,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
         NamedBit[] result = new NamedBit[bits.length];
         for (int i = 0; i < bits.length; i++) {
             if (bits[i] instanceof ConstantBit) {
-                result[i] = bits[i].getValue().isTrue() ? (NamedBit) not(ZERO) : ZERO;
+                result[i] = bits[i].getValue().isTrue() ? (NamedBit) not(ZERO) : (NamedBit) ZERO;
             } else if (bits[i] instanceof NamedBit) {
                 result[i] = (NamedBit) bits[i];
             } else {

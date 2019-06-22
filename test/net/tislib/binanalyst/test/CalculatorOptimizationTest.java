@@ -12,6 +12,7 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
@@ -118,6 +119,19 @@ public class CalculatorOptimizationTest {
         calculator = new BinderOptimizationDecorator(calculator);
         calculator = new XorOrCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new UnusedBitOptimizerDecorator(calculator);
+
+        check(calculator);
+    }
+
+    @Test
+    public void constantOperationRemoverOptimizationDecorator() {
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+
+        calculator = new BinderOptimizationDecorator(calculator);
+        calculator = new XorOrCalculatorDecorator(calculator, true);
+        calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
 
         check(calculator);

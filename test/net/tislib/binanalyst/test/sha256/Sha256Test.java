@@ -13,6 +13,7 @@ import net.tislib.binanalyst.lib.algorithms.sha.sha256.Sha256;
 import net.tislib.binanalyst.lib.algorithms.sha.sha256.Sha256Algorithm;
 import net.tislib.binanalyst.lib.algorithms.sha.sha256.Sha256AlgorithmImpl;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
 import net.tislib.binanalyst.test.TestData;
 import org.junit.Assert;
@@ -51,10 +52,30 @@ public class Sha256Test {
     }
 
     @Test
-    public void testAlgorithm() {
+    public void simpleTest() {
         int[] hash = Sha256.hash(data);
 
         Bit[][] res = sha256Algorithm.hash(data);
+
+        Assert.assertEquals(toHex(hash), wordOpsHelper.toHex(res));
+    }
+
+    @Test
+    public void varBitTest() {
+        int[] hash = Sha256.hash(data);
+
+        Bit[][] constantDat = wordOpsHelper.toBitWordArray(wordOpsHelper.pad(data));
+        Bit[][] bits = new Bit[constantDat.length][32];
+
+        for (int i = 0; i < constantDat.length; i++) {
+            for (int j = 0; j < constantDat[i].length; j++) {
+                VarBit varBit = new VarBit("I[" + i + "][" + j + "]");
+                varBit.setValue(constantDat[i][j].getValue());
+                bits[i][j] = varBit;
+            }
+        }
+
+        Bit[][] res = sha256Algorithm.hash(bits);
 
         Assert.assertEquals(toHex(hash), wordOpsHelper.toHex(res));
     }

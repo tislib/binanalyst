@@ -30,9 +30,9 @@ public class RevSolver {
         this.bit = bits[0];
         this.internalCalculator = new GraphBitOpsCalculator();
         this.internalCalculator.setInputBits(new VarBit[0]);
-        this.internalCalculator.getInput().setBits(
-                calculator.getOutput().getBits().stream().map(item -> (VarBit) item).collect(Collectors.toList())
-        );
+//        this.internalCalculator.getInput().setBits(
+//                calculator.getOutput().getBits().stream().map(item -> (VarBit) item).collect(Collectors.toList())
+//        ); // compile failure
         this.truthBit = generateTruth(bit);
 //        this.falsyBit = generateFalsy(bit);
 
