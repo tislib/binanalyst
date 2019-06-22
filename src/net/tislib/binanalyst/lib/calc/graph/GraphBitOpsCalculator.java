@@ -1,6 +1,8 @@
 package net.tislib.binanalyst.lib.calc.graph;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,6 +23,7 @@ import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.ConstantCleaner;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
+import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
@@ -151,7 +154,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     @Override
     public Bit wrap(Number num) {
-        throw new UnsupportedOperationException("wrapping is not supported for " + this.getClass().getName());
+        return num.longValue() == 0 ? ZERO : ONE;
     }
 
     public void saveState(OutputStream outputStream) throws JAXBException {
@@ -188,6 +191,9 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
         input.show(false);
         middle.show(false);
         output.show(false);
+
+        System.out.println("MIDDLE SIZE: " + this.getMiddle().getBits().size());
+        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(this));
     }
 
     public void showResult() {

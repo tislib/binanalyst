@@ -58,7 +58,7 @@ public class BinMulRec {
 //            System.out.println("ERROR");
 //        }
 
-        if (addTree) {
+        if (!addTree) {
             return BinAdd.add(calculator, c0, BinOps.shl(c1, l), BinOps.shl(c2, l), BinOps.shl(c3, l * 2));
         } else {
             return add2(calculator, add2(calculator, c0, BinOps.shl(c1, l)), add2(calculator, BinOps.shl(c2, l), BinOps.shl(c3, l * 2)));
@@ -67,7 +67,8 @@ public class BinMulRec {
 
     public static Bit[] add2(BitOpsCalculator calculator, Bit[] aBits, Bit[] bBits) {
         if (aBits.length == 1 || bBits.length == 1) {
-            return BinAdd.add(calculator, aBits, bBits);
+            Bit[] res = BinAdd.add(calculator, aBits, bBits);
+            return res;
         }
         int l = Math.min(aBits.length / 2, bBits.length / 2);
         Bit[] al = new Bit[l];

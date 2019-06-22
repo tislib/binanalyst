@@ -3,7 +3,6 @@ package net.tislib.binanalyst.lib.operator;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import net.tislib.binanalyst.lib.BinOps;
-import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
@@ -45,7 +44,25 @@ public class BinMul {
         if (b.length == 1) {
             return multiplyByBit(calculator, a, b[0]);
         }
-        return BinAdd.add(calculator, getMultiplicationMatrix(calculator, a, b));
+        return flip(BinAdd.add(calculator, flip(getMultiplicationMatrix(calculator, a, b))));
+    }
+
+    private static Bit[][] flip(Bit[][] matrix) {
+        Bit[][] res = new Bit[matrix.length][];
+
+        for (int i = 0; i < matrix.length; i++) {
+            res[i] = flip(matrix[i]);
+        }
+
+        return res;
+    }
+
+    private static Bit[] flip(Bit[] bits) {
+        Bit[] result = new Bit[bits.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = bits[bits.length - i - 1];
+        }
+        return result;
     }
 
     private static Bit[] multiplyByBit(BitOpsCalculator calculator, Bit[] b, Bit bit) {

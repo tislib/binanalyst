@@ -54,7 +54,7 @@ public class BinValueHelper {
     public static void print(long a, int length) {
         byte[] binArr = getBinArray(a);
         String pad = new String(new char[length - binArr.length]).replace("\0", "0");
-        System.out.print("0x" + pad);
+        System.out.print("0b" + pad);
         for (Byte bit : binArr) {
             System.out.print(bit);
         }
@@ -62,8 +62,31 @@ public class BinValueHelper {
         System.out.println();
     }
 
+    public static void printHex(long a, int length) {
+        byte[] binArr = getBinArray(a);
+        String pad = new String(new char[length - binArr.length / 4]).replace("\0", "0");
+        System.out.print("0x" + pad);
+        for (int i = 0; i < binArr.length - 4; i++) {
+            Byte bit0 = binArr[i];
+            Byte bit1 = binArr[i + 1];
+            Byte bit2 = binArr[i + 2];
+            Byte bit3 = binArr[i + 3];
+            System.out.print(bit4ToHexChar(bit0, bit1, bit2, bit3));
+        }
+        System.out.print(" : " + a);
+        System.out.println();
+    }
+
+    public static Character bit4ToHexChar(Byte bit0, Byte bit1, Byte bit2, Byte bit3) {
+        return '!';
+    }
+
     public static void print(long a) {
         print(a, BIT_LENGTH);
+    }
+
+    public static void printHex(long a) {
+        printHex(a, BIT_LENGTH / 4);
     }
 
     public static byte getBit(long a, int i) {
@@ -146,7 +169,7 @@ public class BinValueHelper {
     public static void print(Bit... bits) {
         System.out.print("0x");
         for (int i = 0; i < bits.length; i++) {
-            System.out.print(bits[i].toString());
+            System.out.print(bits[i].intVal());
         }
         System.out.print(" : " + toLong(bits));
         System.out.println();
@@ -270,5 +293,9 @@ public class BinValueHelper {
 
     public static void printFormula(NamedBit bit) {
         System.out.println(bit.getName() + " = " + formulaToString(bit));
+    }
+
+    public static long toHexString(Bit[] res) {
+        return 0;
     }
 }

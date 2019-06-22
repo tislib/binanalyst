@@ -1,11 +1,11 @@
 package net.tislib.binanalyst.lib.calc.graph;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
-import net.tislib.binanalyst.lib.bit.OperationalBit;
-
-import java.util.*;
-import net.tislib.binanalyst.lib.bit.VarBit;
 
 /**
  * Created by Taleh Ibrahimli on 2/8/18.
@@ -44,7 +44,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
             this.bits.addAll(Arrays.asList(bits));
         }
 
-        if(setNames){
+        if (setNames) {
             this.rename();
         }
     }
@@ -115,5 +115,13 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
             T bit = this.bits.get(i);
             bit.setName(name.toCharArray()[0] + "[" + i + "]");
         }
+    }
+
+    public int size() {
+        return bits.size();
+    }
+
+    public T getBitL(int i) {
+        return bits.get(bits.size() - 1 - i);
     }
 }

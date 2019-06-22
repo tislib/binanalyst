@@ -8,4 +8,7 @@ public interface Bit {
 
     public BinaryValue getValue();
 
+    default int intVal() {
+        return getValue().isTrue() ? 1 : 0;
+    }
 }

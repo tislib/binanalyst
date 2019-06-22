@@ -50,7 +50,7 @@ public class LevelAnalyseTest {
 
 
 //        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
-        Bit[] r = BinMulRec.multiplyTree2Rec(calculator, aBits, bBits, false);
+        Bit[] r = BinMulRec.multiplyTree2Rec(calculator, aBits, bBits, true);
 
 
 //        int i = 0;
@@ -82,8 +82,6 @@ public class LevelAnalyseTest {
 
 
 //        printValues(r);
-        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
-        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
 //
 //        for (int i = 0; i < r.length; i++) {
 //            BinValueHelper.printFormula((NamedBit) r[i]);

@@ -16,14 +16,11 @@ public class BinAdd {
 
 
     public static Bit[] add(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
-        a = flip(a);
-        b = flip(b);
         int L = Math.max(a.length, b.length) + 1;
         Bit[] result = new Bit[L];
 
         result[0] = xor(calculator, a[0], b[0]);
         Bit carryBit = calculator.and(a[0], b[0]);
-        Bit[] carryBits = new Bit[L];
         for (int i = 1; i < L; i++) {
             Bit ai = i < a.length ? a[i] : ZERO;
 
@@ -75,10 +72,9 @@ public class BinAdd {
                     );
                 }
             }
-            carryBits[i] = carryBit;
         }
 
-        return flip(result);
+        return result;
     }
 
     public static Bit getAddStageBit(BitOpsCalculator calculator, Bit[] bits, int dv) {
@@ -106,23 +102,11 @@ public class BinAdd {
         return calculator.xor(bits);
     }
 
-    private static Bit[] flip(Bit[] bits) {
-        Bit[] result = new Bit[bits.length];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = bits[bits.length - i - 1];
-        }
-        return result;
-    }
-
     public static Bit[] add(BitOpsCalculator calculator, Bit[]... nums) {
         if (nums.length == 0) return new Bit[0];
         if (nums.length == 1) return nums[0];
-        int L = maxLength(nums);
-        Bit[] result = new Bit[L];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = ZERO;
-        }
-        for (int i = 0; i < nums.length; i++) {
+        Bit[] result = nums[0];
+        for (int i = 1; i < nums.length; i++) {
             result = add(calculator, result, nums[i]);
         }
         return result;
