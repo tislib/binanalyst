@@ -1,5 +1,8 @@
 package net.tislib.binanalyst.test.old;
 
+import static net.tislib.binanalyst.lib.BinValueHelper.*;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
@@ -7,18 +10,13 @@ import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
-import javax.xml.bind.JAXBException;
-
-import static net.tislib.binanalyst.lib.BinValueHelper.*;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
-
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
  * Email: me@talehibrahimli.com
  */
 public class Test11 {
 
-    public static void main(String... args) throws JAXBException {
+    public static void main(String... args) {
 //        while (true) {
 
 

@@ -9,12 +9,14 @@ import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.OperationLevelMeasureAnalyser;
 import net.tislib.binanalyst.lib.operator.BinMul;
+import net.tislib.binanalyst.lib.operator.BinMulRec;
 
 /**
  * Created by Taleh Ibrahimli on 2/9/18.
@@ -28,8 +30,6 @@ public class LevelAnalyseTest22 {
         calculator = new XorAndCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
-
-        OperationLevelMeasureAnalyser operationLevelMeasureAnalyser = new OperationLevelMeasureAnalyser(calculator);
 
         long a = 3;
         long b = 2;
@@ -48,20 +48,11 @@ public class LevelAnalyseTest22 {
         calculator.setInputBits(aBits, bBits);
 
 
-//        Bit[] r = BinMulRec.multiplyTree2Rec(calculator, aBits, bBits, true);
-        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
+        Bit[] r = BinMulRec.multiplyTree2Rec(calculator, aBits, bBits, true);
+//        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
-        //110001
 
-        Bit[] truth = new Bit[6];
-        truth[0] = r[2];
-        truth[1] = r[3];
-        truth[2] = calculator.not(r[4]);
-        truth[3] = calculator.not(r[5]);
-        truth[4] = calculator.not(r[6]);
-        truth[5] = r[7];
-
-        calculator.setOutputBits(new Bit[]{calculator.and(truth)});
+        calculator.setOutputBits(new Bit[]{calculator.or(r)});
 
         calculator.calculate();
 

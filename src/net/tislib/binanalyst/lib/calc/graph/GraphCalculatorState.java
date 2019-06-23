@@ -1,15 +1,8 @@
 package net.tislib.binanalyst.lib.calc.graph;
 
-import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-@XmlRootElement
-@XmlType(propOrder = {"input"})
-@XmlAccessorType(XmlAccessType.FIELD)
 public class GraphCalculatorState {
 
     private LayerInfo input = new LayerInfo();
@@ -18,9 +11,6 @@ public class GraphCalculatorState {
         return input;
     }
 
-    @XmlRootElement(name = "bitx")
-    @XmlType(propOrder = {"name"})
-    @XmlAccessorType(XmlAccessType.FIELD)
     public static class BitInfo {
         private String name;
 
@@ -33,9 +23,6 @@ public class GraphCalculatorState {
         }
     }
 
-    @XmlRootElement
-    @XmlType(propOrder = {"bit"})
-    @XmlAccessorType(XmlAccessType.FIELD)
     public static class LayerInfo {
         private List<BitInfo> bit = new ArrayList<>();
 

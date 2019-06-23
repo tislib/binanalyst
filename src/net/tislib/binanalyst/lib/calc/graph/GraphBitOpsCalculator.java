@@ -5,16 +5,11 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
@@ -142,15 +137,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     @Override
     public Bit wrap(Number num) {
         return num.longValue() == 0 ? ZERO : ONE;
-    }
-
-    public void saveState(OutputStream outputStream) throws JAXBException {
-        GraphCalculatorState state = getState();
-
-        JAXBContext jc = JAXBContext.newInstance(GraphCalculatorState.class);
-        Marshaller marshaller = jc.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(state, outputStream);
     }
 
     private GraphCalculatorState getState() {

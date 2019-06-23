@@ -28,9 +28,12 @@ public class XorAndCalculatorDecorator extends AbstractBitOpsGraphCalculatorDeco
     @Override
     public Bit not(Bit bit) {
         if (reverseInsteadOfNot) {
-            return reverseBitMap.computeIfAbsent(bit, this::reverse);
+            if(!reverseBitMap.containsKey(bit)){
+                reverseBitMap.put(bit, this.reverse(bit));
+            }
+            return reverseBitMap.get(bit);
         } else {
-            return xor(bit, ConstantBit.ONE);
+            return super.not(bit);
         }
     }
 

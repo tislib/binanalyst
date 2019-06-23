@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph.tools;
 
+import static net.tislib.binanalyst.lib.util.MapUtil.computeIfAbsent;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,7 +42,7 @@ public class GraphCalculatorTools {
     private static int getMaxDepth(Map<Bit, Integer> cache, Bit bit) {
         if (bit instanceof OperationalBit) {
             Collection<? extends Bit> bits = Arrays.asList(((OperationalBit) bit).getBits());
-            return cache.computeIfAbsent(bit, u -> {
+            return computeIfAbsent(cache, bit, u -> {
                 int res = getMaxDepth(cache, bits);
                 return 1 + res;
             });
