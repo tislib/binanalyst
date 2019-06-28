@@ -1,7 +1,5 @@
 package net.tislib.binanalyst.lib.algorithms.sha.sha256;
 
-import static net.tislib.binanalyst.lib.WordOpsHelper.toHex;
-
 import java.nio.ByteBuffer;
 
 

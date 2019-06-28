@@ -109,11 +109,11 @@ public class Sha256AlgorithmImpl implements Sha256Algorithm {
         );
     }
 
-    public void setRounds(int rounds) {
-        this.rounds = rounds;
-    }
-
     public int getRounds() {
         return rounds;
+    }
+
+    public void setRounds(int rounds) {
+        this.rounds = rounds;
     }
 }

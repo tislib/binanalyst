@@ -29,15 +29,6 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
         return null;
     }
 
-    public void setBits(T[][] bitsArray) {
-        setBits(bitsArray, false);
-    }
-
-    public void setBits(List<T> bits) {
-        this.bits.clear();
-        this.bits.addAll(bits);
-    }
-
     public void setBits(T[][] bitsArray, boolean setNames) {
         this.bits.clear();
         for (T[] bits : bitsArray) {
@@ -82,6 +73,15 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
 
     public List<T> getBits() {
         return bits;
+    }
+
+    public void setBits(T[][] bitsArray) {
+        setBits(bitsArray, false);
+    }
+
+    public void setBits(List<T> bits) {
+        this.bits.clear();
+        this.bits.addAll(bits);
     }
 
     public Layer<T> copy() {

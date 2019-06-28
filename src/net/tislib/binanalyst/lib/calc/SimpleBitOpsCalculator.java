@@ -1,10 +1,11 @@
 package net.tislib.binanalyst.lib.calc;
 
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+
 import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.CompositeBit;
-
-import static net.tislib.binanalyst.lib.bit.ConstantBit.*;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
@@ -24,7 +25,7 @@ public class SimpleBitOpsCalculator implements BitOpsCalculator {
     @Override
     public Bit and(Bit... bits) {
         for (Bit bit : bits) {
-            if(bit == null){
+            if (bit == null) {
                 throw new RuntimeException();
             }
             if (bit.getValue().isFalse()) {

@@ -4,7 +4,6 @@ import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,6 +31,8 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     private final Map<String, OperationalBit> middleBitCache = new HashMap<>();
     private long reusedBitsCount;
+    private List<Optimizer> optimizers = new ArrayList<>();
+    private int operationCount = 0;
 
     @Override
     public Layer<VarBit> getInput() {
@@ -48,10 +49,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
         return output;
     }
 
-    private List<Optimizer> optimizers = new ArrayList<>();
-
-    private int operationCount = 0;
-
     @Override
     public void setInputBits(VarBit[]... bits) {
         input.setBits(bits);
@@ -64,7 +61,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     @Override
     public void setOutputBits(Bit[]... bitsArray) {
-        NamedBit newBitsArray[][] = new NamedBit[bitsArray.length][];
+        NamedBit[][] newBitsArray = new NamedBit[bitsArray.length][];
         for (int i = 0; i < bitsArray.length; i++) {
             NamedBit[] result = resolveBits(bitsArray[i]);
             newBitsArray[i] = result;
@@ -139,21 +136,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     @Override
     public Bit wrap(Number num) {
         return num.longValue() == 0 ? ZERO : ONE;
-    }
-
-    private GraphCalculatorState getState() {
-        GraphCalculatorState graphCalculatorState = new GraphCalculatorState();
-        for (Bit bit : input) {
-            VarBit varBit = (VarBit) bit;
-            GraphCalculatorState.BitInfo bitInfo = new GraphCalculatorState.BitInfo();
-            bitInfo.setName(bit.toString());
-            graphCalculatorState.getInput().getBit().add(bitInfo);
-        }
-        return graphCalculatorState;
-    }
-
-    public void loadState(InputStream inputStream) {
-
     }
 
     @Override

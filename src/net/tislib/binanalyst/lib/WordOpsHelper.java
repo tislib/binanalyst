@@ -4,16 +4,37 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import java.nio.ByteBuffer;
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.operator.BinAdd;
 
 public class WordOpsHelper {
+    final private static char[] encoding = "0123456789ABCDEF".toCharArray();
     private final BitOpsCalculator calculator;
 
     public WordOpsHelper(BitOpsCalculator calculator) {
         this.calculator = calculator;
+    }
+
+    public static String toHex(int... arr) {
+        char[] encodedChars = new char[arr.length * 4 * 2];
+        for (int i = 0; i < arr.length; i++) {
+            int v = arr[i];
+            int idx = i * 4 * 2;
+            for (int j = 0; j < 8; j++) {
+                encodedChars[idx + j] = encoding[(v >>> ((7 - j) * 4)) & 0x0F];
+            }
+        }
+        return new String(encodedChars);
+    }
+
+    public static Bit[] shl(Bit[] bh, int l) {
+        Bit[] newBits = new Bit[bh.length];
+        for (int i = 0; i < newBits.length; i++) {
+            newBits[i] = ZERO;
+        }
+        System.arraycopy(bh, l, newBits, 0, bh.length - l);
+        return newBits;
     }
 
     public Bit[] wordToBits(int word) {
@@ -46,20 +67,6 @@ public class WordOpsHelper {
 
     public String toHex(Bit[]... state) {
         return toHex(bitsArrToWordArr(state));
-    }
-
-    final private static char[] encoding = "0123456789ABCDEF".toCharArray();
-
-    public static String toHex(int... arr) {
-        char[] encodedChars = new char[arr.length * 4 * 2];
-        for (int i = 0; i < arr.length; i++) {
-            int v = arr[i];
-            int idx = i * 4 * 2;
-            for (int j = 0; j < 8; j++) {
-                encodedChars[idx + j] = encoding[(v >>> ((7 - j) * 4)) & 0x0F];
-            }
-        }
-        return new String(encodedChars);
     }
 
     public Bit[] add(Bit[]... bits) {
@@ -102,15 +109,6 @@ public class WordOpsHelper {
             newBits[i] = ZERO;
         }
         System.arraycopy(bh, 0, newBits, l, bh.length - l);
-        return newBits;
-    }
-
-    public static Bit[] shl(Bit[] bh, int l) {
-        Bit[] newBits = new Bit[bh.length];
-        for (int i = 0; i < newBits.length; i++) {
-            newBits[i] = ZERO;
-        }
-        System.arraycopy(bh, l, newBits, 0, bh.length - l);
         return newBits;
     }
 

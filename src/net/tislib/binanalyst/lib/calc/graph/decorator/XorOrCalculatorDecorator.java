@@ -3,7 +3,6 @@ package net.tislib.binanalyst.lib.calc.graph.decorator;
 import java.util.HashMap;
 import java.util.Map;
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
@@ -26,7 +25,7 @@ public class XorOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
     @Override
     public Bit not(Bit bit) {
         if (reverseInsteadOfNot) {
-            if(!reverseBitMap.containsKey(bit)){
+            if (!reverseBitMap.containsKey(bit)) {
                 reverseBitMap.put(bit, this.reverse(bit));
             }
             return reverseBitMap.get(bit);

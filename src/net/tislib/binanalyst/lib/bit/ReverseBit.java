@@ -16,20 +16,6 @@ public class ReverseBit extends VarBit {
         this.bits = bits;
     }
 
-    public enum AnomalOperation {
-        RAND("R&"), ROR("R|");
-
-        private final String sign;
-
-        AnomalOperation(String sign) {
-            this.sign = sign;
-        }
-
-        public String getSign() {
-            return sign;
-        }
-    }
-
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(" " + operation.getSign() + " ");
@@ -45,5 +31,19 @@ public class ReverseBit extends VarBit {
 
     public AnomalOperation getOperation() {
         return operation;
+    }
+
+    public enum AnomalOperation {
+        RAND("R&"), ROR("R|");
+
+        private final String sign;
+
+        AnomalOperation(String sign) {
+            this.sign = sign;
+        }
+
+        public String getSign() {
+            return sign;
+        }
     }
 }

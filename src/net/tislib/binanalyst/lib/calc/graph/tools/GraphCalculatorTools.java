@@ -83,6 +83,62 @@ public class GraphCalculatorTools {
         }
     }
 
+    public static GraphCalculatorSerializedData serializeCalculator(BitOpsGraphCalculator calculator) {
+        GraphCalculatorSerializedData data = new GraphCalculatorSerializedData();
+
+        data.input = calculator.getInput().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
+        data.middle = calculator.getMiddle().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
+        data.output = calculator.getOutput().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
+
+        return data;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends NamedBit> T deserializeBit(GraphBitOpsCalculator calculator, BitData bitData) {
+        if (VarBit.class.getTypeName().equals(bitData.type)) {
+            return (T) new VarBit(bitData.name);
+        } else if (OperationalBit.class.getTypeName().equals(bitData.type)) {
+            Operation operation = bitData.operation;
+            NamedBit[] bits = (bitData.bits).stream().map(item -> locateBit(calculator, item)).toArray(NamedBit[]::new);
+            return (T) calculator.operation(operation, bits);
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends NamedBit> T locateBit(GraphBitOpsCalculator calculator, String name) {
+        if (name.equals("0") || name.equals("ZERO")) {
+            return (T) ConstantBit.ZERO;
+        } else if (name.equals("1") || name.equals("ONE")) {
+            return (T) ConstantBit.ONE;
+        }
+        OperationalBit middleBit = calculator.getMiddle().locate(name);
+        if (middleBit != null) {
+            return (T) middleBit;
+        }
+        VarBit inputBit = calculator.getInput().locate(name);
+        return (T) inputBit;
+    }
+
+    private static BitData serializeBit(NamedBit item) {
+        BitData bitData = new BitData();
+        bitData.type = item.getClass().getTypeName();
+        bitData.name = item.getName();
+        if (item instanceof OperationalBit) {
+            bitData.bits = Arrays.stream(((OperationalBit) item).getBits()).map(NamedBit::getName).collect(Collectors.toList());
+            bitData.operation = ((OperationalBit) item).getOperation();
+        }
+        return bitData;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static BitOpsGraphCalculator deSerializeCalculator(GraphCalculatorSerializedData data) {
+        GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
+        calculator.setInputBits(data.input.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(VarBit[]::new));
+        calculator.getMiddle().addBits(data.middle.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(OperationalBit[]::new));
+        calculator.setOutputBits(data.output.stream().map(bitData -> locateBit(calculator, (String) bitData.name)).toArray(NamedBit[]::new));
+        return calculator;
+    }
 
     public static class GraphCalculatorReferenceFinder {
 
@@ -139,63 +195,6 @@ public class GraphCalculatorTools {
             }
             return false;
         }
-    }
-
-    public static GraphCalculatorSerializedData serializeCalculator(BitOpsGraphCalculator calculator) {
-        GraphCalculatorSerializedData data = new GraphCalculatorSerializedData();
-
-        data.input = calculator.getInput().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
-        data.middle = calculator.getMiddle().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
-        data.output = calculator.getOutput().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
-
-        return data;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends NamedBit> T deserializeBit(GraphBitOpsCalculator calculator, BitData bitData) {
-        if (VarBit.class.getTypeName().equals(bitData.type)) {
-            return (T) new VarBit(bitData.name);
-        } else if (OperationalBit.class.getTypeName().equals(bitData.type)) {
-            Operation operation = bitData.operation;
-            NamedBit[] bits = (bitData.bits).stream().map(item -> locateBit(calculator, item)).toArray(NamedBit[]::new);
-            return (T) calculator.operation(operation, bits);
-        }
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends NamedBit> T locateBit(GraphBitOpsCalculator calculator, String name) {
-        if (name.equals("0") || name.equals("ZERO")) {
-            return (T) ConstantBit.ZERO;
-        } else if (name.equals("1") || name.equals("ONE")) {
-            return (T) ConstantBit.ONE;
-        }
-        OperationalBit middleBit = calculator.getMiddle().locate(name);
-        if (middleBit != null) {
-            return (T) middleBit;
-        }
-        VarBit inputBit = calculator.getInput().locate(name);
-        return (T) inputBit;
-    }
-
-    private static BitData serializeBit(NamedBit item) {
-        BitData bitData = new BitData();
-        bitData.type = item.getClass().getTypeName();
-        bitData.name = item.getName();
-        if (item instanceof OperationalBit) {
-            bitData.bits = Arrays.stream(((OperationalBit) item).getBits()).map(NamedBit::getName).collect(Collectors.toList());
-            bitData.operation = ((OperationalBit) item).getOperation();
-        }
-        return bitData;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static BitOpsGraphCalculator deSerializeCalculator(GraphCalculatorSerializedData data) {
-        GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
-        calculator.setInputBits(data.input.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(VarBit[]::new));
-        calculator.getMiddle().addBits(data.middle.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(OperationalBit[]::new));
-        calculator.setOutputBits(data.output.stream().map(bitData -> locateBit(calculator, (String) bitData.name)).toArray(NamedBit[]::new));
-        return calculator;
     }
 
     public static class GraphCalculatorSerializedData {

@@ -1,6 +1,9 @@
 package net.tislib.binanalyst.lib.neo;
 
-import net.tislib.binanalyst.lib.bit.*;
+import net.tislib.binanalyst.lib.bit.NamedBit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
+import net.tislib.binanalyst.lib.bit.ReverseBit;
+import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.expression.AnomalGraphExpression;
 import net.tislib.binanalyst.lib.calc.graph.expression.GraphExpression;
@@ -24,6 +27,12 @@ public class NeoGraphExpressionRenderer implements AutoCloseable {
         this.name = name;
         this.driver = GraphDatabase.driver("bolt://twl.tisserv.net:7687", AuthTokens.basic("neo4j", "d709ec6c241244683c23e6c8d7638c40"));
         this.session = driver.session();
+    }
+
+    public static void easyRender(GraphExpression graphExpression) {
+        try (NeoGraphExpressionRenderer neoGraphExpressionRenderer = new NeoGraphExpressionRenderer("Bit3")) {
+            neoGraphExpressionRenderer.render(graphExpression);
+        }
     }
 
     public void render(GraphBitOpsCalculator calculator) {
@@ -65,12 +74,6 @@ public class NeoGraphExpressionRenderer implements AutoCloseable {
     public void close() {
         session.close();
         driver.close();
-    }
-
-    public static void easyRender(GraphExpression graphExpression) {
-        try (NeoGraphExpressionRenderer neoGraphExpressionRenderer = new NeoGraphExpressionRenderer("Bit3")) {
-            neoGraphExpressionRenderer.render(graphExpression);
-        }
     }
 
     public void render(GraphExpression graphExpression) {

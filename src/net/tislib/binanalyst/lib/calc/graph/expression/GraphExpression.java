@@ -1,5 +1,8 @@
 package net.tislib.binanalyst.lib.calc.graph.expression;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
@@ -7,10 +10,6 @@ import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Taleh Ibrahimli on 2/10/18.

@@ -1,9 +1,9 @@
 package net.tislib.binanalyst.lib;
 
+import static net.tislib.binanalyst.lib.BinOps.*;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
-
-import static net.tislib.binanalyst.lib.BinOps.*;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.

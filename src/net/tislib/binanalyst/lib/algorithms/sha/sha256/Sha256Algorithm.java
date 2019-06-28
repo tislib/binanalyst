@@ -4,5 +4,6 @@ import net.tislib.binanalyst.lib.bit.Bit;
 
 public interface Sha256Algorithm {
     Bit[][] hash(byte[] bytes);
+
     Bit[][] hash(Bit[][] bits);
 }

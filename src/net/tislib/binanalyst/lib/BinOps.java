@@ -1,6 +1,5 @@
 package net.tislib.binanalyst.lib;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.print;
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 

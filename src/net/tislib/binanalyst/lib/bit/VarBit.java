@@ -6,12 +6,11 @@ package net.tislib.binanalyst.lib.bit;
  */
 public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit> {
     private String name;
+    private boolean valueSetted = false;
 
     public VarBit(String name) {
         this.name = name;
     }
-
-    private boolean valueSetted = false;
 
     public VarBit() {
 
@@ -48,19 +47,6 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
         return result;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
     public static VarBit[] list(String name, int count, Bit initialValue) {
         VarBit[] bits = new VarBit[count];
         for (int i = 0; i < bits.length; i++) {
@@ -68,6 +54,19 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
             bits[i].setValue(initialValue.getValue());
         }
         return bits;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     @Override
@@ -78,8 +77,8 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
     @Override
     public BinaryValue getValue() {
         if (!valueSetted) {
-            if(this instanceof OperationalBit) {
-                ((OperationalBit)this).calculate();
+            if (this instanceof OperationalBit) {
+                ((OperationalBit) this).calculate();
             }
 //            throw new RuntimeException("Varbit: " + getName() + " has not value");
         }

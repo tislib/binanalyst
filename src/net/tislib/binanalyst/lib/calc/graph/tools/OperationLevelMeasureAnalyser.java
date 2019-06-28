@@ -10,10 +10,9 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 
 public class OperationLevelMeasureAnalyser {
 
+    private final BitOpsGraphCalculator calculator;
     private Map<OperationalBit, Integer> bitLevelMapUpper = new HashMap<>();
     private Map<OperationalBit, Integer> bitLevelMapLower = new HashMap<>();
-
-    private final BitOpsGraphCalculator calculator;
 
     public OperationLevelMeasureAnalyser(BitOpsGraphCalculator calculator) {
         this.calculator = calculator;

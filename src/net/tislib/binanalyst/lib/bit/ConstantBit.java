@@ -16,6 +16,10 @@ public final class ConstantBit implements Bit, NamedBit {
         this.value = value;
     }
 
+    public static Bit not(ConstantBit bit) {
+        return bit == ZERO ? ONE : ZERO;
+    }
+
     @Override
     public BinaryValue getValue() {
         return value;
@@ -24,10 +28,6 @@ public final class ConstantBit implements Bit, NamedBit {
     @Override
     public String toString() {
         return this == ZERO ? "0" : "1";
-    }
-
-    public static Bit not(ConstantBit bit) {
-        return bit == ZERO ? ONE : ZERO;
     }
 
     @Override

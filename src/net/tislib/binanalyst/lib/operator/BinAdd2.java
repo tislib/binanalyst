@@ -106,7 +106,7 @@ public class BinAdd2 {
         for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j < nums.length; j++) {
                 chainMatrix[i][j] = numsTransposed[i][j];
-                resultMatrix [i][j] = numsTransposed[i][j];
+                resultMatrix[i][j] = numsTransposed[i][j];
             }
         }
         for (int i = 1; i < nums.length; i++) {

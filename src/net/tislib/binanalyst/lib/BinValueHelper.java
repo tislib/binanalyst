@@ -22,9 +22,8 @@ import net.tislib.binanalyst.lib.calc.SimpleBitOpsCalculator;
  */
 public class BinValueHelper {
 
-    static BitOpsCalculator simpleCalculator = new SimpleBitOpsCalculator();
-
     private static final int BIT_LENGTH = 64;
+    static BitOpsCalculator simpleCalculator = new SimpleBitOpsCalculator();
 
     public static byte[] getBinArray(long num) {
         List<Byte> container = new ArrayList<>();

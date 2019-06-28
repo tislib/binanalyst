@@ -1,10 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph.optimizer;
 
-import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
-import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 /**
  * Created by Taleh Ibrahimli on 2/11/18.

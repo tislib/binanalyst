@@ -23,6 +23,13 @@ public final class OperationalBit extends VarBit implements Bit {
         this.bits = bits;
     }
 
+    public static String showFull(NamedBit bit) {
+        if (bit instanceof OperationalBit) {
+            return "(" + ((OperationalBit) bit).showFull(false) + ")";
+        }
+        return bit.getName();
+    }
+
     public Operation getOperation() {
         return operation;
     }
@@ -51,6 +58,7 @@ public final class OperationalBit extends VarBit implements Bit {
     public void calculate() {
         this.setValue(calculateInternal());
     }
+
     private BinaryValue calculateInternal() {
         boolean unknownFound = false;
         switch (operation) {
@@ -114,13 +122,6 @@ public final class OperationalBit extends VarBit implements Bit {
             joiner.add(showFull(bit));
         }
         return showSelf ? getName() + " : " + joiner : joiner.toString();
-    }
-
-    public static String showFull(NamedBit bit) {
-        if (bit instanceof OperationalBit) {
-            return "(" + ((OperationalBit) bit).showFull(false) + ")";
-        }
-        return bit.getName();
     }
 
     public boolean isFullMiddle() {

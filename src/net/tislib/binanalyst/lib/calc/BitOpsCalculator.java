@@ -7,6 +7,10 @@ import net.tislib.binanalyst.lib.bit.Bit;
  * Email: me@talehibrahimli.com
  */
 public interface BitOpsCalculator {
+    static BitOpsCalculator getDefault() {
+        return new SimpleBitOpsCalculator();
+    }
+
     Bit xor(Bit... bits);
 
     Bit and(Bit... bits);
@@ -16,10 +20,6 @@ public interface BitOpsCalculator {
     Bit not(Bit bit);
 
     Bit wrap(Number num);
-
-    static BitOpsCalculator getDefault() {
-        return new SimpleBitOpsCalculator();
-    }
 
     void calculate();
 }

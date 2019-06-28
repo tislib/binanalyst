@@ -1,8 +1,5 @@
 package net.tislib.binanalyst.lib.calc.logickeeper;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.rasterize;
-import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +10,10 @@ import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 public class OptimizedBitLogicKeeper implements BitLogicalKeeper {
     private final BitOpsCalculator calculator;
-    private List<Bit[]> result = new ArrayList<>();
-
+    private final List<Bit> restrictions = new ArrayList<>();
     boolean calculateResult = true;
     boolean calculateVariationCount = true;
-    private final List<Bit> restrictions = new ArrayList<>();
+    private List<Bit[]> result = new ArrayList<>();
     private VarBit[] input;
     private long operationCount = 0;
     private VarBit[] resultingBits;

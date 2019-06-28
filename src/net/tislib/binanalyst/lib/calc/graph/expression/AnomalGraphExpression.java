@@ -1,14 +1,17 @@
 package net.tislib.binanalyst.lib.calc.graph.expression;
 
-import net.tislib.binanalyst.lib.bit.*;
-import net.tislib.binanalyst.lib.calc.graph.Layer;
+import static net.tislib.binanalyst.lib.bit.ReverseBit.AnomalOperation.RAND;
+import static net.tislib.binanalyst.lib.bit.ReverseBit.AnomalOperation.ROR;
+import static net.tislib.binanalyst.lib.calc.graph.Operation.NOT;
+import static net.tislib.binanalyst.lib.calc.graph.Operation.XOR;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static net.tislib.binanalyst.lib.bit.ReverseBit.AnomalOperation.RAND;
-import static net.tislib.binanalyst.lib.bit.ReverseBit.AnomalOperation.ROR;
-import static net.tislib.binanalyst.lib.calc.graph.Operation.*;
+import net.tislib.binanalyst.lib.bit.NamedBit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
+import net.tislib.binanalyst.lib.bit.ReverseBit;
+import net.tislib.binanalyst.lib.bit.VarBit;
+import net.tislib.binanalyst.lib.calc.graph.Layer;
 
 /**
  * Created by Taleh Ibrahimli on 2/10/18.
@@ -21,6 +24,7 @@ public class AnomalGraphExpression {
     private final Layer<VarBit> root;
 
     private final GraphExpression expression;
+    Set<OperationalBit> rCache = new HashSet<>();
 
     public AnomalGraphExpression(GraphExpression expression) {
         this.expression = expression;
@@ -28,8 +32,6 @@ public class AnomalGraphExpression {
         this.root = this.expression.getRoot().copy();
         resolve(expression.getTruth());
     }
-
-    Set<OperationalBit> rCache = new HashSet<>();
 
     private void resolve(OperationalBit operationalBit) {
         if (rCache.contains(operationalBit)) return;

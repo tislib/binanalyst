@@ -1,11 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph.optimizer;
 
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
-
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import net.tislib.binanalyst.lib.bit.NamedBit;
-import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
