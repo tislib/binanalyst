@@ -31,6 +31,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     private final Layer<NamedBit> output = new Layer<>("Output");
 
     private final Map<String, OperationalBit> middleBitCache = new HashMap<>();
+    private long reusedBitsCount;
 
     @Override
     public Layer<VarBit> getInput() {
@@ -100,6 +101,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
         if (result == null) {
             OperationalBit newBit = new OperationalBit(operation, bits);
             if (middleBitCache.containsKey(newBit.toString())) {
+                reusedBitsCount++;
                 return middleBitCache.get(newBit.toString());
             }
             middleBitCache.put(newBit.toString(), newBit);
@@ -246,6 +248,16 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
                 System.out.println(item);
             }
         });
+    }
+
+    @Override
+    public long getReusedBitsCount() {
+        return reusedBitsCount;
+    }
+
+    @Override
+    public void remake() {
+
     }
 
     public enum LayerType {

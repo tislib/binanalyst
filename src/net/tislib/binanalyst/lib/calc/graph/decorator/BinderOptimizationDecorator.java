@@ -2,6 +2,7 @@ package net.tislib.binanalyst.lib.calc.graph.decorator;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
@@ -19,7 +20,7 @@ public class BinderOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
     public Bit xor(Bit... bits) {
         List<Bit> newBits = new ArrayList<>();
         for (Bit bit : bits) {
-            newBits.addAll(explode(bit, Operation.XOR));
+            newBits.addAll(explode(bit, Operation.XOR, 1));
         }
         return super.xor(newBits.toArray(new Bit[0]));
     }
@@ -28,7 +29,7 @@ public class BinderOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
     public Bit and(Bit... bits) {
         List<Bit> newBits = new ArrayList<>();
         for (Bit bit : bits) {
-            newBits.addAll(explode(bit, Operation.AND));
+            newBits.addAll(explode(bit, Operation.AND, 1));
         }
         return super.and(newBits.toArray(new Bit[0]));
     }
@@ -37,19 +38,23 @@ public class BinderOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
     public Bit or(Bit... bits) {
         List<Bit> newBits = new ArrayList<>();
         for (Bit bit : bits) {
-            newBits.addAll(explode(bit, Operation.OR));
+            newBits.addAll(explode(bit, Operation.OR, 1));
         }
         return super.or(newBits.toArray(new Bit[0]));
     }
 
-    public List<Bit> explode(Bit bit, Operation operation) {
+    public List<Bit> explode(Bit bit, Operation operation, int depth) {
         List<Bit> newBits = new ArrayList<>();
         if (bit instanceof OperationalBit
                 && ((OperationalBit) bit).getOperation() == operation
                 && (!ignoreHalfMiddle || !((OperationalBit) bit).testBits(a -> !(a instanceof OperationalBit)))
         ) {
+            if (depth > 5) {
+                newBits.addAll(Arrays.asList(((OperationalBit) bit).getBits()));
+                return newBits;
+            }
             for (Bit bit2 : ((OperationalBit) bit).getBits()) {
-                newBits.addAll(explode(bit2, operation));
+                newBits.addAll(explode(bit2, operation, depth + 1));
             }
         } else {
             newBits.add(bit);

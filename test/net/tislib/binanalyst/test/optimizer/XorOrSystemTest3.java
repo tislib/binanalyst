@@ -3,9 +3,7 @@ package net.tislib.binanalyst.test.optimizer;
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
-import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
@@ -14,8 +12,6 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorato
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.XorOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.operator.BinMul;
 import net.tislib.binanalyst.lib.operator.BinMulRec;
@@ -24,7 +20,7 @@ import net.tislib.binanalyst.lib.operator.BinMulRec;
  * Created by Taleh Ibrahimli on 2/9/18.
  * Email: me@talehibrahimli.com
  */
-public class XorOrSystemTest {
+public class XorOrSystemTest3 {
 
     public static void main(String... args) {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
@@ -32,7 +28,7 @@ public class XorOrSystemTest {
         calculator = new BinderOptimizationDecorator(calculator);
         calculator = new AndOrCalculatorDecorator(calculator, true);
 //        calculator = new XorOrCalculatorDecorator(calculator, true);
-        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
+//        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
 
@@ -41,8 +37,8 @@ public class XorOrSystemTest {
 
         //32532325, 23403244
 
-        VarBit[] aBits = VarBit.list("a", 2, ZERO);
-        VarBit[] bBits = VarBit.list("b", 2, ZERO);
+        VarBit[] aBits = VarBit.list("a", 3, ZERO);
+        VarBit[] bBits = VarBit.list("b", 3, ZERO);
 
 
         setVal(aBits, a);

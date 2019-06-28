@@ -6,10 +6,12 @@ import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
+import net.tislib.binanalyst.lib.calc.graph.tools.OperationLevelMeasureAnalyser;
 
 public class Test1 {
 
@@ -23,6 +25,8 @@ public class Test1 {
         WordOpsHelper wordOpsHelper = new WordOpsHelper(calculator);
 
         Sha256AlgorithmImpl sha256Algorithm = new Sha256AlgorithmImpl(calculator);
+
+        OperationLevelMeasureAnalyser operationLevelMeasureAnalyser = new OperationLevelMeasureAnalyser(calculator);
 
 //        sha256Algorithm.setRounds(8);
 
@@ -43,10 +47,19 @@ public class Test1 {
 
         calculator.calculate();
 
+        operationLevelMeasureAnalyser.reLabel();
+
         System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
         System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
 
 //        calculator.show();
+
+        operationLevelMeasureAnalyser.analyse();
+
+//        System.out.println(operationLevelMeasureAnalyser.stats());
+        System.out.println(operationLevelMeasureAnalyser.statsUpper());
+
+        System.out.println(GraphCalculatorTools.getMaxOperationCount(calculator));
     }
 
 }

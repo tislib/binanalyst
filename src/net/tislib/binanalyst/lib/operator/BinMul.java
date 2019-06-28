@@ -4,7 +4,9 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import net.tislib.binanalyst.lib.BinOps;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 
 /**
  * Created by Taleh Ibrahimli on 2/6/18.

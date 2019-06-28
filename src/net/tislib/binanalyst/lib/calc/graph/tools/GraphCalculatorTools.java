@@ -9,11 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
+import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
+import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 public class GraphCalculatorTools {
     public static Bit[] findReferencedBits(BitOpsGraphCalculator calculator, int depth, NamedBit... bits) {
@@ -48,6 +53,33 @@ public class GraphCalculatorTools {
             });
         } else {
             return 1;
+        }
+    }
+
+    public static long getMaxOperationCount(BitOpsGraphCalculator calculator) {
+        return getMaxOperationCount(new HashMap<>(), calculator.getOutput().getBits());
+    }
+
+    public static long getMaxOperationCount(Map<Bit, Long> cache, Collection<? extends Bit> bits) {
+        long maxContent = 0;
+
+        for (Bit bit : bits) {
+            long operationCount = getMaxOperationCount(cache, bit);
+            maxContent += operationCount;
+        }
+
+        return maxContent;
+    }
+
+    private static long getMaxOperationCount(Map<Bit, Long> cache, Bit bit) {
+        if (bit instanceof OperationalBit) {
+            Collection<? extends Bit> bits = Arrays.asList(((OperationalBit) bit).getBits());
+            return computeIfAbsent(cache, bit, u -> {
+                long res = getMaxOperationCount(cache, bits);
+                return bits.size() + res;
+            });
+        } else {
+            return 0;
         }
     }
 
@@ -107,5 +139,75 @@ public class GraphCalculatorTools {
             }
             return false;
         }
+    }
+
+    public static GraphCalculatorSerializedData serializeCalculator(BitOpsGraphCalculator calculator) {
+        GraphCalculatorSerializedData data = new GraphCalculatorSerializedData();
+
+        data.input = calculator.getInput().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
+        data.middle = calculator.getMiddle().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
+        data.output = calculator.getOutput().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
+
+        return data;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends NamedBit> T deserializeBit(GraphBitOpsCalculator calculator, BitData bitData) {
+        if (VarBit.class.getTypeName().equals(bitData.type)) {
+            return (T) new VarBit(bitData.name);
+        } else if (OperationalBit.class.getTypeName().equals(bitData.type)) {
+            Operation operation = bitData.operation;
+            NamedBit[] bits = (bitData.bits).stream().map(item -> locateBit(calculator, item)).toArray(NamedBit[]::new);
+            return (T) calculator.operation(operation, bits);
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends NamedBit> T locateBit(GraphBitOpsCalculator calculator, String name) {
+        if (name.equals("0") || name.equals("ZERO")) {
+            return (T) ConstantBit.ZERO;
+        } else if (name.equals("1") || name.equals("ONE")) {
+            return (T) ConstantBit.ONE;
+        }
+        OperationalBit middleBit = calculator.getMiddle().locate(name);
+        if (middleBit != null) {
+            return (T) middleBit;
+        }
+        VarBit inputBit = calculator.getInput().locate(name);
+        return (T) inputBit;
+    }
+
+    private static BitData serializeBit(NamedBit item) {
+        BitData bitData = new BitData();
+        bitData.type = item.getClass().getTypeName();
+        bitData.name = item.getName();
+        if (item instanceof OperationalBit) {
+            bitData.bits = Arrays.stream(((OperationalBit) item).getBits()).map(NamedBit::getName).collect(Collectors.toList());
+            bitData.operation = ((OperationalBit) item).getOperation();
+        }
+        return bitData;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static BitOpsGraphCalculator deSerializeCalculator(GraphCalculatorSerializedData data) {
+        GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
+        calculator.setInputBits(data.input.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(VarBit[]::new));
+        calculator.getMiddle().addBits(data.middle.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(OperationalBit[]::new));
+        calculator.setOutputBits(data.output.stream().map(bitData -> locateBit(calculator, (String) bitData.name)).toArray(NamedBit[]::new));
+        return calculator;
+    }
+
+    public static class GraphCalculatorSerializedData {
+        public List<BitData> input;
+        public List<BitData> middle;
+        public List<BitData> output;
+    }
+
+    public static class BitData {
+        public String type;
+        public String name;
+        public Operation operation;
+        public List<String> bits;
     }
 }

@@ -42,7 +42,7 @@ public final class OperationalBit extends VarBit implements Bit {
             bitNames.add(bit.getName());
         }
         bitNames.sort(Comparator.comparing(Function.identity()));
-        for(String bitName: bitNames) {
+        for (String bitName : bitNames) {
             joiner.add(bitName);
         }
         return getName() + " : " + joiner;
@@ -51,7 +51,6 @@ public final class OperationalBit extends VarBit implements Bit {
     public void calculate() {
         this.setValue(calculateInternal());
     }
-
     private BinaryValue calculateInternal() {
         boolean unknownFound = false;
         switch (operation) {
@@ -144,5 +143,13 @@ public final class OperationalBit extends VarBit implements Bit {
             if (bit instanceof OperationalBit) return false;
         }
         return this.getOperation() == Operation.NOT;
+    }
+
+    public void replaceBit(NamedBit from, NamedBit to) {
+        for (int i = 0; i < bits.length; i++) {
+            if (bits[i] == from) {
+                bits[i] = to;
+            }
+        }
     }
 }

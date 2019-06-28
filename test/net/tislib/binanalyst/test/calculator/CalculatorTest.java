@@ -1,9 +1,12 @@
-package net.tislib.binanalyst.test;
+package net.tislib.binanalyst.test.calculator;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.*;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static org.junit.Assert.assertEquals;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Collection;
 import net.tislib.binanalyst.lib.bit.Bit;
@@ -17,7 +20,10 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorato
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorOrCalculatorDecorator;
+import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
+import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools.GraphCalculatorSerializedData;
 import net.tislib.binanalyst.lib.operator.BinMul;
+import net.tislib.binanalyst.test.TestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,7 +33,7 @@ import org.junit.runners.Parameterized;
  * Email: me@talehibrahimli.com
  */
 @RunWith(Parameterized.class)
-public class CalculatorOptimizationTest {
+public class CalculatorTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -37,7 +43,7 @@ public class CalculatorOptimizationTest {
     private final BigInteger a;
     private final BigInteger b;
 
-    public CalculatorOptimizationTest(long a, long b) {
+    public CalculatorTest(long a, long b) {
         this.a = BigInteger.valueOf(a);
         this.b = BigInteger.valueOf(b);
     }
@@ -135,6 +141,88 @@ public class CalculatorOptimizationTest {
         calculator = new UnusedBitOptimizerDecorator(calculator);
 
         check(calculator);
+    }
+
+    @Test
+    public void storeTest() {
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+
+        VarBit[] aBits = VarBit.list("a", binLength(a.longValue()), ZERO);
+        VarBit[] bBits = VarBit.list("b", binLength(b.longValue()), ZERO);
+
+        setVal(aBits, a.longValue());
+        setVal(bBits, b.longValue());
+
+        calculator.setInputBits(aBits, bBits);
+
+        System.out.println("a: " + a);
+        System.out.println("b: " + b);
+
+        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
+
+        calculator.setOutputBits(r);
+
+
+        GraphCalculatorSerializedData data = GraphCalculatorTools.serializeCalculator(calculator);
+
+        BitOpsGraphCalculator calculator2 = GraphCalculatorTools.deSerializeCalculator(data);
+
+        VarBit[] aBits2 = calculator2.getInput().getBits().subList(0, calculator.getInput().size() / 2).toArray(new VarBit[0]);
+        VarBit[] bBits2 = calculator2.getInput().getBits().subList(calculator.getInput().size() / 2, calculator.getInput().size()).toArray(new VarBit[0]);
+
+        setVal(aBits2, a.longValue());
+        setVal(bBits2, b.longValue());
+
+        calculator2.calculate();
+
+        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
+        System.out.println("OPERATION COUNT: " + calculator.getOperationCount());
+
+        assertEquals(a.multiply(b), toLong(calculator.getOutput().getBits().toArray(new Bit[0])));
+    }
+
+    @Test
+    public void storeJsonTest() throws Throwable, JsonMappingException {
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+
+        VarBit[] aBits = VarBit.list("a", binLength(a.longValue()), ZERO);
+        VarBit[] bBits = VarBit.list("b", binLength(b.longValue()), ZERO);
+
+        setVal(aBits, a.longValue());
+        setVal(bBits, b.longValue());
+
+        calculator.setInputBits(aBits, bBits);
+
+        System.out.println("a: " + a);
+        System.out.println("b: " + b);
+
+        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
+
+        calculator.setOutputBits(r);
+
+
+        GraphCalculatorSerializedData data = GraphCalculatorTools.serializeCalculator(calculator);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String dataStr = objectMapper.writeValueAsString(data);
+
+        GraphCalculatorSerializedData data2 = objectMapper.readValue(dataStr, GraphCalculatorSerializedData.class);
+
+        BitOpsGraphCalculator calculator2 = GraphCalculatorTools.deSerializeCalculator(data2);
+
+        VarBit[] aBits2 = calculator2.getInput().getBits().subList(0, calculator.getInput().size() / 2).toArray(new VarBit[0]);
+        VarBit[] bBits2 = calculator2.getInput().getBits().subList(calculator.getInput().size() / 2, calculator.getInput().size()).toArray(new VarBit[0]);
+
+        setVal(aBits2, a.longValue());
+        setVal(bBits2, b.longValue());
+
+        calculator2.calculate();
+
+        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
+        System.out.println("OPERATION COUNT: " + calculator.getOperationCount());
+
+        assertEquals(a.multiply(b), toLong(calculator.getOutput().getBits().toArray(new Bit[0])));
     }
 
     private void check(BitOpsGraphCalculator calculator) {

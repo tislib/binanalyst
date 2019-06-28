@@ -1,13 +1,13 @@
-package net.tislib.binanalyst.test;
+package net.tislib.binanalyst.test.experiments;
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
-import net.tislib.binanalyst.lib.neo.NeoGraphExpressionRenderer;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
+import static net.tislib.binanalyst.lib.BinValueHelper.print;
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
@@ -15,7 +15,7 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
  * Created by Taleh Ibrahimli on 2/9/18.
  * Email: me@talehibrahimli.com
  */
-public class Test13 {
+public class Test12 {
 
     public static void main(String... args) {
         GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
@@ -23,8 +23,10 @@ public class Test13 {
         long a = 3;
         long b = 1;
 
-        VarBit[] aBits = VarBit.list("a", 2, ZERO);
-        VarBit[] bBits = VarBit.list("b", 2, ZERO);
+        VarBit[] aBits = VarBit.list("a", 4, ZERO);
+        VarBit[] bBits = VarBit.list("b", 4, ZERO);
+
+        VarBit[] result = VarBit.list("c", 143, ZERO);
 
         setVal(aBits, a);
         setVal(bBits, b);
@@ -34,21 +36,17 @@ public class Test13 {
         calculator.getOptimizers().add(new SimpleOptimizer());
         calculator.getOptimizers().add(new LogicalOptimizer());
 
+        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
-        try (NeoGraphExpressionRenderer neoGraphExpressionRenderer = new NeoGraphExpressionRenderer("Bit3")) {
+        System.out.println(calculator.getOperationCount());
 
-            Bit[] r = BinMul.multiply(calculator, aBits, bBits);
+        calculator.setOutputBits(r);
 
-            System.out.println(calculator.getOperationCount());
+//        calculator.transform(new AndNotOptimizer());
 
-            calculator.setOutputBits(r);
+        calculator.calculate();
 
-//        calculator.calculate();
-
-            calculator.show();
-//        calculator.showResult();
-
-            neoGraphExpressionRenderer.render(calculator);
-        }
+        calculator.show();
+        calculator.showResult();
     }
 }

@@ -67,6 +67,16 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
     }
 
     @Override
+    public long getReusedBitsCount() {
+        return calculator.getReusedBitsCount();
+    }
+
+    @Override
+    public void remake() {
+        calculator.remake();
+    }
+
+    @Override
     public Bit xor(Bit... bits) {
         return calculator.xor(bits);
     }

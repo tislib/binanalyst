@@ -4,7 +4,9 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import java.nio.ByteBuffer;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.operator.BinAdd;
 
 public class WordOpsHelper {
@@ -170,5 +172,9 @@ public class WordOpsHelper {
         }
 
         return result;
+    }
+
+    public <T extends Bit> T[][] bitArrayToWordArray(Layer<? extends T> input) {
+        return null;
     }
 }

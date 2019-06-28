@@ -1,4 +1,4 @@
-package net.tislib.binanalyst.test;
+package net.tislib.binanalyst.test.experiments;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.formulaToString;
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;

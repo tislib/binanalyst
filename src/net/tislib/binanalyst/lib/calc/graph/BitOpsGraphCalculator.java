@@ -26,4 +26,8 @@ public interface BitOpsGraphCalculator extends BitOpsCalculator {
     void show();
 
     void calculate();
+
+    long getReusedBitsCount();
+
+    void remake();
 }

@@ -1,73 +1,71 @@
-package net.tislib.binanalyst.test.optimizer;
+package net.tislib.binanalyst.test.analyse;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
-import net.tislib.binanalyst.lib.BinValueHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.XorOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.operator.BinMul;
-import net.tislib.binanalyst.lib.operator.BinMulRec;
+import net.tislib.binanalyst.lib.operator.BinMulDiv;
 
 /**
  * Created by Taleh Ibrahimli on 2/9/18.
  * Email: me@talehibrahimli.com
  */
-public class XorOrSystemTest {
+public class MultiplyGraphExpression {
 
-    public static void main(String... args) {
+    public static void main(String... args) throws JsonProcessingException {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
-
         calculator = new BinderOptimizationDecorator(calculator);
         calculator = new AndOrCalculatorDecorator(calculator, true);
-//        calculator = new XorOrCalculatorDecorator(calculator, true);
-        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
+//        calculator = new XorAndCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
+//        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
 
-        long a = 5;
-        long b = 7;
+        long a = 3;
+        long b = 2;
 
         //32532325, 23403244
 
-        VarBit[] aBits = VarBit.list("a", 2, ZERO);
-        VarBit[] bBits = VarBit.list("b", 2, ZERO);
-
+        VarBit[] aBits = VarBit.list("a", 3, ZERO);
+        VarBit[] bBits = VarBit.list("b", 3, ZERO);
 
         setVal(aBits, a);
-        setVal(bBits, b);
 
-        calculator.setInputBits(aBits, bBits);
+        prepareCommonOps(calculator);
 
-//        prepareCommonOps(calculator);
+        VarBit[] cBits = VarBit.list("c", aBits.length * bBits.length, ZERO);
 
-        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
-//        Bit[] r = BinMulRec.multiplyTree2Rec(calculator, aBits, bBits, true);
+        calculator.setInputBits(aBits, cBits);
 
-        calculator.setOutputBits(r);
+        Bit[] truth = BinMul.multiply(calculator, aBits, cBits);
 
-        calculator.calculate();
+
+        calculator.setOutputBits(truth);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        objectMapper.writeValueAsString(GraphCalculatorTools.serializeCalculator(calculator));
+
+
+        calculator.remake();
+
+//        calculator.calculate();
 
         calculator.show();
 
-//        printValues(r);
-        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
-        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
-//
-//        for (int i = 0; i < r.length; i++) {
-//            BinValueHelper.printFormula((NamedBit) r[i]);
-//        }
+
     }
 
     private static void prepareCommonOps(BitOpsGraphCalculator calculator) {
@@ -91,6 +89,16 @@ public class XorOrSystemTest {
                 for (int k3 = 0; k3 < l; k3++) {
                     for (int k4 = 0; k4 < l; k4++) {
                         calculator.xor(M[k1][k2], M[k3][k4]);
+                    }
+                }
+            }
+        }
+
+        for (int k1 = 0; k1 < l; k1++) {
+            for (int k2 = 0; k2 < l; k2++) {
+                for (int k3 = 0; k3 < l; k3++) {
+                    for (int k4 = 0; k4 < l; k4++) {
+                        calculator.and(M[k1][k2], M[k3][k4]);
                     }
                 }
             }

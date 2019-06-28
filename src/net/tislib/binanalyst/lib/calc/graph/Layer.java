@@ -124,4 +124,13 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     public T getBitL(int i) {
         return bits.get(bits.size() - 1 - i);
     }
+
+    public T locate(String name) {
+        for (T bit : bits) {
+            if (bit.getName().equals(name)) {
+                return bit;
+            }
+        }
+        return null;
+    }
 }

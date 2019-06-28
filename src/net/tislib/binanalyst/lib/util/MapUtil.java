@@ -6,7 +6,7 @@ import net.tislib.binanalyst.lib.bit.Bit;
 
 public class MapUtil {
 
-    public static int computeIfAbsent(Map<Bit, Integer> cache, Bit bit, Function<Bit, Integer> function) {
+    public static <T> T computeIfAbsent(Map<Bit, T> cache, Bit bit, Function<Bit, T> function) {
         if (!cache.containsKey(bit)) {
             cache.put(bit, function.apply(bit));
         }

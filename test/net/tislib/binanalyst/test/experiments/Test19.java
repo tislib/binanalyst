@@ -1,4 +1,4 @@
-package net.tislib.binanalyst.test;
+package net.tislib.binanalyst.test.experiments;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -78,7 +78,10 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
     @Override
     public BinaryValue getValue() {
         if (!valueSetted) {
-            throw new RuntimeException("Varbit: " + getName() + " has not value");
+            if(this instanceof OperationalBit) {
+                ((OperationalBit)this).calculate();
+            }
+//            throw new RuntimeException("Varbit: " + getName() + " has not value");
         }
         return super.getValue();
     }
