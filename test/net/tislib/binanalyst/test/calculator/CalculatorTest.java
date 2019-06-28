@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Collection;
 import net.tislib.binanalyst.lib.bit.Bit;
@@ -35,17 +34,16 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class CalculatorTest {
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return TestData.testPairData();
-    }
-
     private final BigInteger a;
     private final BigInteger b;
-
     public CalculatorTest(long a, long b) {
         this.a = BigInteger.valueOf(a);
         this.b = BigInteger.valueOf(b);
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return TestData.testPairData();
     }
 
     @Test

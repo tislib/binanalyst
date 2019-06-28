@@ -1,5 +1,8 @@
 package net.tislib.binanalyst.test;
 
+import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
@@ -7,9 +10,6 @@ import net.tislib.binanalyst.lib.calc.graph.expression.GraphExpression;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
 import net.tislib.binanalyst.lib.operator.BinMul;
-
-import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/10/18.
@@ -50,7 +50,7 @@ public class Sampler {
         return graphExpression;
     }
 
-    public static  GraphExpression graphExpressionSampler(int bitCount, long a, long b) {
+    public static GraphExpression graphExpressionSampler(int bitCount, long a, long b) {
         GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
 
         VarBit[] aBits = VarBit.list("a", bitCount, ZERO);

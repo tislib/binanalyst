@@ -13,7 +13,6 @@ import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.operator.BinAdd;
-import net.tislib.binanalyst.lib.operator.BinAdd2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -24,6 +23,17 @@ import org.junit.runners.Parameterized;
  */
 @RunWith(Parameterized.class)
 public class AddingTest {
+
+    private final long a;
+    private final long b;
+    private final long c;
+    private final long d;
+    public AddingTest(long a, long b, long c, long d) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+    }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -38,16 +48,22 @@ public class AddingTest {
         });
     }
 
-    private final long a;
-    private final long b;
-    private final long c;
-    private final long d;
+    private static boolean check(long a, long b, int i) {
 
-    public AddingTest(long a, long b, long c, long d) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
+        long c = a + b;
+
+        byte ai, bi, ci, ai1, bi1, ci1;
+
+        ai = BinValueHelper.getBit(a, i);
+        bi = BinValueHelper.getBit(b, i);
+        ci = BinValueHelper.getBit(c, i);
+        ai1 = BinValueHelper.getBit(a, i + 1);
+        bi1 = BinValueHelper.getBit(b, i + 1);
+        ci1 = BinValueHelper.getBit(c, i + 1);
+
+        byte cip = BinCalc.getAddPosBit(BitOpsCalculator.getDefault(), ai, bi, ci, ai1, bi1);
+        return cip == ci1;
+
     }
 
     @Test
@@ -57,22 +73,6 @@ public class AddingTest {
         for (int i = 0; i < l - 1; i++) {
             assertTrue(check(a, b, i));
         }
-    }
-
-    @Test
-    public void binCalcAdd() {
-        int l = BinValueHelper.binLength(a) + BinValueHelper.binLength(b) + BinValueHelper.binLength(c) + BinValueHelper.binLength(d);
-        VarBit[] aBits = VarBit.list("a", l, ConstantBit.ZERO);
-        VarBit[] bBits = VarBit.list("a", l, ConstantBit.ZERO);
-        VarBit[] cBits = VarBit.list("c", l, ConstantBit.ZERO);
-        VarBit[] dBits = VarBit.list("d", l, ConstantBit.ZERO);
-
-        setVal(aBits, a);
-        setVal(bBits, b);
-        setVal(cBits, c);
-        setVal(dBits, d);
-
-        assertEquals(toLong(BinAdd.add(BitOpsCalculator.getDefault(), aBits, bBits, cBits, dBits)).longValue(), a + b + c + d);
     }
 
 //    @Test
@@ -91,22 +91,20 @@ public class AddingTest {
 //        assertEquals(toLong(BinAdd2.add(BitOpsCalculator.getDefault(), aBits, bBits, cBits, dBits)).longValue(), a + b + c + d);
 //    }
 
-    private static boolean check(long a, long b, int i) {
+    @Test
+    public void binCalcAdd() {
+        int l = BinValueHelper.binLength(a) + BinValueHelper.binLength(b) + BinValueHelper.binLength(c) + BinValueHelper.binLength(d);
+        VarBit[] aBits = VarBit.list("a", l, ConstantBit.ZERO);
+        VarBit[] bBits = VarBit.list("a", l, ConstantBit.ZERO);
+        VarBit[] cBits = VarBit.list("c", l, ConstantBit.ZERO);
+        VarBit[] dBits = VarBit.list("d", l, ConstantBit.ZERO);
 
-        long c = a + b;
+        setVal(aBits, a);
+        setVal(bBits, b);
+        setVal(cBits, c);
+        setVal(dBits, d);
 
-        byte ai, bi, ci, ai1, bi1, ci1;
-
-        ai = BinValueHelper.getBit(a, i);
-        bi = BinValueHelper.getBit(b, i);
-        ci = BinValueHelper.getBit(c, i);
-        ai1 = BinValueHelper.getBit(a, i + 1);
-        bi1 = BinValueHelper.getBit(b, i + 1);
-        ci1 = BinValueHelper.getBit(c, i + 1);
-
-        byte cip = BinCalc.getAddPosBit(BitOpsCalculator.getDefault(), ai, bi, ci, ai1, bi1);
-        return cip == ci1;
-
+        assertEquals(toLong(BinAdd.add(BitOpsCalculator.getDefault(), aBits, bBits, cBits, dBits)).longValue(), a + b + c + d);
     }
 
 }

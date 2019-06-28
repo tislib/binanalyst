@@ -1,12 +1,11 @@
 package net.tislib.binanalyst.test.old;
 
+import static net.tislib.binanalyst.lib.BinValueHelper.*;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.operator.BinAdd;
 import net.tislib.binanalyst.lib.operator.BinMul;
-
-import static net.tislib.binanalyst.lib.BinValueHelper.*;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.

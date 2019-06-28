@@ -24,6 +24,7 @@ import net.tislib.binanalyst.test.CalculatorHelper;
  */
 public class Test33_UnkBit_BruteDegreeChecker {
 
+    static Map<Bit, Integer> currentDeepLengthValues = new HashMap<>();
     private static int checkCounter = 0;
     private static int checkCounter2 = 0;
 
@@ -80,8 +81,6 @@ public class Test33_UnkBit_BruteDegreeChecker {
             System.out.println(findDeepLength(bit));
         }
     }
-
-    static Map<Bit, Integer> currentDeepLengthValues = new HashMap<>();
 
     private static int findDeepLength(Bit bit) {
         if (currentDeepLengthValues.containsKey(bit)) {

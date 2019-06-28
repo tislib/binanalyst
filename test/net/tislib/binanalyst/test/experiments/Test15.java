@@ -1,5 +1,8 @@
 package net.tislib.binanalyst.test.experiments;
 
+import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
@@ -10,9 +13,6 @@ import net.tislib.binanalyst.lib.calc.graph.optimizer.SimpleOptimizer;
 import net.tislib.binanalyst.lib.calc.graph.solver.AnomalitySolver;
 import net.tislib.binanalyst.lib.neo.NeoGraphExpressionRenderer;
 import net.tislib.binanalyst.lib.operator.BinMul;
-
-import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/9/18.

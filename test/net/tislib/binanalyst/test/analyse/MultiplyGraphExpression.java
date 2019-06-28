@@ -4,7 +4,6 @@ import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
@@ -16,7 +15,6 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorato
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.operator.BinMul;
-import net.tislib.binanalyst.lib.operator.BinMulDiv;
 
 /**
  * Created by Taleh Ibrahimli on 2/9/18.

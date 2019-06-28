@@ -1,6 +1,7 @@
 package net.tislib.binanalyst.test;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.*;
+import static net.tislib.binanalyst.lib.BinValueHelper.binLength;
+import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.UNKNOWN;
 
 import net.tislib.binanalyst.lib.bit.Bit;

@@ -1,11 +1,9 @@
 package net.tislib.binanalyst.test.unknownvalue;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.binLength;
-import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.UNKNOWN;
 
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;

@@ -1,22 +1,23 @@
 package net.tislib.binanalyst.test.old;
 
-import net.tislib.binanalyst.lib.BinCalc;
-import net.tislib.binanalyst.lib.BinValueHelper;
-import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
+import static net.tislib.binanalyst.lib.BinOps.xor;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import static net.tislib.binanalyst.lib.BinOps.xor;
+import net.tislib.binanalyst.lib.BinCalc;
+import net.tislib.binanalyst.lib.BinValueHelper;
+import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
 /**
  * Created by Taleh Ibrahimli on 2/4/18.
  * Email: me@talehibrahimli.com
  */
 public class Test7 {
+
+    private static Map<Holder, Bit> cache = new HashMap<>();
 
     public static void main(String... args) {
 
@@ -47,8 +48,6 @@ public class Test7 {
         System.out.println(cache.size() + " OPS");
 
     }
-
-    private static Map<Holder, Bit> cache = new HashMap<>();
 
     private static Bit checkRecursive(long num[], int i) {
         Holder holder = new Holder();

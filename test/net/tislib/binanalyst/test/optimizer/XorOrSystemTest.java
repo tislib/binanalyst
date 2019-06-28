@@ -3,9 +3,7 @@ package net.tislib.binanalyst.test.optimizer;
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
-import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
@@ -14,11 +12,8 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorato
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.XorOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.operator.BinMul;
-import net.tislib.binanalyst.lib.operator.BinMulRec;
 
 /**
  * Created by Taleh Ibrahimli on 2/9/18.

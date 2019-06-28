@@ -11,7 +11,6 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.logickeeper.BitLogicalKeeper;
 import net.tislib.binanalyst.lib.calc.logickeeper.SimpleBitLogicKeeper;
 import net.tislib.binanalyst.lib.operator.BinMul;

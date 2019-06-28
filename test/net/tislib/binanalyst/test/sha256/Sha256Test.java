@@ -25,6 +25,14 @@ import org.junit.runners.Parameterized;
 public class Sha256Test {
     private final byte[] data;
     private final Sha256Algorithm sha256Algorithm;
+    private final WordOpsHelper wordOpsHelper;
+    private final SimpleBitOpsCalculator calculator;
+    public Sha256Test(byte[] data) {
+        calculator = new SimpleBitOpsCalculator();
+        wordOpsHelper = new WordOpsHelper(calculator);
+        this.sha256Algorithm = new Sha256AlgorithmImpl(calculator);
+        this.data = data;
+    }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() throws IOException {
@@ -39,16 +47,6 @@ public class Sha256Test {
         data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getResource("randfile3").getPath()))});
 
         return data;
-    }
-
-    private final WordOpsHelper wordOpsHelper;
-    private final SimpleBitOpsCalculator calculator;
-
-    public Sha256Test(byte[] data) {
-        calculator = new SimpleBitOpsCalculator();
-        wordOpsHelper = new WordOpsHelper(calculator);
-        this.sha256Algorithm = new Sha256AlgorithmImpl(calculator);
-        this.data = data;
     }
 
     @Test

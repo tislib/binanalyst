@@ -29,17 +29,16 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class MultiplicationTest {
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return TestData.testPairData();
-    }
-
     private final BigInteger a;
     private final BigInteger b;
-
     public MultiplicationTest(long a, long b) {
         this.a = BigInteger.valueOf(a);
         this.b = BigInteger.valueOf(b);
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return TestData.testPairData();
     }
 
     @Test
