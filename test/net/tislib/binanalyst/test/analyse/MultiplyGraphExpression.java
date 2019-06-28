@@ -1,5 +1,6 @@
 package net.tislib.binanalyst.test.analyse;
 
+import static net.tislib.binanalyst.lib.BinValueHelper.print;
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
@@ -31,8 +32,8 @@ public class MultiplyGraphExpression {
 //        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
 
-        long a = 3;
-        long b = 2;
+        long a = 7;
+        long b = 5;
 
         //32532325, 23403244
 
@@ -40,28 +41,30 @@ public class MultiplyGraphExpression {
         VarBit[] bBits = VarBit.list("b", 3, ZERO);
 
         setVal(aBits, a);
+        setVal(bBits, b);
 
         prepareCommonOps(calculator);
 
-        VarBit[] cBits = VarBit.list("c", aBits.length * bBits.length, ZERO);
+        calculator.setInputBits(aBits, bBits);
 
-        calculator.setInputBits(aBits, cBits);
+        Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
-        Bit[] truth = BinMul.multiply(calculator, aBits, cBits);
+        Bit[] truth = GraphCalculatorTools.getTruthBit(calculator, r, 35);
 
+        Bit result = calculator.and(truth);
 
-        calculator.setOutputBits(truth);
+        calculator.setOutputBits(new Bit[]{result});
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        objectMapper.writeValueAsString(GraphCalculatorTools.serializeCalculator(calculator));
+        String data = objectMapper.writeValueAsString(GraphCalculatorTools.serializeCalculator(calculator));
 
+        System.out.println(data);
 
-        calculator.remake();
+        calculator.calculate();
 
-//        calculator.calculate();
-
-        calculator.show();
+        print(r);
+        System.out.println(result.getValue().isTrue());
 
 
     }

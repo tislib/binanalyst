@@ -44,25 +44,10 @@ public class BinMul {
         if (b.length == 1) {
             return multiplyByBit(calculator, a, b[0]);
         }
-        return BinAdd.add(calculator, getMultiplicationMatrix(calculator, a, b));
-    }
-
-    private static Bit[][] flip(Bit[][] matrix) {
-        Bit[][] res = new Bit[matrix.length][];
-
-        for (int i = 0; i < matrix.length; i++) {
-            res[i] = flip(matrix[i]);
-        }
-
-        return res;
-    }
-
-    private static Bit[] flip(Bit[] bits) {
-        Bit[] result = new Bit[bits.length];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = bits[bits.length - i - 1];
-        }
-        return result;
+        Bit[] res = BinAdd.add(calculator, getMultiplicationMatrix(calculator, a, b));
+        Bit[] realRes = new Bit[a.length + b.length];
+        System.arraycopy(res, res.length - realRes.length, realRes, 0, realRes.length);
+        return realRes;
     }
 
     private static Bit[] multiplyByBit(BitOpsCalculator calculator, Bit[] b, Bit bit) {
@@ -71,9 +56,5 @@ public class BinMul {
             res[i] = calculator.and(b[i], bit);
         }
         return res;
-    }
-
-    public static Bit[] multiply2(BitOpsCalculator calculator, Bit[] a, Bit[] b) {
-        return BinAdd2.add(calculator, getMultiplicationMatrix(calculator, a, b));
     }
 }

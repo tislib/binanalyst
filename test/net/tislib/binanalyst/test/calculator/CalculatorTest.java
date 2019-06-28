@@ -165,22 +165,20 @@ public class CalculatorTest {
 
         BitOpsGraphCalculator calculator2 = GraphCalculatorTools.deSerializeCalculator(data);
 
-        VarBit[] aBits2 = calculator2.getInput().getBits().subList(0, calculator.getInput().size() / 2).toArray(new VarBit[0]);
-        VarBit[] bBits2 = calculator2.getInput().getBits().subList(calculator.getInput().size() / 2, calculator.getInput().size()).toArray(new VarBit[0]);
+        VarBit[] aBits2 = calculator2.getInput().getBits().subList(0, binLength(a.longValue())).toArray(new VarBit[0]);
+        VarBit[] bBits2 = calculator2.getInput().getBits().subList(binLength(a.longValue()), calculator.getInput().size()).toArray(new VarBit[0]);
 
         setVal(aBits2, a.longValue());
         setVal(bBits2, b.longValue());
 
         calculator2.calculate();
 
-        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
-        System.out.println("OPERATION COUNT: " + calculator.getOperationCount());
 
-        assertEquals(a.multiply(b), toLong(calculator.getOutput().getBits().toArray(new Bit[0])));
+        assertEquals(a.multiply(b), toLong(calculator2.getOutput().getBits().toArray(new Bit[0])));
     }
 
     @Test
-    public void storeJsonTest() throws Throwable, JsonMappingException {
+    public void storeJsonTest() throws Throwable {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
         VarBit[] aBits = VarBit.list("a", binLength(a.longValue()), ZERO);
@@ -209,18 +207,15 @@ public class CalculatorTest {
 
         BitOpsGraphCalculator calculator2 = GraphCalculatorTools.deSerializeCalculator(data2);
 
-        VarBit[] aBits2 = calculator2.getInput().getBits().subList(0, calculator.getInput().size() / 2).toArray(new VarBit[0]);
-        VarBit[] bBits2 = calculator2.getInput().getBits().subList(calculator.getInput().size() / 2, calculator.getInput().size()).toArray(new VarBit[0]);
+        VarBit[] aBits2 = calculator2.getInput().getBits().subList(0, binLength(a.longValue())).toArray(new VarBit[0]);
+        VarBit[] bBits2 = calculator2.getInput().getBits().subList(binLength(a.longValue()), calculator.getInput().size()).toArray(new VarBit[0]);
 
         setVal(aBits2, a.longValue());
         setVal(bBits2, b.longValue());
 
         calculator2.calculate();
 
-        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
-        System.out.println("OPERATION COUNT: " + calculator.getOperationCount());
-
-        assertEquals(a.multiply(b), toLong(calculator.getOutput().getBits().toArray(new Bit[0])));
+        assertEquals(a.multiply(b), toLong(calculator2.getOutput().getBits().toArray(new Bit[0])));
     }
 
     private void check(BitOpsGraphCalculator calculator) {

@@ -1,0 +1,1316 @@
+{
+  "input": [
+    {
+      "type": "net.tislib.binanalyst.lib.bit.VarBit",
+      "name": "a2",
+      "operation": null,
+      "bits": null
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.VarBit",
+      "name": "a1",
+      "operation": null,
+      "bits": null
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.VarBit",
+      "name": "a0",
+      "operation": null,
+      "bits": null
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.VarBit",
+      "name": "b2",
+      "operation": null,
+      "bits": null
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.VarBit",
+      "name": "b1",
+      "operation": null,
+      "bits": null
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.VarBit",
+      "name": "b0",
+      "operation": null,
+      "bits": null
+    }
+  ],
+  "middle": [
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[0]",
+      "operation": "AND",
+      "bits": [
+        "b0",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[1]",
+      "operation": "AND",
+      "bits": [
+        "b0",
+        "a1"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[2]",
+      "operation": "AND",
+      "bits": [
+        "b0",
+        "a2"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[3]",
+      "operation": "AND",
+      "bits": [
+        "b1",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[4]",
+      "operation": "AND",
+      "bits": [
+        "b1",
+        "a1"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[5]",
+      "operation": "AND",
+      "bits": [
+        "b1",
+        "a2"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[6]",
+      "operation": "AND",
+      "bits": [
+        "b2",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[7]",
+      "operation": "AND",
+      "bits": [
+        "b2",
+        "a1"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[8]",
+      "operation": "AND",
+      "bits": [
+        "b2",
+        "a2"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[9]",
+      "operation": "NOT",
+      "bits": [
+        "b1"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[10]",
+      "operation": "NOT",
+      "bits": [
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[11]",
+      "operation": "OR",
+      "bits": [
+        "M[9]",
+        "M[10]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[12]",
+      "operation": "AND",
+      "bits": [
+        "M[1]",
+        "M[11]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[13]",
+      "operation": "NOT",
+      "bits": [
+        "b0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[14]",
+      "operation": "NOT",
+      "bits": [
+        "a1"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[15]",
+      "operation": "OR",
+      "bits": [
+        "M[13]",
+        "M[14]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[16]",
+      "operation": "AND",
+      "bits": [
+        "M[3]",
+        "M[15]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[17]",
+      "operation": "OR",
+      "bits": [
+        "M[12]",
+        "M[16]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[18]",
+      "operation": "AND",
+      "bits": [
+        "M[1]",
+        "M[3]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[19]",
+      "operation": "XOR",
+      "bits": [
+        "M[18]",
+        "M[2]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[20]",
+      "operation": "OR",
+      "bits": [
+        "M[9]",
+        "M[14]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[21]",
+      "operation": "AND",
+      "bits": [
+        "M[19]",
+        "M[20]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[22]",
+      "operation": "NOT",
+      "bits": [
+        "a2"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[23]",
+      "operation": "OR",
+      "bits": [
+        "M[13]",
+        "M[22]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[24]",
+      "operation": "AND",
+      "bits": [
+        "M[1]",
+        "M[3]",
+        "M[23]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[25]",
+      "operation": "OR",
+      "bits": [
+        "M[13]",
+        "M[14]",
+        "M[9]",
+        "M[10]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[26]",
+      "operation": "AND",
+      "bits": [
+        "M[2]",
+        "M[25]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[27]",
+      "operation": "OR",
+      "bits": [
+        "M[24]",
+        "M[26]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[28]",
+      "operation": "OR",
+      "bits": [
+        "M[13]",
+        "M[14]",
+        "M[9]",
+        "M[10]",
+        "M[2]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[29]",
+      "operation": "AND",
+      "bits": [
+        "b0",
+        "a1",
+        "b1",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[30]",
+      "operation": "OR",
+      "bits": [
+        "M[13]",
+        "M[22]",
+        "M[29]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[31]",
+      "operation": "AND",
+      "bits": [
+        "M[28]",
+        "M[30]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[32]",
+      "operation": "AND",
+      "bits": [
+        "M[4]",
+        "M[28]",
+        "M[30]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[33]",
+      "operation": "OR",
+      "bits": [
+        "M[21]",
+        "M[32]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[34]",
+      "operation": "AND",
+      "bits": [
+        "M[2]",
+        "M[4]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[35]",
+      "operation": "AND",
+      "bits": [
+        "M[2]",
+        "M[1]",
+        "M[3]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[36]",
+      "operation": "AND",
+      "bits": [
+        "M[4]",
+        "M[1]",
+        "M[3]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[37]",
+      "operation": "OR",
+      "bits": [
+        "M[34]",
+        "M[35]",
+        "M[36]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[38]",
+      "operation": "OR",
+      "bits": [
+        "M[13]",
+        "M[22]",
+        "M[9]",
+        "M[14]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[39]",
+      "operation": "OR",
+      "bits": [
+        "M[13]",
+        "M[22]",
+        "M[13]",
+        "M[14]",
+        "M[9]",
+        "M[10]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[40]",
+      "operation": "OR",
+      "bits": [
+        "M[9]",
+        "M[14]",
+        "M[13]",
+        "M[14]",
+        "M[9]",
+        "M[10]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[41]",
+      "operation": "AND",
+      "bits": [
+        "M[38]",
+        "M[39]",
+        "M[40]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[42]",
+      "operation": "AND",
+      "bits": [
+        "M[5]",
+        "M[38]",
+        "M[39]",
+        "M[40]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[43]",
+      "operation": "OR",
+      "bits": [
+        "M[9]",
+        "M[22]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[44]",
+      "operation": "AND",
+      "bits": [
+        "M[37]",
+        "M[43]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[45]",
+      "operation": "OR",
+      "bits": [
+        "M[42]",
+        "M[44]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[46]",
+      "operation": "AND",
+      "bits": [
+        "M[5]",
+        "M[37]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[47]",
+      "operation": "NOT",
+      "bits": [
+        "b2"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[48]",
+      "operation": "OR",
+      "bits": [
+        "M[47]",
+        "M[10]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[49]",
+      "operation": "AND",
+      "bits": [
+        "M[33]",
+        "M[48]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[50]",
+      "operation": "OR",
+      "bits": [
+        "M[31]",
+        "M[4]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[51]",
+      "operation": "AND",
+      "bits": [
+        "b0",
+        "a1",
+        "b1",
+        "a0",
+        "M[23]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[52]",
+      "operation": "AND",
+      "bits": [
+        "b0",
+        "a2",
+        "M[25]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[53]",
+      "operation": "OR",
+      "bits": [
+        "M[9]",
+        "M[14]",
+        "M[51]",
+        "M[52]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[54]",
+      "operation": "AND",
+      "bits": [
+        "M[50]",
+        "M[53]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[55]",
+      "operation": "AND",
+      "bits": [
+        "M[6]",
+        "M[50]",
+        "M[53]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[56]",
+      "operation": "OR",
+      "bits": [
+        "M[49]",
+        "M[55]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[57]",
+      "operation": "AND",
+      "bits": [
+        "M[33]",
+        "M[6]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[58]",
+      "operation": "XOR",
+      "bits": [
+        "M[57]",
+        "M[45]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[59]",
+      "operation": "OR",
+      "bits": [
+        "M[47]",
+        "M[14]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[60]",
+      "operation": "AND",
+      "bits": [
+        "M[58]",
+        "M[59]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[61]",
+      "operation": "AND",
+      "bits": [
+        "b0",
+        "a2",
+        "b1",
+        "a1"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[62]",
+      "operation": "AND",
+      "bits": [
+        "b0",
+        "a2",
+        "b0",
+        "a1",
+        "b1",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[63]",
+      "operation": "AND",
+      "bits": [
+        "b1",
+        "a1",
+        "b0",
+        "a1",
+        "b1",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[64]",
+      "operation": "OR",
+      "bits": [
+        "M[9]",
+        "M[22]",
+        "M[61]",
+        "M[62]",
+        "M[63]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[65]",
+      "operation": "OR",
+      "bits": [
+        "M[41]",
+        "M[5]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[66]",
+      "operation": "AND",
+      "bits": [
+        "M[64]",
+        "M[65]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[67]",
+      "operation": "AND",
+      "bits": [
+        "M[33]",
+        "M[6]",
+        "M[64]",
+        "M[65]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[68]",
+      "operation": "OR",
+      "bits": [
+        "M[54]",
+        "M[47]",
+        "M[10]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[69]",
+      "operation": "AND",
+      "bits": [
+        "M[45]",
+        "M[68]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[70]",
+      "operation": "OR",
+      "bits": [
+        "M[67]",
+        "M[69]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[71]",
+      "operation": "AND",
+      "bits": [
+        "b1",
+        "a2",
+        "M[38]",
+        "M[39]",
+        "M[40]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[72]",
+      "operation": "OR",
+      "bits": [
+        "M[61]",
+        "M[62]",
+        "M[63]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[73]",
+      "operation": "AND",
+      "bits": [
+        "M[72]",
+        "M[43]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[74]",
+      "operation": "OR",
+      "bits": [
+        "M[54]",
+        "M[47]",
+        "M[10]",
+        "M[71]",
+        "M[73]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[75]",
+      "operation": "OR",
+      "bits": [
+        "M[51]",
+        "M[52]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[76]",
+      "operation": "AND",
+      "bits": [
+        "M[75]",
+        "M[20]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[77]",
+      "operation": "AND",
+      "bits": [
+        "b1",
+        "a1",
+        "M[28]",
+        "M[30]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[78]",
+      "operation": "OR",
+      "bits": [
+        "M[76]",
+        "M[77]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[79]",
+      "operation": "AND",
+      "bits": [
+        "M[78]",
+        "b2",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[80]",
+      "operation": "OR",
+      "bits": [
+        "M[66]",
+        "M[79]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[81]",
+      "operation": "AND",
+      "bits": [
+        "M[74]",
+        "M[80]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[82]",
+      "operation": "AND",
+      "bits": [
+        "M[7]",
+        "M[74]",
+        "M[80]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[83]",
+      "operation": "OR",
+      "bits": [
+        "M[60]",
+        "M[82]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[84]",
+      "operation": "AND",
+      "bits": [
+        "M[45]",
+        "M[7]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[85]",
+      "operation": "AND",
+      "bits": [
+        "M[45]",
+        "M[33]",
+        "M[6]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[86]",
+      "operation": "AND",
+      "bits": [
+        "M[7]",
+        "M[33]",
+        "M[6]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[87]",
+      "operation": "OR",
+      "bits": [
+        "M[84]",
+        "M[85]",
+        "M[86]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[88]",
+      "operation": "XOR",
+      "bits": [
+        "M[87]",
+        "M[46]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[89]",
+      "operation": "OR",
+      "bits": [
+        "M[47]",
+        "M[22]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[90]",
+      "operation": "AND",
+      "bits": [
+        "M[88]",
+        "M[89]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[91]",
+      "operation": "OR",
+      "bits": [
+        "M[9]",
+        "M[22]",
+        "M[41]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[92]",
+      "operation": "AND",
+      "bits": [
+        "M[87]",
+        "M[91]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[93]",
+      "operation": "OR",
+      "bits": [
+        "M[66]",
+        "M[47]",
+        "M[14]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[94]",
+      "operation": "OR",
+      "bits": [
+        "M[66]",
+        "M[54]",
+        "M[47]",
+        "M[10]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[95]",
+      "operation": "OR",
+      "bits": [
+        "M[47]",
+        "M[14]",
+        "M[54]",
+        "M[47]",
+        "M[10]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[96]",
+      "operation": "AND",
+      "bits": [
+        "M[93]",
+        "M[94]",
+        "M[95]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[97]",
+      "operation": "AND",
+      "bits": [
+        "M[5]",
+        "M[37]",
+        "M[93]",
+        "M[94]",
+        "M[95]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[98]",
+      "operation": "OR",
+      "bits": [
+        "M[92]",
+        "M[97]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[99]",
+      "operation": "AND",
+      "bits": [
+        "b1",
+        "a2",
+        "M[72]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[100]",
+      "operation": "OR",
+      "bits": [
+        "M[96]",
+        "M[99]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[101]",
+      "operation": "OR",
+      "bits": [
+        "M[71]",
+        "M[73]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[102]",
+      "operation": "AND",
+      "bits": [
+        "M[101]",
+        "b2",
+        "a1"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[103]",
+      "operation": "AND",
+      "bits": [
+        "M[101]",
+        "M[78]",
+        "b2",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[104]",
+      "operation": "AND",
+      "bits": [
+        "b2",
+        "a1",
+        "M[78]",
+        "b2",
+        "a0"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[105]",
+      "operation": "OR",
+      "bits": [
+        "M[9]",
+        "M[22]",
+        "M[41]",
+        "M[102]",
+        "M[103]",
+        "M[104]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[106]",
+      "operation": "AND",
+      "bits": [
+        "M[100]",
+        "M[105]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[107]",
+      "operation": "AND",
+      "bits": [
+        "M[8]",
+        "M[100]",
+        "M[105]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[108]",
+      "operation": "OR",
+      "bits": [
+        "M[90]",
+        "M[107]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[109]",
+      "operation": "AND",
+      "bits": [
+        "M[5]",
+        "M[37]",
+        "M[8]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[110]",
+      "operation": "AND",
+      "bits": [
+        "M[5]",
+        "M[37]",
+        "M[87]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[111]",
+      "operation": "AND",
+      "bits": [
+        "M[8]",
+        "M[87]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[112]",
+      "operation": "OR",
+      "bits": [
+        "M[109]",
+        "M[110]",
+        "M[111]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[113]",
+      "operation": "OR",
+      "bits": [
+        "M[106]",
+        "M[8]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[114]",
+      "operation": "OR",
+      "bits": [
+        "M[102]",
+        "M[103]",
+        "M[104]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[115]",
+      "operation": "AND",
+      "bits": [
+        "M[114]",
+        "M[91]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[116]",
+      "operation": "AND",
+      "bits": [
+        "b1",
+        "a2",
+        "M[72]",
+        "M[93]",
+        "M[94]",
+        "M[95]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[117]",
+      "operation": "OR",
+      "bits": [
+        "M[47]",
+        "M[22]",
+        "M[115]",
+        "M[116]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[118]",
+      "operation": "AND",
+      "bits": [
+        "M[113]",
+        "M[117]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[119]",
+      "operation": "OR",
+      "bits": [
+        "M[81]",
+        "M[7]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[120]",
+      "operation": "AND",
+      "bits": [
+        "M[78]",
+        "b2",
+        "a0",
+        "M[64]",
+        "M[65]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[121]",
+      "operation": "AND",
+      "bits": [
+        "M[101]",
+        "M[68]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[122]",
+      "operation": "OR",
+      "bits": [
+        "M[47]",
+        "M[14]",
+        "M[120]",
+        "M[121]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[123]",
+      "operation": "AND",
+      "bits": [
+        "M[119]",
+        "M[122]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[124]",
+      "operation": "OR",
+      "bits": [
+        "M[54]",
+        "M[6]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[125]",
+      "operation": "OR",
+      "bits": [
+        "M[47]",
+        "M[10]",
+        "M[76]",
+        "M[77]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[126]",
+      "operation": "AND",
+      "bits": [
+        "M[124]",
+        "M[125]"
+      ]
+    },
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[127]",
+      "operation": "AND",
+      "bits": [
+        "M[112]",
+        "M[113]",
+        "M[117]",
+        "M[119]",
+        "M[122]",
+        "M[124]",
+        "M[125]",
+        "M[17]",
+        "M[0]"
+      ]
+    }
+  ],
+  "output": [
+    {
+      "type": "net.tislib.binanalyst.lib.bit.OperationalBit",
+      "name": "M[127]",
+      "operation": "AND",
+      "bits": [
+        "M[112]",
+        "M[113]",
+        "M[117]",
+        "M[119]",
+        "M[122]",
+        "M[124]",
+        "M[125]",
+        "M[17]",
+        "M[0]"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph.tools;
 
+import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static net.tislib.binanalyst.lib.util.MapUtil.computeIfAbsent;
 
 import java.util.ArrayList;
@@ -138,6 +140,22 @@ public class GraphCalculatorTools {
         calculator.getMiddle().addBits(data.middle.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(OperationalBit[]::new));
         calculator.setOutputBits(data.output.stream().map(bitData -> locateBit(calculator, (String) bitData.name)).toArray(NamedBit[]::new));
         return calculator;
+    }
+
+    public static Bit[] getTruthBit(BitOpsGraphCalculator calculator, Bit[] bits, int value) {
+        VarBit[] xBits = VarBit.list("x", bits.length, ZERO);
+
+        setVal(xBits, value);
+
+        Bit[] truth = new Bit[bits.length];
+        for (int i = 0; i < bits.length; i++) {
+            if (xBits[i].getValue().isTrue()) {
+                truth[i] = bits[i];
+            } else {
+                truth[i] = calculator.not(bits[i]);
+            }
+        }
+        return truth;
     }
 
     public static class GraphCalculatorReferenceFinder {
