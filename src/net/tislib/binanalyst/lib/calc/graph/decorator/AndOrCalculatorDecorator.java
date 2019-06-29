@@ -46,7 +46,7 @@ public class AndOrCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecor
         Bit[] newBits = new Bit[bits.length - 1];
         System.arraycopy(bits, 0, newBits, 0, bits.length - 1);
 
-        Bit leftBit = super.xor(newBits);
+        Bit leftBit = xor(newBits);
         Bit rightBit = bits[bits.length - 1];
 
         return or(and(leftBit, not(rightBit)), and(rightBit, not(leftBit)));
