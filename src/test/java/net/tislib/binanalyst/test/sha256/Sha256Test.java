@@ -38,9 +38,7 @@ public class Sha256Test {
     public static Collection<Object[]> data() throws IOException {
         List<Object[]> data = TestData.testPairData();
 
-        data = data.stream().map(item -> {
-            return new Object[]{("" + item[0] + item[1]).getBytes()};
-        }).collect(Collectors.toList());
+        data = data.stream().map(item -> new Object[]{("" + item[0] + item[1]).getBytes()}).collect(Collectors.toList());
 
         data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getClassLoader().getResource("randfile1").getPath()))});
         data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getClassLoader().getResource("randfile2").getPath()))});
