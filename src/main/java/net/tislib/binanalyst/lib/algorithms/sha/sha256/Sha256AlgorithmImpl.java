@@ -53,6 +53,7 @@ public class Sha256AlgorithmImpl implements Sha256Algorithm {
         return state;
     }
 
+    @Override
     public void init() {
         // initialize all words
         for (int i = 0; i < STATE_0.length; i++) {
@@ -60,7 +61,8 @@ public class Sha256AlgorithmImpl implements Sha256Algorithm {
         }
     }
 
-    private void update(Bit[][] words) {
+    @Override
+    public void update(Bit[][] words) {
         final Bit[][] w = new Bit[64][8];
 
         System.arraycopy(words, 0, w, 0, 16);

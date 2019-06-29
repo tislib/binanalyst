@@ -5,6 +5,7 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionRootFinder;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
@@ -57,53 +58,15 @@ public class MultiplyGraphExpression2 {
 
         calculator.setOutputBits(new Bit[]{result});
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-//        String data = objectMapper.writeValueAsString(GraphCalculatorTools.serializeCalculator(calculator));
-
-//        System.out.println(data);
-
         calculator.calculate();
         calculator.show();
 
-//        print(r);
-//        System.out.println(result.getValue().isTrue());
+        GraphExpressionRootFinder graphExpressionRootFinder = new GraphExpressionRootFinder(calculator);
+        graphExpressionRootFinder.analyse();
+        graphExpressionRootFinder.traverse();
 
-        traverse(calculator);
+        graphExpressionRootFinder.show();
 
-
-    }
-
-    private static void traverse(BitOpsGraphCalculator calculator) {
-        NamedBit truth = calculator.getOutput().getBits().get(0);
-        String val = traverse(truth);
-        System.out.println(val);
-        System.out.println(val.length());
-    }
-
-    private static String traverse(NamedBit bit) {
-        if (bit instanceof OperationalBit) {
-            OperationalBit operationalBit = (OperationalBit) bit;
-            if (operationalBit.getOperation() == Operation.AND) {
-                StringBuilder stringBuilder = new StringBuilder();
-                NamedBit[] bits = operationalBit.getBits();
-                for (int i = 0, bitsLength = bits.length; i < bitsLength; i++) {
-                    stringBuilder.append(traverse(bits[i]));
-                    if (i < bitsLength - 1) {
-                        stringBuilder.append(",");
-                    }
-                }
-                return stringBuilder.toString();
-            } else if (operationalBit.getOperation() == Operation.OR) {
-                return traverse(operationalBit.getBits()[0]);
-            } else if (operationalBit.getOperation() == Operation.NOT) {
-                return "!" + traverse(operationalBit.getBits()[0]);
-            } else {
-                throw new RuntimeException();
-            }
-        } else {
-            return bit.getName();
-        }
     }
 
     private static void prepareCommonOps(BitOpsGraphCalculator calculator) {

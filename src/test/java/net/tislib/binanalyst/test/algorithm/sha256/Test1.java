@@ -1,4 +1,4 @@
-package net.tislib.binanalyst.test.sha256;
+package net.tislib.binanalyst.test.algorithm.sha256;
 
 import net.tislib.binanalyst.lib.WordOpsHelper;
 import net.tislib.binanalyst.lib.algorithms.sha.sha256.Sha256AlgorithmImpl;

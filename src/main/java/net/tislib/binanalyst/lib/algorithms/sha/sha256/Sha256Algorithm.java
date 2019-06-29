@@ -6,4 +6,8 @@ public interface Sha256Algorithm {
     Bit[][] hash(byte[] bytes);
 
     Bit[][] hash(Bit[][] bits);
+
+    void init();
+
+    void update(Bit[][] words);
 }

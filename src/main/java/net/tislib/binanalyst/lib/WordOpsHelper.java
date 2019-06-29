@@ -28,6 +28,18 @@ public class WordOpsHelper {
         return new String(encodedChars);
     }
 
+    public static String toHex(byte... arr) {
+        char[] encodedChars = new char[arr.length * 2];
+        for (int i = 0; i < arr.length; i++) {
+            int v = arr[i];
+            int idx = i * 2;
+            for (int j = 0; j < 8; j++) {
+                encodedChars[idx + j] = encoding[(v >>> ((7 - j) * 4)) & 0x0F];
+            }
+        }
+        return new String(encodedChars);
+    }
+
     public static Bit[] shl(Bit[] bh, int l) {
         Bit[] newBits = new Bit[bh.length];
         for (int i = 0; i < newBits.length; i++) {
