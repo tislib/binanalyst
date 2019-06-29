@@ -42,9 +42,9 @@ public class Sha256Test {
             return new Object[]{("" + item[0] + item[1]).getBytes()};
         }).collect(Collectors.toList());
 
-        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getResource("randfile1").getPath()))});
-        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getResource("randfile2").getPath()))});
-        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getResource("randfile3").getPath()))});
+        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getClassLoader().getResource("randfile1").getPath()))});
+        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getClassLoader().getResource("randfile2").getPath()))});
+        data.add(new Object[]{Files.readAllBytes(Paths.get(Sha256Test.class.getClassLoader().getResource("randfile3").getPath()))});
 
         return data;
     }
