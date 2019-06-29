@@ -37,44 +37,54 @@ public class Sha256AlgorithmImpl implements Sha256Algorithm {
         return hash(wordOpsHelper.toBitWordArray(wordOpsHelper.pad(bytes)));
     }
 
+    private final Bit[][] state = new Bit[8][32];
+
     @Override
     public Bit[][] hash(Bit[][] words) {
-        Bit[][] state = new Bit[8][32];
-
-        for (int i = 0; i < STATE_0.length; i++) {
-            state[i] = wordOpsHelper.wordToBits(STATE_0[i]);
-        }
-
-        // initialize all words
-
-        final Bit[][] W = new Bit[64][8];
+        init();
 
         for (int i = 0, n = words.length / 16; i < n; ++i) {
+            final Bit[][] W = new Bit[16][32];
             // initialize W from the block's words
             System.arraycopy(words, i * 16, W, 0, 16);
-            for (int t = 16; t < W.length; ++t) {
-                W[t] = wordOpsHelper.add(smallSig1(W[t - 2]), W[t - 7], smallSig0(W[t - 15]), W[t - 16]);
-            }
-
-            final Bit[][] TEMP = copy(state);
-
-            // operate on TEMP
-            for (int t = 0; t < rounds; ++t) {
-                Bit[] t1 = wordOpsHelper.add(TEMP[7], bigSig1(TEMP[4]), ch(TEMP[4], TEMP[5], TEMP[6]), wordOpsHelper.wordToBits(K[t]), W[t]);
-
-                Bit[] t2 = wordOpsHelper.add(bigSig0(TEMP[0]), maj(TEMP[0], TEMP[1], TEMP[2]));
-                System.arraycopy(TEMP, 0, TEMP, 1, TEMP.length - 1);
-                TEMP[4] = wordOpsHelper.add(TEMP[4], t1);
-                TEMP[0] = wordOpsHelper.add(t1, t2);
-            }
-
-            // add values in TEMP to values in H
-            for (int t = 0; t < state.length; ++t) {
-                state[t] = wordOpsHelper.add(state[t], TEMP[t]);
-            }
+            update(W);
         }
 
         return state;
+    }
+
+    public void init() {
+        // initialize all words
+        for (int i = 0; i < STATE_0.length; i++) {
+            state[i] = wordOpsHelper.wordToBits(STATE_0[i]);
+        }
+    }
+
+    private void update(Bit[][] words) {
+        final Bit[][] w = new Bit[64][8];
+
+        System.arraycopy(words, 0, w, 0, 16);
+
+        for (int t = 16; t < w.length; ++t) {
+            w[t] = wordOpsHelper.add(smallSig1(w[t - 2]), w[t - 7], smallSig0(w[t - 15]), w[t - 16]);
+        }
+
+        final Bit[][] TEMP = copy(state);
+
+        // operate on TEMP
+        for (int t = 0; t < rounds; ++t) {
+            Bit[] t1 = wordOpsHelper.add(TEMP[7], bigSig1(TEMP[4]), ch(TEMP[4], TEMP[5], TEMP[6]), wordOpsHelper.wordToBits(K[t]), w[t]);
+
+            Bit[] t2 = wordOpsHelper.add(bigSig0(TEMP[0]), maj(TEMP[0], TEMP[1], TEMP[2]));
+            System.arraycopy(TEMP, 0, TEMP, 1, TEMP.length - 1);
+            TEMP[4] = wordOpsHelper.add(TEMP[4], t1);
+            TEMP[0] = wordOpsHelper.add(t1, t2);
+        }
+
+        // add values in TEMP to values in H
+        for (int t = 0; t < state.length; ++t) {
+            state[t] = wordOpsHelper.add(state[t], TEMP[t]);
+        }
     }
 
     private Bit[] ch(Bit[] x, Bit[] y, Bit[] z) {
