@@ -9,6 +9,7 @@ import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
+@SuppressWarnings("ALL")
 public class GraphExpressionRootFinderEx {
     private final BitOpsGraphCalculator calculator;
     private long switchCount;

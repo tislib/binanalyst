@@ -153,4 +153,11 @@ public final class OperationalBit extends VarBit implements Bit {
             }
         }
     }
+
+    public boolean hasBit(String name) {
+        for (NamedBit bit : bits) {
+            if (bit.getName().equals(name)) return true;
+        }
+        return false;
+    }
 }

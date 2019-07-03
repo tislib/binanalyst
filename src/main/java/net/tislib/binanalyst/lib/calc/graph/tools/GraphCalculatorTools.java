@@ -1,15 +1,18 @@
 package net.tislib.binanalyst.lib.calc.graph.tools;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static net.tislib.binanalyst.lib.util.MapUtil.computeIfAbsent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import net.tislib.binanalyst.lib.BinValueHelper;
@@ -156,6 +159,44 @@ public class GraphCalculatorTools {
             }
         }
         return truth;
+    }
+
+    public static Set<NamedBit> findDependencyBits(NamedBit operationalBit) {
+        if (operationalBit instanceof OperationalBit && ((OperationalBit) operationalBit).getOperation() != Operation.NOT) {
+            return Arrays.stream(((OperationalBit) operationalBit).getBits()).flatMap(item -> findDependencyBits(item).stream()).collect(Collectors.toSet());
+        } else {
+            return Collections.singleton(operationalBit);
+        }
+    }
+
+    public static OperationalBit normalFormSeparatePerBit(BitOpsGraphCalculator calculator, OperationalBit operationalBit, VarBit locatedBit) {
+        return (OperationalBit) calculator.or(
+                calculator.and(locatedBit, normalFormSeparatePerBitReplace(calculator, operationalBit, locatedBit, (ConstantBit) ONE)),
+                calculator.and(calculator.not(locatedBit), normalFormSeparatePerBitReplace(calculator, operationalBit, locatedBit, (ConstantBit) ZERO))
+        );
+    }
+
+    private static NamedBit normalFormSeparatePerBitReplace(BitOpsGraphCalculator calculator, OperationalBit theBit, VarBit locatedBit, ConstantBit replacement) {
+        List<NamedBit> fixedBits = new ArrayList<>();
+        for (NamedBit namedBit : theBit.getBits()) {
+            if (namedBit == locatedBit) {
+                fixedBits.add(replacement);
+            } else if (namedBit instanceof OperationalBit) {
+                fixedBits.add(normalFormSeparatePerBitReplace(calculator, (OperationalBit) namedBit, locatedBit, replacement));
+            } else {
+                fixedBits.add(namedBit);
+            }
+        }
+
+        return (NamedBit) calculator.operation(theBit.getOperation(), fixedBits.toArray(new NamedBit[0]));
+    }
+
+    public static boolean hasDependencyBit(NamedBit operationalBit, String cBit) {
+        if (operationalBit instanceof OperationalBit && ((OperationalBit) operationalBit).getOperation() != Operation.NOT) {
+            return Arrays.stream(((OperationalBit) operationalBit).getBits()).anyMatch(item -> hasDependencyBit(item, cBit));
+        } else {
+            return operationalBit.getName().equals(cBit);
+        }
     }
 
     public static class GraphCalculatorReferenceFinder {

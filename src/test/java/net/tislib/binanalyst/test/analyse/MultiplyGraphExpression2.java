@@ -6,6 +6,8 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.tislib.binanalyst.lib.analyse.GraphExpressionRootFinder;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionRootFinderLogicKeeper;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionRootFinderLogicKeeper2;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
@@ -15,9 +17,12 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.TwoOpsOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
+import net.tislib.binanalyst.lib.calc.graph.tools.OperationLevelMeasureAnalyser;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
 /**
@@ -28,12 +33,15 @@ public class MultiplyGraphExpression2 {
 
     public static void main(String... args) throws JsonProcessingException {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
-        calculator = new BinderOptimizationDecorator(calculator);
+//        calculator = new BinderOptimizationDecorator(calculator);
+        calculator = new TwoOpsOptimizationDecorator(calculator);
         calculator = new AndOrCalculatorDecorator(calculator, true);
 //        calculator = new XorAndCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
-//        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
+        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
+
+        OperationLevelMeasureAnalyser operationLevelMeasureAnalyser = new OperationLevelMeasureAnalyser(calculator);
 
         long a = 7;
         long b = 5;
@@ -58,12 +66,18 @@ public class MultiplyGraphExpression2 {
 
         calculator.setOutputBits(new Bit[]{result});
 
+
         calculator.calculate();
+
+        operationLevelMeasureAnalyser.analyse();
+        operationLevelMeasureAnalyser.reLabel();
+
         calculator.show();
+        operationLevelMeasureAnalyser.show();
+
 
         GraphExpressionRootFinder graphExpressionRootFinder = new GraphExpressionRootFinder(calculator);
         graphExpressionRootFinder.analyse();
-        graphExpressionRootFinder.traverse();
 
         graphExpressionRootFinder.show();
 

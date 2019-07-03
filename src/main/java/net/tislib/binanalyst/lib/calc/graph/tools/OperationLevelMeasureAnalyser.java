@@ -52,7 +52,7 @@ public class OperationLevelMeasureAnalyser {
     public void reLabel() {
         for (Bit bit : calculator.getMiddle()) {
             OperationalBit operationalBit = (OperationalBit) bit;
-            operationalBit.setName("L" + bitLevelMapLower.get(bit) + ":" + operationalBit.getName());
+            operationalBit.setName("L" + bitLevelMapUpper.get(bit) + ":" + operationalBit.getName());
         }
     }
 
