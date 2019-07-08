@@ -4,22 +4,14 @@ import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.tislib.binanalyst.lib.analyse.GraphExpressionRootFinder;
-import net.tislib.binanalyst.lib.analyse.GraphExpressionRootFinderLogicKeeper;
-import net.tislib.binanalyst.lib.analyse.GraphExpressionRootFinderLogicKeeper2;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionTruthProb;
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.NamedBit;
-import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.graph.Operation;
-import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.TwoOpsOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.calc.graph.tools.OperationLevelMeasureAnalyser;
@@ -33,9 +25,9 @@ public class MultiplyGraphExpression2 {
 
     public static void main(String... args) throws JsonProcessingException {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
-//        calculator = new BinderOptimizationDecorator(calculator);
-        calculator = new TwoOpsOptimizationDecorator(calculator);
-        calculator = new AndOrCalculatorDecorator(calculator, true);
+        calculator = new BinderOptimizationDecorator(calculator);
+//        calculator = new TwoOpsOptimizationDecorator(calculator);
+//        calculator = new AndOrCalculatorDecorator(calculator, true);
 //        calculator = new XorAndCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
@@ -48,8 +40,8 @@ public class MultiplyGraphExpression2 {
 
         //32532325, 23403244
 
-        VarBit[] aBits = VarBit.list("a", 3, ZERO);
-        VarBit[] bBits = VarBit.list("b", 3, ZERO);
+        VarBit[] aBits = VarBit.list("a", 8, ZERO);
+        VarBit[] bBits = VarBit.list("b", 8, ZERO);
 
         setVal(aBits, a);
         setVal(bBits, b);
@@ -60,7 +52,7 @@ public class MultiplyGraphExpression2 {
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
-        Bit[] truth = GraphCalculatorTools.getTruthBit(calculator, r, 35);
+        Bit[] truth = GraphCalculatorTools.getTruthBit(calculator, r, 251 * 257);
 
         Bit result = calculator.and(truth);
 
@@ -69,14 +61,14 @@ public class MultiplyGraphExpression2 {
 
         calculator.calculate();
 
-        operationLevelMeasureAnalyser.analyse();
-        operationLevelMeasureAnalyser.reLabel();
+//        operationLevelMeasureAnalyser.analyse();
+//        operationLevelMeasureAnalyser.reLabel();
 
         calculator.show();
-        operationLevelMeasureAnalyser.show();
+//        operationLevelMeasureAnalyser.show();
 
 
-        GraphExpressionRootFinder graphExpressionRootFinder = new GraphExpressionRootFinder(calculator);
+        GraphExpressionTruthProb graphExpressionRootFinder = new GraphExpressionTruthProb(calculator);
         graphExpressionRootFinder.analyse();
 
         graphExpressionRootFinder.show();

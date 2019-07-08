@@ -145,7 +145,7 @@ public class GraphCalculatorTools {
         return calculator;
     }
 
-    public static Bit[] getTruthBit(BitOpsGraphCalculator calculator, Bit[] bits, int value) {
+    public static Bit[] getTruthBit(BitOpsGraphCalculator calculator, Bit[] bits, long value) {
         VarBit[] xBits = VarBit.list("x", bits.length, ZERO);
 
         setVal(xBits, value);

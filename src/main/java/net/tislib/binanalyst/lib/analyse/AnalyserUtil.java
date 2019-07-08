@@ -69,4 +69,14 @@ public class AnalyserUtil {
     public static Set<String> findConflicts(OperationalBit operationalBit) {
         return findConflicts(new HashSet<NamedBit>(Arrays.asList(operationalBit.getBits())));
     }
+
+    public static boolean isConflicting(NamedBit bit, NamedBit truth) {
+        String bitName = bit.getName();
+        if (bit instanceof OperationalBit) {
+            bitName = ((OperationalBit) bit).showFull(false);
+        }
+        boolean isNot = bitName.startsWith("!");
+        String bitReverse = isNot ? bitName.substring(1) : "!" + bitName;
+        return truth.getName().equals(bitReverse);
+    }
 }

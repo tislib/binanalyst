@@ -1,6 +1,7 @@
 package net.tislib.binanalyst.lib;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import java.util.function.Consumer;
@@ -160,5 +161,23 @@ public class BinOps {
         }
         System.arraycopy(bh, 0, newBits, l, bh.length);
         return newBits;
+    }
+
+    public static boolean isFalsy(Bit... bits) {
+        boolean res = true;
+        for (Bit bit : bits) {
+            if (bit.getValue().isTrue()) {
+                res = false;
+            }
+        }
+        return res;
+    }
+
+    public static Bit[] randomBits(int len) {
+        Bit[] bits = new Bit[len];
+        for (int i = 0; i < bits.length; i++) {
+            bits[i] = Math.random() >= 0.5 ? ONE : ZERO;
+        }
+        return bits;
     }
 }
