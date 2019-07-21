@@ -25,7 +25,22 @@ public final class OperationalBit extends VarBit implements Bit {
 
     public static String showFull(NamedBit bit) {
         if (bit instanceof OperationalBit) {
-            return "(" + ((OperationalBit) bit).showFull(false) + ")";
+            if (((OperationalBit) bit).getOperation() != Operation.NOT) {
+                return "(" + ((OperationalBit) bit).showFull(false) + ")";
+            } else {
+                return ((OperationalBit) bit).showFull(false);
+            }
+        }
+        return bit.getName();
+    }
+
+    public static String showFull(NamedBit bit, Predicate<NamedBit> resolveFormula) {
+        if (bit instanceof OperationalBit) {
+            if (((OperationalBit) bit).getOperation() != Operation.NOT && resolveFormula.test(bit)) {
+                return "(" + ((OperationalBit) bit).showFull(false, resolveFormula) + ")";
+            } else {
+                return ((OperationalBit) bit).showFull(false, resolveFormula);
+            }
         }
         return bit.getName();
     }
@@ -120,6 +135,23 @@ public final class OperationalBit extends VarBit implements Bit {
         StringJoiner joiner = new StringJoiner(" " + getOperation().getSign() + " ");
         for (NamedBit bit : bits) {
             joiner.add(showFull(bit));
+        }
+        return showSelf ? getName() + " : " + joiner : joiner.toString();
+    }
+
+    public String showFull(boolean showSelf, Predicate<NamedBit> resolveFormula) {
+        if (!resolveFormula.test(this)) {
+            return getName();
+        }
+//        if (!isFullMiddle()) {
+//            return getName();
+//        }
+        if (operation == Operation.NOT) {
+            return showSelf ? getName() + " : " + "!" + showFull(bits[0], resolveFormula) : "!" + showFull(bits[0], resolveFormula);
+        }
+        StringJoiner joiner = new StringJoiner(" " + getOperation().getSign() + " ");
+        for (NamedBit bit : bits) {
+            joiner.add(showFull(bit, resolveFormula));
         }
         return showSelf ? getName() + " : " + joiner : joiner.toString();
     }

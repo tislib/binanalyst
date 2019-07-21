@@ -75,8 +75,11 @@ public class AnalyserUtil {
         if (bit instanceof OperationalBit) {
             bitName = ((OperationalBit) bit).showFull(false);
         }
+        return truth.getName().equals(negativate(bitName));
+    }
+
+    public static String negativate(String bitName) {
         boolean isNot = bitName.startsWith("!");
-        String bitReverse = isNot ? bitName.substring(1) : "!" + bitName;
-        return truth.getName().equals(bitReverse);
+        return isNot ? bitName.substring(1) : "!" + bitName;
     }
 }

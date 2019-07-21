@@ -2,8 +2,10 @@ package net.tislib.binanalyst.lib.calc.graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 
@@ -14,6 +16,7 @@ import net.tislib.binanalyst.lib.bit.NamedBit;
 public class Layer<T extends NamedBit> implements Iterable<T> {
     private final String name;
     private final List<T> bits;
+    private String labelPrefix = "M";
 
     public Layer(String name) {
         this.name = name;
@@ -23,6 +26,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     protected Layer(String name, List<T> bits) {
         this.name = name;
         this.bits = bits;
+        this.labelPrefix = String.valueOf(name.toCharArray()[0]);
     }
 
     public Integer getBitId(T bit) {
@@ -51,7 +55,9 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
             return foundBit;
         }
         if (bit.getName() == null || name.toCharArray()[0] != bit.getName().toCharArray()[0]) {
-            bit.setName(name.toCharArray()[0] + "[" + (this.bits.size()) + "]");
+            bit.setName(labelPrefix + (this.bits.size()));
+        } else {
+            bit.setName(bit.getName().replace("M", labelPrefix));
         }
         this.bits.add(bit);
         return bit;
@@ -79,7 +85,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
         setBits(bitsArray, false);
     }
 
-    public void setBits(List<T> bits) {
+    public void setBits(Collection<T> bits) {
         this.bits.clear();
         this.bits.addAll(bits);
     }
@@ -113,7 +119,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     public void rename() {
         for (int i = 0; i < this.bits.size(); i++) {
             T bit = this.bits.get(i);
-            bit.setName(name.toCharArray()[0] + "[" + i + "]");
+            bit.setName(labelPrefix + i);
         }
     }
 
@@ -132,5 +138,15 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
             }
         }
         return null;
+    }
+
+    public void setLabelPrefix(String labelPrefix) {
+        this.labelPrefix = labelPrefix;
+    }
+
+    public void addBits(List<T> bits) {
+        for (T bit : bits) {
+            addBits(bit);
+        }
     }
 }

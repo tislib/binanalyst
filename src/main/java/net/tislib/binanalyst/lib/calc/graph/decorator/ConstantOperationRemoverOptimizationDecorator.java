@@ -37,11 +37,6 @@ public class ConstantOperationRemoverOptimizationDecorator extends AbstractBitOp
 
     private Bit optimize(Bit result, Bit... bits) {
         for (Bit bit : bits) {
-            if ((bit instanceof ConstantBit)) {
-                System.out.println("found");
-            }
-        }
-        for (Bit bit : bits) {
             if (!(bit instanceof ConstantBit)) {
                 return result;
             }

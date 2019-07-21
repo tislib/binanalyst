@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -197,6 +198,18 @@ public class GraphCalculatorTools {
         } else {
             return operationalBit.getName().equals(cBit);
         }
+    }
+
+    public static Set<NamedBit> findLeafs(OperationalBit varBit) {
+        Set<NamedBit> result = new HashSet<>();
+        for (NamedBit bit : varBit.getBits()) {
+            if (bit instanceof OperationalBit) {
+                result.addAll(findLeafs((OperationalBit) bit));
+            } else {
+                result.add(bit);
+            }
+        }
+        return result;
     }
 
     public static class GraphCalculatorReferenceFinder {

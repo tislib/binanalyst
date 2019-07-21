@@ -77,6 +77,16 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
     }
 
     @Override
+    public void replaceBit(NamedBit namedBit, NamedBit varBit) {
+        calculator.replaceBit(namedBit, varBit);
+    }
+
+    @Override
+    public void show(boolean showValues) {
+        calculator.show(showValues);
+    }
+
+    @Override
     public Bit xor(Bit... bits) {
         return calculator.xor(bits);
     }

@@ -4,14 +4,22 @@ import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import net.tislib.binanalyst.lib.BinValueHelper;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionFindEarlyConflictsB2B;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionLocateConflictingTree;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogic;
 import net.tislib.binanalyst.lib.analyse.GraphExpressionTruthProb;
+import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.TwoOpsOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.calc.graph.tools.OperationLevelMeasureAnalyser;
@@ -26,22 +34,20 @@ public class MultiplyGraphExpression2 {
     public static void main(String... args) throws JsonProcessingException {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
         calculator = new BinderOptimizationDecorator(calculator);
-//        calculator = new TwoOpsOptimizationDecorator(calculator);
-//        calculator = new AndOrCalculatorDecorator(calculator, true);
+        calculator = new TwoOpsOptimizationDecorator(calculator);
+        calculator = new AndOrCalculatorDecorator(calculator, true);
 //        calculator = new XorAndCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
-
-        OperationLevelMeasureAnalyser operationLevelMeasureAnalyser = new OperationLevelMeasureAnalyser(calculator);
 
         long a = 7;
         long b = 5;
 
         //32532325, 23403244
 
-        VarBit[] aBits = VarBit.list("a", 8, ZERO);
-        VarBit[] bBits = VarBit.list("b", 8, ZERO);
+        VarBit[] aBits = VarBit.list("a", 2, ZERO);
+        VarBit[] bBits = VarBit.list("b", 2, ZERO);
 
         setVal(aBits, a);
         setVal(bBits, b);
@@ -52,26 +58,35 @@ public class MultiplyGraphExpression2 {
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
-        Bit[] truth = GraphCalculatorTools.getTruthBit(calculator, r, 251 * 257);
+//        Bit[] truth = GraphCalculatorTools.getTruthBit(calculator, r, 4);
 
-        Bit result = calculator.and(truth);
+//        Bit result = calculator.and(truth);
 
-        calculator.setOutputBits(new Bit[]{result});
+//        calculator.setOutputBits(new Bit[]{result});
+        calculator.setOutputBits(r);
 
+        calculator.getOutput().setLabelPrefix("O");
+        calculator.getOutput().rename();
 
-        calculator.calculate();
+//        calculator.calculate();
 
-//        operationLevelMeasureAnalyser.analyse();
-//        operationLevelMeasureAnalyser.reLabel();
+//        calculator.show();
 
-        calculator.show();
-//        operationLevelMeasureAnalyser.show();
+        GraphExpressionReverserLogic graphExpressionReverserLogic = new GraphExpressionReverserLogic(calculator);
+        graphExpressionReverserLogic.analyse();
 
+        graphExpressionReverserLogic.show();
 
-        GraphExpressionTruthProb graphExpressionRootFinder = new GraphExpressionTruthProb(calculator);
-        graphExpressionRootFinder.analyse();
+        BitOpsGraphCalculator innerCalculator = graphExpressionReverserLogic.getInnerCalculator();
 
-        graphExpressionRootFinder.show();
+        innerCalculator.getInput().getBits().get(0).setValue(BinaryValue.TRUE);
+        innerCalculator.getInput().getBits().get(1).setValue(BinaryValue.FALSE);
+        innerCalculator.getInput().getBits().get(2).setValue(BinaryValue.FALSE);
+        innerCalculator.getInput().getBits().get(3).setValue(BinaryValue.TRUE);
+
+        innerCalculator.calculate();
+        innerCalculator.show(true);
+        BinValueHelper.printValues(innerCalculator.getOutput().getBits().toArray(new NamedBit[0]));
 
     }
 

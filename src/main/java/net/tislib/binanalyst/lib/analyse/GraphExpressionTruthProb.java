@@ -82,7 +82,7 @@ public class GraphExpressionTruthProb {
     }
 
     private Bit[] randomNumber() {
-        return randomBits(35000);
+        return randomBits(350);
     }
 
 

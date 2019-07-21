@@ -145,9 +145,14 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     @Override
     public void show() {
-        input.show(false);
-        middle.show(false);
-        output.show(false);
+        show(false);
+    }
+
+    @Override
+    public void show(boolean showValues) {
+        input.show(showValues);
+        middle.show(showValues);
+        output.show(showValues);
 
         System.out.println("MIDDLE SIZE: " + this.getMiddle().getBits().size());
         System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(this));
@@ -160,7 +165,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     @Override
     public void calculate() {
-        reIndex();
         for (OperationalBit bit : middle) {
             bit.calculate();
             operationCount++;
@@ -172,6 +176,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
         for (int i = 0; i < this.getMiddle().getBits().size(); i++) {
             this.getMiddle().getBits().get(i).setName("M[" + i + "]");
         }
+        this.getMiddle().rename();
     }
 
     public void transform(Transformer transformer) {
@@ -240,6 +245,15 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     @Override
     public void remake() {
 
+    }
+
+    @Override
+    public void replaceBit(NamedBit namedBit, NamedBit varBit) {
+        for (OperationalBit operationalBit : getMiddle()) {
+            if (operationalBit.hasBit(namedBit)) {
+                operationalBit.replaceBit(namedBit, varBit);
+            }
+        }
     }
 
     public enum LayerType {

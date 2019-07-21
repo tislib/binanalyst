@@ -30,4 +30,8 @@ public interface BitOpsGraphCalculator extends BitOpsCalculator {
     long getReusedBitsCount();
 
     void remake();
+
+    void replaceBit(NamedBit namedBit, NamedBit varBit);
+
+    void show(boolean showValues);
 }

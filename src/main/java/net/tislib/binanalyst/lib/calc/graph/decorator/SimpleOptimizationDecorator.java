@@ -4,6 +4,7 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
@@ -28,6 +29,11 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
         return optimize(Operation.OR, bits);
     }
 
+    @Override
+    public Bit not(Bit bit) {
+        return optimize(Operation.NOT, bit);
+    }
+
     Bit optimize(Operation operation, Bit... bits) {
         switch (operation) {
             case AND:
@@ -47,6 +53,10 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
         if (operation != Operation.NOT && bits.length == 1) {
             return bits[0];
         }
+
+//        if (operation == Operation.NOT && (bits[0] instanceof OperationalBit) && ((OperationalBit) bits[0]).getOperation() == Operation.NOT) {
+//            return ((OperationalBit) bits[0]).getBits()[0];
+//        }
         switch (operation) {
             case NOT:
                 return super.not(bits[0]);
