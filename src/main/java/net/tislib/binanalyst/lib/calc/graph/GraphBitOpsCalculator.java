@@ -31,7 +31,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     private final Map<String, OperationalBit> middleBitCache = new HashMap<>();
     private long reusedBitsCount;
-    private List<Optimizer> optimizers = new ArrayList<>();
     private int operationCount = 0;
 
     @Override
@@ -91,9 +90,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
                 operation = ((OperationalBit) result).getOperation();
                 bits = ((OperationalBit) result).getBits();
             }
-            for (Optimizer optimizer : this.optimizers) {
-                result = optimizer.optimizeOperation(this, operation, bits, result);
-            }
         }
         if (result == null) {
             OperationalBit newBit = new OperationalBit(operation, bits);
@@ -108,9 +104,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     }
 
     public void optimize() {
-        for (Optimizer optimizer : this.optimizers) {
-            optimizer.optimizeCalculator(this);
-        }
+        // unused method
     }
 
     @Override
@@ -186,7 +180,7 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     }
 
     public List<Optimizer> getOptimizers() {
-        return optimizers;
+        throw new UnsupportedOperationException();
     }
 
     public void clean() {

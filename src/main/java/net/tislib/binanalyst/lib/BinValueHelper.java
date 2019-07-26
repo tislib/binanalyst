@@ -224,6 +224,12 @@ public class BinValueHelper {
         }
     }
 
+    public static void setVal(VarBit[] bits, BinaryValue[] value) {
+        for (int i = 0; i < Math.min(bits.length, value.length); i++) {
+            bits[i].setValue(value[i]);
+        }
+    }
+
     public static VarBit[] concat(VarBit[] aBits, VarBit[] bBits) {
         VarBit[] result = new VarBit[aBits.length + bBits.length];
         int i;
@@ -296,5 +302,27 @@ public class BinValueHelper {
 
     public static long toHexString(Bit[] res) {
         return 0;
+    }
+
+    public static boolean isEqual(Bit[] bits, BinaryValue[] value) {
+        if (bits.length != value.length) {
+            throw new IllegalArgumentException("bits length and value length are different");
+        }
+        for (int i = 0; i < bits.length; i++) {
+            if (bits[i].getValue().isTrue() != value[i].isTrue()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static BinaryValue[] toBinValueArray(int l, long value) {
+        VarBit[] bits = VarBit.list("temp", l, ZERO);
+        setVal(bits, value);
+        BinaryValue[] res = new BinaryValue[bits.length];
+        for (int i = 0; i < bits.length; i++) {
+            res[i] = bits[i].getValue();
+        }
+        return res;
     }
 }

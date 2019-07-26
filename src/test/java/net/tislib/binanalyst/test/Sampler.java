@@ -61,8 +61,6 @@ public class Sampler {
 
         calculator.setInputBits(aBits, bBits);
 
-        calculator.getOptimizers().add(new LogicalOptimizer());
-
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
         VarBit[] result = VarBit.list("c", r.length, ZERO);

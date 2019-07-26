@@ -19,7 +19,7 @@ public class NormalFormOptimizer extends AbstractBitOpsGraphCalculatorDecorator 
         super.calculate();
     }
 
-    private void optimize() {
+    public void optimize() {
 
     }
 }

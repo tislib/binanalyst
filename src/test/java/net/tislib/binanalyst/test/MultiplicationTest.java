@@ -122,9 +122,6 @@ public class MultiplicationTest {
         setVal(aBits, a.longValue());
         setVal(bBits, b.longValue());
 
-        calculator.getOptimizers().add(new LogicalOptimizer());
-        calculator.getOptimizers().add(new NfOptimizer());
-
         calculator.setInputBits(aBits, bBits);
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
@@ -169,8 +166,6 @@ public class MultiplicationTest {
         setVal(bBits, b.longValue());
 
         calculator.setInputBits(aBits, bBits);
-
-        calculator.getOptimizers().add(new LogicalOptimizer());
 
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 

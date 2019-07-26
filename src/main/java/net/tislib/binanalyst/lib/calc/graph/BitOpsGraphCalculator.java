@@ -35,4 +35,5 @@ public interface BitOpsGraphCalculator extends BitOpsCalculator {
 
     void show(boolean showValues);
 
+    void optimize();
 }

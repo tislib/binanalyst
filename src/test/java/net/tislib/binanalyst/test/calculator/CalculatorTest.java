@@ -35,6 +35,7 @@ public class CalculatorTest {
 
     private final BigInteger a;
     private final BigInteger b;
+
     public CalculatorTest(long a, long b) {
         this.a = BigInteger.valueOf(a);
         this.b = BigInteger.valueOf(b);
@@ -117,6 +118,10 @@ public class CalculatorTest {
 
     @Test
     public void binderOptimizationDecorator() {
+        if (a.longValue() > 1000 || b.longValue() > 1000) {
+            return;
+        }
+
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
         calculator = new BinderOptimizationDecorator(calculator);
@@ -129,6 +134,9 @@ public class CalculatorTest {
 
     @Test
     public void constantOperationRemoverOptimizationDecorator() {
+        if (a.longValue() > 1000 || b.longValue() > 1000) {
+            return;
+        }
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
         calculator = new BinderOptimizationDecorator(calculator);
