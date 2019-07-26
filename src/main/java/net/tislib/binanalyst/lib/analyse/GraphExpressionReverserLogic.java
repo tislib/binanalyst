@@ -155,6 +155,9 @@ public class GraphExpressionReverserLogic {
                 HashSet<String> newContext = new HashSet<>(context);
                 NamedBit varBit = (NamedBit) bit;
                 if (varBit.getName().startsWith("M") || varBit.getName().startsWith("O")) {
+                    if (!inputMap.containsKey(varBit.getName())) {
+                        return varBit;
+                    }
                     return inputMap.get(varBit.getName());
                 } else {
                     if (context.contains(varBit.getName())) {
