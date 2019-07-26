@@ -47,27 +47,12 @@ public class MultiplyGraphExpression3 {
         calculator.calculate();
 
         calculator.show();
+        System.out.println("___________");
 
         GraphExpressionReverserLogic graphExpressionReverserLogic = new GraphExpressionReverserLogic(calculator);
         graphExpressionReverserLogic.analyse();
 
-//        graphExpressionReverserLogic.show();
-
-        BitOpsGraphCalculator innerCalculator = graphExpressionReverserLogic.getInnerCalculator();
-
-//        innerCalculator.getInput().getBits().get(0).setValue(BinaryValue.TRUE);
-//        innerCalculator.getInput().getBits().get(1).setValue(BinaryValue.TRUE);
-//        innerCalculator.getInput().getBits().get(2).setValue(BinaryValue.TRUE);
-//        innerCalculator.getInput().getBits().get(1).setValue(BinaryValue.FALSE);
-//        innerCalculator.getInput().getBits().get(2).setValue(BinaryValue.FALSE);
-//        innerCalculator.getInput().getBits().get(3).setValue(BinaryValue.TRUE);
-
-//        innerCalculator.show(false);
-//        innerCalculator.calculate();
-//        innerCalculator.show(true);
-//        BinValueHelper.printValues(innerCalculator.getOutput().getBits().toArray(new NamedBit[0]));
-
-//        graphExpressionReverserLogic.showState();
+        graphExpressionReverserLogic.show();
 
     }
 

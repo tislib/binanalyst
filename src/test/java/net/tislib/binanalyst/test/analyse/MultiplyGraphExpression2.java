@@ -60,7 +60,7 @@ public class MultiplyGraphExpression2 {
         GraphExpressionReverserLogic graphExpressionReverserLogic = new GraphExpressionReverserLogic(calculator);
         graphExpressionReverserLogic.analyse();
 
-//        graphExpressionReverserLogic.show();
+        graphExpressionReverserLogic.show();
 
         BitOpsGraphCalculator innerCalculator = graphExpressionReverserLogic.getInnerCalculator();
 
@@ -70,9 +70,9 @@ public class MultiplyGraphExpression2 {
 //        innerCalculator.getInput().getBits().get(3).setValue(BinaryValue.TRUE);
 
 
-        innerCalculator.calculate();
+//        innerCalculator.calculate();
 
-        innerCalculator.show(true);
+//        innerCalculator.show(true);
 //        BinValueHelper.printValues(innerCalculator.getOutput().getBits().toArray(new NamedBit[0]));
 
 //        graphExpressionReverserLogic.showNormalState();

@@ -54,17 +54,6 @@ public class GraphExpressionReverserLogic {
         for (VarBit varBit : inputs) {
             reverse(varBit);
         }
-
-//        for (VarBit varBit : calculator.getMiddle()) {
-//            reverse(varBit);
-//        }
-
-        Bit truth = resolve(truthExps.get("a2"), new HashSet<>(Collections.singleton("a2")));
-        System.out.println(formulaToString(truth));
-
-        innerCalculator.calculate();
-
-//        System.out.println(normalFormulaToString(truth));
     }
 
     private Bit resolve(Bit bit, Set<String> context) {
@@ -207,12 +196,13 @@ public class GraphExpressionReverserLogic {
     }
 
     public void showState() {
-        for (String bitName : reversedBits) {
-            System.out.println("_______BEGIN_____");
-            System.out.println(bitName);
-            System.out.println(formulaToString(truthExps.get(bitName)));
-            System.out.println(formulaToString(falsyExps.get(bitName)));
-            System.out.println("_______END_____");
+        for (NamedBit namedBit : calculator.getInput()) {
+            Bit truth = resolve(truthExps.get(namedBit.getName()), new HashSet<>(Collections.singleton(namedBit.getName())));
+            System.out.println(namedBit.getName() + ": " + formulaToString(truth));
+        }
+        for (NamedBit namedBit : calculator.getInput()) {
+            Bit truth = resolve(falsyExps.get(namedBit.getName()), new HashSet<>(Collections.singleton("!" + namedBit.getName())));
+            System.out.println("!" + namedBit.getName() + ": " + formulaToString(truth));
         }
     }
 

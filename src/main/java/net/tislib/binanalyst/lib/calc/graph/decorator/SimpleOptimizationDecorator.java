@@ -5,7 +5,6 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import java.util.Arrays;
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
@@ -46,10 +45,16 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
                 return ONE;
             }
         }
+
+        if (bits.length == 0) {
+            return ZERO;
+        }
+
         switch (operation) {
             case AND:
                 if (Optimizer.contains(bits, ZERO)) return ZERO;
                 bits = Optimizer.remove(bits, ONE);
+                if (bits.length == 0) return ONE;
                 break;
             case OR:
                 if (Optimizer.contains(bits, ONE)) return ONE;
