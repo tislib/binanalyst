@@ -1,7 +1,7 @@
 package net.tislib.binanalyst.lib.calc.graph;
 
 public enum Operation {
-    XOR("^"), AND("&"), OR("|"), NOT("~");
+    XOR("^"), AND("&"), OR("|"), NOT("~"), COPY("");
 
     private CharSequence sign;
 

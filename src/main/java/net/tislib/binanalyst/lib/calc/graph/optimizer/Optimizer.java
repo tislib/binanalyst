@@ -29,6 +29,18 @@ public interface Optimizer {
         return false;
     }
 
+    static int count(Bit[] bits, Bit bit) {
+        int count = 0;
+
+        for (Bit theBit : bits) {
+            if (theBit == bit) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     NamedBit optimizeOperation(GraphBitOpsCalculator graphBitOpsCalculator, Operation operation, NamedBit[] bits, NamedBit chain);
 
     void optimizeCalculator(GraphBitOpsCalculator graphBitOpsCalculator);

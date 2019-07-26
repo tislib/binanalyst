@@ -1,11 +1,8 @@
 package net.tislib.binanalyst.lib.analyse;
 
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static net.tislib.binanalyst.lib.calc.graph.tools.NormalFormulaGenerator.toNormalFormul;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,11 +17,12 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
+import net.tislib.binanalyst.lib.calc.graph.UsageFinder;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
 
-public class GraphExpressionReverserLogic {
+public class GraphExpressionReverserLogicOld3 {
     private static final VarBit UNKNOWN_BIT = new VarBit();
     private static final String UNKNOWN_BIT_NAME = "UNKNOWN_BIT";
     private final BitOpsGraphCalculator calculator;
@@ -35,10 +33,12 @@ public class GraphExpressionReverserLogic {
     private Map<String, NamedBit> falsyExps = new HashMap<>();
     private Set<String> reversedBits = new HashSet<>();
 
-    public GraphExpressionReverserLogic(BitOpsGraphCalculator calculator) {
+    public GraphExpressionReverserLogicOld3(BitOpsGraphCalculator calculator) {
         this.calculator = calculator;
         innerCalculator.getMiddle().setLabelPrefix("I");
 
+//        innerCalculator = new BinderOptimizationDecorator(innerCalculator);
+//        calculator = new XorAndCalculatorDecorator(calculator, true);
         innerCalculator = new SimpleOptimizationDecorator(innerCalculator);
         innerCalculator = new ConstantOperationRemoverOptimizationDecorator(innerCalculator);
         innerCalculator = new UnusedBitOptimizerDecorator(innerCalculator);
@@ -55,69 +55,80 @@ public class GraphExpressionReverserLogic {
             reverse(varBit);
         }
 
+        for (VarBit varBit : calculator.getMiddle()) {
+            reverse(varBit);
+        }
+
+//        for (int i = 0; i < 30; i++) {
+//            for (VarBit varBit : calculator.getMiddle()) {
+//                reverse(varBit);
+//            }
+//
+//            for (VarBit varBit : inputs) {
+//                reverse(varBit);
+//            }
+//        }
+//
 //        for (VarBit varBit : calculator.getMiddle()) {
 //            reverse(varBit);
 //        }
+//
+//        for (VarBit varBit : inputs) {
+//            reverse(varBit);
+//        }
 
-        Bit truth = resolve(truthExps.get("a2"), new HashSet<>(Collections.singleton("a2")));
-        System.out.println(formulaToString(truth));
-
-        innerCalculator.calculate();
-
-//        System.out.println(normalFormulaToString(truth));
-    }
-
-    private Bit resolve(Bit bit, Set<String> context) {
-        if (bit instanceof OperationalBit && ((NamedBit) bit).getName().startsWith("I")) {
-            OperationalBit operationalBit = (OperationalBit) bit;
-            NamedBit[] bits = operationalBit.getBits();
-            NamedBit[] newBits = new NamedBit[bits.length];
-
-            if (operationalBit.getOperation() == Operation.NOT && (
-                    !bits[0].getName().startsWith("I") &&
-                            !bits[0].getName().startsWith("O") &&
-                            !bits[0].getName().startsWith("M")
-            )) {
-                if (context.contains(bits[0].getName())) {
-                    return ZERO;
-                } else if (context.contains("!" + bits[0].getName())) {
-                    return ONE;
-                }
-                NamedBit falsyExp = falsyExps.get(bits[0].getName());
-                HashSet<String> newContext = new HashSet<>(context);
-                newContext.add("!" + bits[0].getName());
-                return resolve(falsyExp, newContext);
+        List<OperationalBit> bits = calculator.getMiddle().getBits();
+        for (int i = 0, bitsSize = bits.size(); i < bitsSize; i++) {
+            VarBit varBit = bits.get(i);
+            if (falsyExps.get(varBit.getName()) != null) {
+                innerCalculator.replaceBit((NamedBit) calculator.not(varBit), falsyExps.get(varBit.getName()));
             }
-
-            for (int i = 0; i < newBits.length; i++) {
-                newBits[i] = (NamedBit) resolve(bits[i], context);
-            }
-
-            return innerCalculator.operation(operationalBit.getOperation(), newBits);
-        } else {
-            if (bit instanceof NamedBit) {
-                HashSet<String> newContext = new HashSet<>(context);
-                NamedBit varBit = (NamedBit) bit;
-                if (varBit instanceof OperationalBit) {
-                    if (varBit.getName().startsWith("M") || varBit.getName().startsWith("O")) {
-                        return varBit;
-                    }
-                } else {
-                    if (context.contains(varBit.getName())) {
-                        return ONE;
-                    } else if (context.contains("!" + varBit.getName())) {
-                        return ZERO;
-                    }
-                }
-                newContext.add(varBit.getName());
-                return resolve(truthExps.get(varBit.getName()), newContext);
+            if (truthExps.get(varBit.getName()) != null) {
+                innerCalculator.replaceBit(varBit, truthExps.get(varBit.getName()));
             }
         }
 
-        return bit;
+
+        for (VarBit varBit : calculator.getInput()) {
+            if (truthExps.containsKey(varBit.getName())) {
+                NamedBit truthBit = truthExps.get(varBit.getName());
+                NamedBit falsyFit = falsyExps.get(varBit.getName());
+
+                truthBit.setName(varBit.getName() + "_truth");
+                falsyFit.setName(varBit.getName() + "_falsy");
+
+                innerCalculator.getOutput().addBits(truthBit);
+                innerCalculator.getOutput().addBits(falsyFit);
+            }
+        }
+
+        rasterizeInnerCalculator();
+
+        UsageFinder usageFinder = new UsageFinder(innerCalculator.getInput(), innerCalculator.getMiddle(), innerCalculator.getOutput());
+        usageFinder.cleanUnusedMiddleBits();
+
+        for (OperationalBit operationalBit : innerCalculator.getMiddle()) {
+            for (NamedBit namedBit : operationalBit.getBits()) {
+                if (namedBit.getName().equals(UNKNOWN_BIT_NAME)) {
+                    throw new RuntimeException("unresolved bit found: " + namedBit.getName());
+                }
+            }
+        }
     }
 
     private void reverse(NamedBit varBit) {
+        if (varBit instanceof OperationalBit) {
+            OperationalBit operationalBit = (OperationalBit) varBit;
+            if (operationalBit.getOperation() == Operation.NOT) {
+                NamedBit innerBit = operationalBit.getBits()[0];
+
+                truthExps.put(varBit.getName(), (NamedBit) locateReverse(innerBit, false));
+                falsyExps.put(varBit.getName(), (NamedBit) locateReverse(innerBit, true));
+                reversedBits.add(varBit.getName());
+
+                return;
+            }
+        }
         // find dependencies
         List<OperationalBit> usage = new ArrayList<>();
         for (OperationalBit operationalBit : calculator.getMiddle()) {
@@ -131,11 +142,10 @@ public class GraphExpressionReverserLogic {
 
         for (OperationalBit operationalBit : usage) {
             NamedBit[] bits = operationalBit.getBits();
-
             if (operationalBit.getOperation() == Operation.AND) {
                 NamedBit otherBit = bits[0] == varBit ? bits[1] : bits[0];
-                Bit theTruth = innerCalculator.or(operationalBit, innerCalculator.not(otherBit));
-                Bit theFalsy = innerCalculator.not(operationalBit);
+                Bit theTruth = innerCalculator.or(locateReverse(operationalBit, true), locateReverse(otherBit, false));
+                Bit theFalsy = locateReverse(operationalBit, false);
                 if (truth == null) {
                     truth = (NamedBit) theTruth;
                     falsy = (NamedBit) theFalsy;
@@ -144,8 +154,8 @@ public class GraphExpressionReverserLogic {
                 falsy = (NamedBit) innerCalculator.and(falsy, theFalsy);
             } else if (operationalBit.getOperation() == Operation.OR) {
                 NamedBit otherBit = bits[0] == varBit ? bits[1] : bits[0];
-                Bit theTruth = operationalBit;
-                Bit theFalsy = innerCalculator.or(innerCalculator.not(operationalBit), otherBit);
+                Bit theTruth = locateReverse(operationalBit, true);
+                Bit theFalsy = innerCalculator.or(locateReverse(operationalBit, false), locateReverse(otherBit, true));
                 if (truth == null) {
                     truth = (NamedBit) theTruth;
                     falsy = (NamedBit) theFalsy;
@@ -154,14 +164,8 @@ public class GraphExpressionReverserLogic {
                 falsy = (NamedBit) innerCalculator.and(falsy, theFalsy);
             } else if (operationalBit.getOperation() == Operation.XOR) {
                 NamedBit otherBit = bits[0] == varBit ? bits[1] : bits[0];
-                Bit theTruth = innerCalculator.or(
-                        innerCalculator.and(operationalBit, innerCalculator.not(otherBit)),
-                        innerCalculator.and(otherBit, innerCalculator.not(operationalBit))
-                );
-                Bit theFalsy = innerCalculator.or(
-                        innerCalculator.and(innerCalculator.not(operationalBit), innerCalculator.not(otherBit)),
-                        innerCalculator.and(otherBit, operationalBit)
-                );
+                Bit theTruth = innerCalculator.or(innerCalculator.and(locateReverse(operationalBit, false), locateReverse(otherBit, false)), innerCalculator.and(locateReverse(operationalBit, true), locateReverse(otherBit, false)));
+                Bit theFalsy = innerCalculator.or(innerCalculator.and(locateReverse(operationalBit, false), locateReverse(otherBit, false)), innerCalculator.and(locateReverse(operationalBit, true), locateReverse(otherBit, true)));
                 if (truth == null) {
                     truth = (NamedBit) theTruth;
                     falsy = (NamedBit) theFalsy;
@@ -169,8 +173,8 @@ public class GraphExpressionReverserLogic {
                 truth = (NamedBit) innerCalculator.and(truth, theTruth);
                 falsy = (NamedBit) innerCalculator.and(falsy, theFalsy);
             } else {
-                Bit theTruth = innerCalculator.not(operationalBit);
-                Bit theFalsy = operationalBit;
+                Bit theTruth = locateReverse(operationalBit, false);
+                Bit theFalsy = locateReverse(operationalBit, true);
                 if (truth == null) {
                     truth = (NamedBit) theTruth;
                     falsy = (NamedBit) theFalsy;
@@ -185,6 +189,16 @@ public class GraphExpressionReverserLogic {
             falsyExps.put(varBit.getName(), falsy);
             reversedBits.add(varBit.getName());
         }
+    }
+
+    private Bit locateReverse(NamedBit varBit, boolean findTruth) {
+        if (varBit.getName().startsWith("O")) {
+            return findTruth ? varBit : innerCalculator.not(varBit);
+        }
+        if (reversedBits.contains(varBit.getName())) {
+            return findTruth ? truthExps.get(varBit.getName()) : falsyExps.get(varBit.getName());
+        }
+        return UNKNOWN_BIT;
     }
 
     public void show() {
@@ -208,11 +222,9 @@ public class GraphExpressionReverserLogic {
 
     public void showState() {
         for (String bitName : reversedBits) {
-            System.out.println("_______BEGIN_____");
             System.out.println(bitName);
             System.out.println(formulaToString(truthExps.get(bitName)));
             System.out.println(formulaToString(falsyExps.get(bitName)));
-            System.out.println("_______END_____");
         }
     }
 
@@ -224,8 +236,10 @@ public class GraphExpressionReverserLogic {
 
     public static String formulaToString(Bit bit) {
         if (bit instanceof OperationalBit) {
-            return ((OperationalBit) bit)
-                    .showFull(false, (namedBit -> !namedBit.getName().startsWith("M") && !namedBit.getName().startsWith("O")));
+            if (((OperationalBit) bit).testBits(item -> !(item instanceof OperationalBit))) {
+                return ((OperationalBit) bit).getName();
+            }
+            return ((OperationalBit) bit).showFull(false, (namedBit -> !namedBit.getName().startsWith("M") && !namedBit.getName().startsWith("O")));
         } else {
             return bit.toString();
         }

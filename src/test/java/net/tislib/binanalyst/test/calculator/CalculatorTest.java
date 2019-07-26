@@ -4,7 +4,6 @@ import static net.tislib.binanalyst.lib.BinValueHelper.*;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static org.junit.Assert.assertEquals;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigInteger;
 import java.util.Collection;

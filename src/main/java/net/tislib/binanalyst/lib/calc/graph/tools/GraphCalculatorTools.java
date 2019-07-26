@@ -212,6 +212,24 @@ public class GraphCalculatorTools {
         return result;
     }
 
+    public static Set<String> findLeafNames(OperationalBit varBit) {
+        Set<String> result = new HashSet<>();
+        for (NamedBit bit : varBit.getBits()) {
+            if (bit instanceof OperationalBit) {
+                result.addAll(findLeafNames((OperationalBit) bit));
+            } else {
+                result.add(bit.getName());
+            }
+        }
+        return result;
+    }
+
+    public static NamedBit copy(BitOpsGraphCalculator calculator, NamedBit namedBit) {
+        OperationalBit operationalBit = new OperationalBit(Operation.COPY, new NamedBit[]{namedBit});
+        calculator.getMiddle().addBits(operationalBit);
+        return operationalBit;
+    }
+
     public static class GraphCalculatorReferenceFinder {
 
         private final BitOpsGraphCalculator calculator;

@@ -34,4 +34,5 @@ public interface BitOpsGraphCalculator extends BitOpsCalculator {
     void replaceBit(NamedBit namedBit, NamedBit varBit);
 
     void show(boolean showValues);
+
 }

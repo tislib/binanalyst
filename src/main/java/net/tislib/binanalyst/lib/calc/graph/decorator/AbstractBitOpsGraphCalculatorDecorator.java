@@ -46,9 +46,19 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
         calculator.setOutputBits(bits);
     }
 
-    @Override
     public Bit operation(Operation operation, NamedBit... bits) {
-        return calculator.operation(operation, bits);
+        switch (operation) {
+            case NOT:
+                return not(bits[0]);
+            case AND:
+                return and(bits);
+            case OR:
+                return or(bits);
+            case XOR:
+                return xor(bits);
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     @Override

@@ -74,6 +74,14 @@ public final class OperationalBit extends VarBit implements Bit {
         this.setValue(calculateInternal());
     }
 
+    @Override
+    public BinaryValue getValue() {
+        if (operation == Operation.COPY) {
+            return bits[0].getValue();
+        }
+        return super.getValue();
+    }
+
     private BinaryValue calculateInternal() {
         boolean unknownFound = false;
         switch (operation) {
