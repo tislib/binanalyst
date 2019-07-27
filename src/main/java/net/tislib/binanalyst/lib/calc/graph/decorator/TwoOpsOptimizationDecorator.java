@@ -38,4 +38,18 @@ public class TwoOpsOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
 
         return res;
     }
+
+    @Override
+    public Bit xor(Bit... bits) {
+        if (bits.length == 1) {
+            return bits[0];
+        }
+
+        Bit res = bits[0];
+        for (int i = 1; i < bits.length; i++) {
+            res = super.xor(res, bits[i]);
+        }
+
+        return res;
+    }
 }
