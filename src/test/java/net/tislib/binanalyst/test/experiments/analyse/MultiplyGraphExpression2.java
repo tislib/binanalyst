@@ -2,8 +2,7 @@ package net.tislib.binanalyst.test.experiments.analyse;
 
 import static net.tislib.binanalyst.lib.bit.ConstantBit.UNSET;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogic;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionNFTReverserLogic;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
@@ -17,7 +16,7 @@ import net.tislib.binanalyst.lib.operator.BinMul;
  */
 public class MultiplyGraphExpression2 {
 
-    public static void main(String... args) throws JsonProcessingException {
+    public static void main(String... args) {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 //        calculator = new TwoOpsOptimizationDecorator(calculator);
 //        calculator = new SimpleOptimizationDecorator(calculator);
@@ -28,8 +27,8 @@ public class MultiplyGraphExpression2 {
 
         //32532325, 23403244
 
-        VarBit[] aBits = VarBit.list("a", 2, UNSET);
-        VarBit[] bBits = VarBit.list("b", 2, UNSET);
+        VarBit[] aBits = VarBit.list("a", 8, UNSET);
+        VarBit[] bBits = VarBit.list("b", 8, UNSET);
 
 //        setVal(aBits, a);
 //        setVal(bBits, b);
@@ -53,25 +52,14 @@ public class MultiplyGraphExpression2 {
 
         calculator.show();
 
-        GraphExpressionReverserLogic graphExpressionReverserLogic = new GraphExpressionReverserLogic(calculator);
+        GraphExpressionNFTReverserLogic graphExpressionReverserLogic = new GraphExpressionNFTReverserLogic(calculator);
         graphExpressionReverserLogic.analyse();
 
-        graphExpressionReverserLogic.show();
+        graphExpressionReverserLogic.getInnerCalculator().show();
+        System.out.println("___________");
 
-        BitOpsGraphCalculator innerCalculator = graphExpressionReverserLogic.getInnerCalculator();
+        graphExpressionReverserLogic.showState();
 
-//        innerCalculator.getInput().getBits().get(0).setValue(BinaryValue.TRUE);
-//        innerCalculator.getInput().getBits().get(1).setValue(BinaryValue.FALSE);
-//        innerCalculator.getInput().getBits().get(2).setValue(BinaryValue.FALSE);
-//        innerCalculator.getInput().getBits().get(3).setValue(BinaryValue.TRUE);
-
-
-//        innerCalculator.calculate();
-
-//        innerCalculator.show(true);
-//        BinValueHelper.printValues(innerCalculator.getOutput().getBits().toArray(new NamedBit[0]));
-
-//        graphExpressionReverserLogic.showNormalState();
 
     }
 

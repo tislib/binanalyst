@@ -5,6 +5,7 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import java.util.Arrays;
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
@@ -35,7 +36,9 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
     }
 
     Bit optimize(Operation operation, Bit... bits) {
-        bits = distinct(bits);
+        if (operation != Operation.XOR) {
+            bits = distinct(bits);
+        }
         if (isReversedBits(bits)) {
             if (operation == Operation.AND) {
                 return ZERO;
@@ -84,14 +87,13 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
             return bits[0];
         }
 
-//        if (operation == Operation.NOT && (bits[0] instanceof OperationalBit) && ((OperationalBit) bits[0]).getOperation() == Operation.NOT) {
-//            return ((OperationalBit) bits[0]).getBits()[0];
-//        }
+        if (operation == Operation.NOT && bits[0] instanceof OperationalBit && ((OperationalBit) bits[0]).getOperation() == Operation.NOT) {
+            return ((OperationalBit) bits[0]).getBits()[0];
+        }
+
         switch (operation) {
             case NOT:
                 return super.not(bits[0]);
-            case XOR:
-                return super.xor(bits);
             case OR:
                 return super.or(bits);
             case AND:

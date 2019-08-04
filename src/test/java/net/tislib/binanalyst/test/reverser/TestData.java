@@ -109,6 +109,21 @@ public class TestData {
                 (Expression) (input, calculator) -> new Bit[]{
                         calculator.and(
                                 calculator.or(
+                                        input[input.length - 1],
+                                        input[input.length - 2]
+                                ),
+                                calculator.or(
+                                        input[input.length - 1],
+                                        input[input.length - 3]
+                                )
+                        )
+                }
+        });
+
+        data.add(new Object[]{
+                (Expression) (input, calculator) -> new Bit[]{
+                        calculator.and(
+                                calculator.or(
                                         calculator.or(input[input.length - 1], input[input.length - 2]),
                                         calculator.xor(input[input.length - 1], input[input.length - 2])
                                 ),
@@ -120,27 +135,27 @@ public class TestData {
                 }
         });
 
-//        data.add(new Object[]{
-//                (Expression) (input, calculator) ->
-//                        BinAdd.add(calculator, new Bit[]{
-//                               input[0],
-//                               input[1],
-//                        }, new Bit[]{
-//                                input[2],
-//                                input[3],
-//                        })
-//        });
+        data.add(new Object[]{
+                (Expression) (input, calculator) ->
+                        BinAdd.add(calculator, new Bit[]{
+                               input[0],
+                               input[1],
+                        }, new Bit[]{
+                                input[2],
+                                input[3],
+                        })
+        });
 
-//        data.add(new Object[]{
-//                (Expression) (input, calculator) ->
-//                        BinMul.multiply(calculator, new Bit[]{
-//                               input[input.length - 2],
-//                               input[input.length - 1],
-//                        }, new Bit[]{
-//                                input[input.length - 4],
-//                                input[input.length - 3],
-//                        })
-//        });
+        data.add(new Object[]{
+                (Expression) (input, calculator) ->
+                        BinMul.multiply(calculator, new Bit[]{
+                               input[input.length - 2],
+                               input[input.length - 1],
+                        }, new Bit[]{
+                                input[input.length - 4],
+                                input[input.length - 3],
+                        })
+        });
 
         return data;
     }

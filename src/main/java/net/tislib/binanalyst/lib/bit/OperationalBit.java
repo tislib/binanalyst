@@ -12,7 +12,7 @@ import net.tislib.binanalyst.lib.calc.graph.Operation;
  * Created by Taleh Ibrahimli on 2/6/18.
  * Email: me@talehibrahimli.com
  */
-public final class OperationalBit extends VarBit implements Bit {
+public class OperationalBit extends VarBit implements Bit {
 
     private final Operation operation;
     private final NamedBit[] bits;

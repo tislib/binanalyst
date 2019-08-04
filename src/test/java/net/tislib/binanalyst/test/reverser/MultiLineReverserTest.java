@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.analyse.BriteBitReverser;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionNFTReverserLogic;
 import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogicMulti;
 import net.tislib.binanalyst.lib.bit.BinaryValue;
 import net.tislib.binanalyst.lib.bit.Bit;
@@ -52,10 +53,17 @@ public class MultiLineReverserTest {
         return TestData.getMultiLineExpressions();
     }
 
+//    @Test
+//    public void testReversingLogic3Multi() {
+//        testReversingLogic3InternalMulti(true);
+//        testReversingLogic3InternalMulti(false);
+//    }
+
     @Test
-    public void testReversingLogic3Multi() {
-        testReversingLogic3InternalMulti(true);
-        testReversingLogic3InternalMulti(false);
+    public void testReversingGraphExpressionNFTReverserLogic() {
+        calculator.show();
+        testReversingGraphExpressionNFTReverserLogic(true);
+        testReversingGraphExpressionNFTReverserLogic(false);
     }
 
     private void testReversingLogic3InternalMulti(boolean validateTruth) {
@@ -80,6 +88,36 @@ public class MultiLineReverserTest {
                 if (gerlBeRes != bruteBeRes) {
                     System.out.println("DEBUG!");
                 }
+
+                Assert.assertEquals(varBit.getName() + " failed", bruteBeRes, gerlBeRes);
+            }
+
+        }
+    }
+
+    private void testReversingGraphExpressionNFTReverserLogic(boolean validateTruth) {
+        calculator.optimize();
+
+        List<VarBit> bits = calculator.getInput().getBits();
+
+        for (int i1 = 0; i1 < bits.size(); i1++) {
+            VarBit varBit = bits.get(i1);
+            SingleBitReverser singleBitReverser = GraphExpressionNFTReverserLogic.reverser();
+            SingleBitReverser bruteBitReverser = new BriteBitReverser();
+
+            int oSize = calculator.getOutput().size(); // possibility count
+
+            BooleanExpression gerlBe = singleBitReverser.reverse(calculator, varBit.getName(), validateTruth);
+            BooleanExpression bruteBe = bruteBitReverser.reverse(calculator, varBit.getName(), validateTruth);
+
+            for (long i = 0; i < 1 << oSize; i++) {
+                BinaryValue[] val = BinValueHelper.toBinValueArray(oSize, i);
+                boolean gerlBeRes = gerlBe.calculate(val);
+                boolean bruteBeRes = bruteBe.calculate(val);
+                if (gerlBeRes != bruteBeRes) {
+                    System.out.println("DEBUG! " + validateTruth);
+                }
+                gerlBe.calculate(val);
 
                 Assert.assertEquals(varBit.getName() + " failed", bruteBeRes, gerlBeRes);
             }

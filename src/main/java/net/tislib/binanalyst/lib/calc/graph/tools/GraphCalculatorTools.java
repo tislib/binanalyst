@@ -287,6 +287,17 @@ public class GraphCalculatorTools {
         }
     }
 
+    public static List<OperationalBit> findUsages(BitOpsGraphCalculator calculator, NamedBit varBit) {
+        List<OperationalBit> usage = new ArrayList<>();
+        for (OperationalBit operationalBit : calculator.getMiddle()) {
+            if (operationalBit.hasBit(varBit)) {
+                usage.add(operationalBit);
+            }
+        }
+
+        return usage;
+    }
+
     public static class GraphCalculatorSerializedData {
         public List<BitData> input;
         public List<BitData> middle;

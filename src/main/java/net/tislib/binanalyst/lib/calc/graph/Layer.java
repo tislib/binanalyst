@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import net.tislib.binanalyst.lib.BinValueHelper;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 
@@ -152,5 +151,9 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
 
     public void clean() {
         this.bits.clear();
+    }
+
+    public void setSingleBit(T truth) {
+        addBits(truth);
     }
 }

@@ -3,8 +3,10 @@ package net.tislib.binanalyst.test.experiments.analyse;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionNFTReverserLogic;
 import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogic;
 import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogicMulti;
+import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogicMulti2;
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
@@ -51,7 +53,7 @@ public class MultiplyGraphExpression3 {
         calculator.show();
         System.out.println("___________");
 
-        GraphExpressionReverserLogicMulti graphExpressionReverserLogic = new GraphExpressionReverserLogicMulti(calculator);
+        GraphExpressionNFTReverserLogic graphExpressionReverserLogic = new GraphExpressionNFTReverserLogic(calculator);
         graphExpressionReverserLogic.analyse();
 
         graphExpressionReverserLogic.getInnerCalculator().show();
