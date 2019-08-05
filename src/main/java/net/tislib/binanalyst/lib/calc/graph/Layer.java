@@ -149,11 +149,8 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
         }
     }
 
-    public void clean() {
-        this.bits.clear();
-    }
-
     public void setSingleBit(T truth) {
+        this.bits.clear();
         addBits(truth);
     }
 }

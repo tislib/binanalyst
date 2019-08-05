@@ -39,6 +39,7 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
         if (operation != Operation.XOR) {
             bits = distinct(bits);
         }
+
         if (isReversedBits(bits)) {
             if (operation == Operation.AND) {
                 return ZERO;
@@ -104,7 +105,25 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
     }
 
     private boolean isReversedBits(Bit[] bits) {
-        return bits.length == 2 && (bits[0] == not(bits[1]) || bits[1] == not(bits[0]));
+        if (bits.length != 2) {
+            return false;
+        }
+
+        if (bits[0] instanceof OperationalBit) {
+            OperationalBit operationalBit = (OperationalBit) bits[0];
+            if (operationalBit.getOperation() == Operation.NOT && operationalBit.getBits()[0] == bits[1]) {
+                return true;
+            }
+        }
+
+        if (bits[1] instanceof OperationalBit) {
+            OperationalBit operationalBit = (OperationalBit) bits[1];
+            if (operationalBit.getOperation() == Operation.NOT && operationalBit.getBits()[0] == bits[0]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private Bit[] distinct(Bit[] bits) {

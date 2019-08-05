@@ -230,6 +230,11 @@ public class GraphCalculatorTools {
         return operationalBit;
     }
 
+    public static void showStates(BitOpsGraphCalculator calculator) {
+        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
+        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
+    }
+
     public static class GraphCalculatorReferenceFinder {
 
         private final BitOpsGraphCalculator calculator;

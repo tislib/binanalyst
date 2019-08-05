@@ -8,6 +8,9 @@ import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.UsageFinder;
+import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
 /**
@@ -18,17 +21,17 @@ public class MultiplyGraphExpression2 {
 
     public static void main(String... args) {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
-//        calculator = new TwoOpsOptimizationDecorator(calculator);
-//        calculator = new SimpleOptimizationDecorator(calculator);
-//        calculator = new AndOrCalculatorDecorator(calculator, true);
+        calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new AndOrCalculatorDecorator(calculator, true);
+        calculator = new BinderOptimizationDecorator(calculator);
 
         long a = 7;
         long b = 5;
 
         //32532325, 23403244
 
-        VarBit[] aBits = VarBit.list("a", 8, UNSET);
-        VarBit[] bBits = VarBit.list("b", 8, UNSET);
+        VarBit[] aBits = VarBit.list("a", 4, UNSET);
+        VarBit[] bBits = VarBit.list("b", 4, UNSET);
 
 //        setVal(aBits, a);
 //        setVal(bBits, b);
@@ -55,7 +58,7 @@ public class MultiplyGraphExpression2 {
         GraphExpressionNFTReverserLogic graphExpressionReverserLogic = new GraphExpressionNFTReverserLogic(calculator);
         graphExpressionReverserLogic.analyse();
 
-        graphExpressionReverserLogic.getInnerCalculator().show();
+//        graphExpressionReverserLogic.getInnerCalculator().show();
         System.out.println("___________");
 
         graphExpressionReverserLogic.showState();

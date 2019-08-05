@@ -147,9 +147,6 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
         input.show(showValues);
         middle.show(showValues);
         output.show(showValues);
-
-//        System.out.println("MIDDLE SIZE: " + this.getMiddle().getBits().size());
-//        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(this));
     }
 
     public void showResult() {

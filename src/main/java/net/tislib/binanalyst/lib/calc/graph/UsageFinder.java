@@ -22,14 +22,18 @@ public class UsageFinder {
     }
 
     public void cleanUnusedMiddleBits() {
+        int cleanCount = 0;
         for (NamedBit bit : this.output) {
             this.markBit(bit);
         }
+        cleanCount +=  this.middle.getBits().stream().filter(item -> !markedBit.contains(item.getName())).count();
         List<OperationalBit> newMiddleBits = this.middle.getBits().stream().filter(item -> markedBit.contains(item.getName())).collect(Collectors.toList());
         this.middle.setBits(newMiddleBits);
 
+        cleanCount +=  this.input.getBits().stream().filter(item -> !markedBit.contains(item.getName())).count();
         List<VarBit> newInputBits = this.input.getBits().stream().filter(item -> markedBit.contains(item.getName())).collect(Collectors.toList());
         this.input.setBits(newInputBits);
+        System.out.println(cleanCount + " bits cleaned");
     }
 
     private void markBit(NamedBit bit) {
