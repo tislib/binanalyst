@@ -4,6 +4,7 @@ import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
+@Deprecated
 public class NfOptimizer implements Optimizer { // Normal Form Optimizer
 
     private final Optimizer logicalOptimizer = new LogicalOptimizer();

@@ -1,12 +1,8 @@
 package net.tislib.binanalyst.lib.analyse.lk;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+
 import net.tislib.binanalyst.lib.analyse.AnalyserUtil;
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
@@ -14,64 +10,65 @@ import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 public class BruteForceLogicKeeper implements LogicKeeper {
 
-    private final Map<String, List<List<String>>> formulaCache = new HashMap<>();
+    private final Map<String, Set<Set<String>>> formulaCache = new HashMap<>();
 
     @Override
     public void keep(NamedBit namedBit) {
         if (namedBit instanceof OperationalBit) {
             OperationalBit operationalBit = (OperationalBit) namedBit;
-            List<List<List<String>>> formulas = Arrays.stream(operationalBit.getBits())
+            Set<Set<Set<String>>> formulas = Arrays.stream(operationalBit.getBits())
                     .map(this::locateFormula)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
 
             if (operationalBit.getOperation() == Operation.AND) {
-                List<List<String>> formula = intersectFormulas(formulas);
+                Set<Set<String>> formula = intersectFormulas(formulas);
                 formulaCache.put(operationalBit.getName(), formula);
             } else if (operationalBit.getOperation() == Operation.OR) {
-                List<List<String>> formula = variateFormulas(formulas);
+                Set<Set<String>> formula = variateFormulas(formulas);
                 formulaCache.put(operationalBit.getName(), formula);
             } else if (operationalBit.getOperation() == Operation.NOT) {
-                formulaCache.put(operationalBit.getName(), Collections.singletonList(Collections.singletonList(operationalBit.showFull(false))));
+                formulaCache.put(operationalBit.getName(), Collections.singleton(Collections.singleton(operationalBit.showFull(false))));
             } else {
                 throw new RuntimeException("Unsupported operation: " + operationalBit.getOperation());
             }
         } else {
-            formulaCache.put(namedBit.getName(), Collections.singletonList(Collections.singletonList(namedBit.getName())));
+            formulaCache.put(namedBit.getName(), Collections.singleton(Collections.singleton(namedBit.getName())));
         }
     }
 
-    private List<List<String>> variateFormulas(List<List<List<String>>> formulas) {
-        List<List<String>> result = new ArrayList<>();
-        for (List<List<String>> formula : formulas) {
-            for (List<String> variant : formula) {
+    private Set<Set<String>> variateFormulas(Set<Set<Set<String>>> formulas) {
+        Set<Set<String>> result = new HashSet<>();
+        for (Set<Set<String>> formula : formulas) {
+            for (Set<String> variant : formula) {
                 addVariation(result, variant);
             }
         }
         return result;
     }
 
-    private void addVariation(List<List<String>> result, List<String> variant) {
-        for (List<String> existingVariation : result) {
-            if(AnalyserUtil.variationEquals(existingVariation, variant)) {
-                return;
-            }
+    private void addVariation(Set<Set<String>> result, Set<String> variant) {
+        if (result.contains(variant)) {
+            return;
         }
         result.add(variant);
     }
 
-    private List<List<String>> intersectFormulas(List<List<List<String>>> formulas) {
-        List<List<String>> checkingFormula = formulas.get(0);
+    private Set<Set<String>> intersectFormulas(Set<Set<Set<String>>> formulas) {
+        Set<Set<String>> checkingFormula = formulas.iterator().next();
         if (formulas.size() == 1) {
             return checkingFormula;
         }
 
-        List<List<String>> result = new ArrayList<>();
+        HashSet<Set<Set<String>>> rightFormulas = new HashSet<>(formulas);
+        rightFormulas.remove(checkingFormula);
+        Set<Set<String>> rightIntersection = intersectFormulas(rightFormulas);
 
-        for (List<String> variant : checkingFormula) {
-            List<List<String>> rightIntersection = intersectFormulas(formulas.subList(1, formulas.size()));
-            for (List<String> rightVariant : rightIntersection) {
+        Set<Set<String>> result = new HashSet<>();
+
+        for (Set<String> variant : checkingFormula) {
+            for (Set<String> rightVariant : rightIntersection) {
                 if (!AnalyserUtil.hasConflicts(variant, rightVariant)) {
-                    List<String> fullVariant = combineTwoFormula(variant, rightVariant);
+                    Set<String> fullVariant = combineTwoFormula(variant, rightVariant);
                     addVariation(result, fullVariant);
                 } else {
                     result.size();
@@ -82,17 +79,13 @@ public class BruteForceLogicKeeper implements LogicKeeper {
         return result;
     }
 
-    private List<String> combineTwoFormula(List<String> variant, List<String> rightVariant) {
-        List<String> fullVariant = new ArrayList<>(variant);
-        for (String elem : rightVariant) {
-            if (!fullVariant.contains(elem)) {
-                fullVariant.add(elem);
-            }
-        }
+    private Set<String> combineTwoFormula(Set<String> variant, Set<String> rightVariant) {
+        Set<String> fullVariant = new TreeSet<>(variant);
+        fullVariant.addAll(rightVariant);
         return fullVariant;
     }
 
-    private List<List<String>> locateFormula(NamedBit namedBit) {
+    private Set<Set<String>> locateFormula(NamedBit namedBit) {
         if (formulaCache.containsKey(namedBit.getName())) {
             return formulaCache.get(namedBit.getName());
         }
@@ -101,7 +94,18 @@ public class BruteForceLogicKeeper implements LogicKeeper {
 
     @Override
     public void showFormula(NamedBit namedBit) {
-        List<List<String>> res = locateFormula(namedBit);
-        System.out.println(res);
+        Set<Set<String>> res = locateFormula(namedBit);
+        res.forEach(System.out::println);
+    }
+
+    public void showAllFormulas() {
+        Set<Set<String>> result = formulaCache.values().stream().reduce(new HashSet<>(), (a, b) -> {
+            Set<Set<String>> res = new HashSet<>();
+            res.addAll(a);
+            res.addAll(b);
+            return res;
+        });
+
+        result.forEach(System.out::println);
     }
 }

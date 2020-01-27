@@ -82,6 +82,11 @@ public class VarBit extends CompositeBit implements NamedBit, Comparable<VarBit>
         return super.getValue();
     }
 
+    @Override
+    public String getType() {
+        return "var";
+    }
+
     public void setValue(BinaryValue value) {
         if (value != BinaryValue.UNSET) {
             valueSetted = true;

@@ -57,7 +57,7 @@ public class MultiplyGraphExpression {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String data = objectMapper.writeValueAsString(GraphCalculatorTools.serializeCalculator(calculator));
+        String data = objectMapper.writeValueAsString(GraphCalculatorTools.serializeCalculator(calculator, false));
 
         System.out.println(data);
 

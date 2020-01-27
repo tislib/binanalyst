@@ -16,12 +16,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import net.tislib.binanalyst.lib.BinValueHelper;
-import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.ConstantBit;
-import net.tislib.binanalyst.lib.bit.NamedBit;
-import net.tislib.binanalyst.lib.bit.OperationalBit;
-import net.tislib.binanalyst.lib.bit.VarBit;
+import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
@@ -89,24 +86,25 @@ public class GraphCalculatorTools {
         }
     }
 
-    public static GraphCalculatorSerializedData serializeCalculator(BitOpsGraphCalculator calculator) {
+    public static GraphCalculatorSerializedData serializeCalculator(BitOpsGraphCalculator calculator, boolean withValues) {
         GraphCalculatorSerializedData data = new GraphCalculatorSerializedData();
 
-        data.input = calculator.getInput().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
-        data.middle = calculator.getMiddle().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
-        data.output = calculator.getOutput().getBits().stream().map(GraphCalculatorTools::serializeBit).collect(Collectors.toList());
+        data.input = calculator.getInput().getBits().stream().map(item -> serializeBit(item, withValues)).collect(Collectors.toList());
+        data.middle = calculator.getMiddle().getBits().stream().map(item -> serializeBit(item, withValues)).collect(Collectors.toList());
+        data.output = calculator.getOutput().getBits().stream().map(item -> serializeBit(item, withValues)).collect(Collectors.toList());
 
         return data;
     }
 
     @SuppressWarnings("unchecked")
     public static <T extends NamedBit> T deserializeBit(GraphBitOpsCalculator calculator, BitData bitData) {
-        if (VarBit.class.getTypeName().equals(bitData.type)) {
-            return (T) new VarBit(bitData.name);
-        } else if (OperationalBit.class.getTypeName().equals(bitData.type)) {
-            Operation operation = bitData.operation;
-            NamedBit[] bits = (bitData.bits).stream().map(item -> locateBit(calculator, item)).toArray(NamedBit[]::new);
-            return (T) calculator.operation(operation, bits);
+        switch (bitData.type) {
+            case "var":
+                return (T) new VarBit(bitData.name);
+            case "operational":
+                Operation operation = bitData.operation;
+                NamedBit[] bits = (bitData.bits).stream().map(item -> locateBit(calculator, item)).toArray(NamedBit[]::new);
+                return (T) calculator.operation(operation, bits);
         }
         return null;
     }
@@ -126,10 +124,13 @@ public class GraphCalculatorTools {
         return (T) inputBit;
     }
 
-    private static BitData serializeBit(NamedBit item) {
+    private static BitData serializeBit(NamedBit item, boolean withValues) {
         BitData bitData = new BitData();
-        bitData.type = item.getClass().getTypeName();
+        bitData.type = item.getType();
         bitData.name = item.getName();
+        if (withValues) {
+            bitData.value = item.getValue();
+        }
         if (item instanceof OperationalBit) {
             bitData.bits = Arrays.stream(((OperationalBit) item).getBits()).map(NamedBit::getName).collect(Collectors.toList());
             bitData.operation = ((OperationalBit) item).getOperation();
@@ -235,6 +236,48 @@ public class GraphCalculatorTools {
         System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
     }
 
+    public static Set<Set<String>> toNormalForm(BitOpsGraphCalculator calculator) {
+        return toNormalForm(calculator.getOutput());
+    }
+
+    public static Set<Set<String>> toNormalForm(Iterable<NamedBit> it) {
+        Set<Set<String>> res = new HashSet<>();
+        for (NamedBit namedBit : it) {
+            res.addAll(toNormalForm(namedBit));
+        }
+        return res;
+    }
+
+    public static Set<Set<String>> toNormalForm(NamedBit namedBit) {
+        Set<Set<String>> res = new HashSet<>();
+        if (namedBit instanceof OperationalBit) {
+            OperationalBit operationalBit = (OperationalBit) namedBit;
+            if (operationalBit.getOperation() == Operation.NOT) {
+                res.add(new HashSet<>(Collections.singletonList(((OperationalBit) namedBit).showFull(false))));
+            } else if (operationalBit.getOperation() == Operation.AND) {
+                List<Set<Set<String>>> andInner = Arrays.stream(operationalBit.getBits())
+                        .map(GraphCalculatorTools::toNormalForm)
+                        .collect(Collectors.toList());
+                Set<String> res3 = new HashSet<>();
+//                for (Set<Set<String>> andVars : andInner) {
+//                    for (Set<String> orVars : andVars) {
+//                        res3.addAll(set1);
+//                    }
+//                }
+                throw new RuntimeException();
+//                res.add(res3);
+            } else if (operationalBit.getOperation() == Operation.OR) {
+                Set<Set<String>> res2 = toNormalForm(Arrays.asList(operationalBit.getBits()));
+                res.addAll(res2);
+            } else {
+                throw new UnsupportedOperationException(operationalBit.getOperation() + " not supported");
+            }
+        } else if (namedBit instanceof VarBit) {
+            res.add(new HashSet<>(Collections.singletonList(namedBit.getName())));
+        }
+        return res;
+    }
+
     public static class GraphCalculatorReferenceFinder {
 
         private final BitOpsGraphCalculator calculator;
@@ -312,6 +355,7 @@ public class GraphCalculatorTools {
     public static class BitData {
         public String type;
         public String name;
+        public BinaryValue value;
         public Operation operation;
         public List<String> bits;
     }

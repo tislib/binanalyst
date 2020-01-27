@@ -26,6 +26,11 @@ public final class ConstantBit implements Bit, NamedBit {
     }
 
     @Override
+    public String getType() {
+        return "const";
+    }
+
+    @Override
     public String toString() {
         return this == ZERO ? "0" : "1";
     }

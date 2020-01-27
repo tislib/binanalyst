@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 
@@ -47,11 +48,8 @@ public class AnalyserUtil {
         return set.contains(bitReverse);
     }
 
-    public static boolean variationEquals(List<String> existingVariation, List<String> variant) {
-        return existingVariation.stream().sorted().collect(Collectors.joining(","))
-                .equals(
-                        variant.stream().sorted().collect(Collectors.joining(","))
-                );
+    public static boolean variationEquals(Set<String> existingVariation, Set<String> variant) {
+        return existingVariation.equals(variant);
     }
 
     public static Set<String> findConflicts(Set<NamedBit> bits) {

@@ -2,42 +2,39 @@ package net.tislib.binanalyst.lib.calc.graph.decorator;
 
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+import static net.tislib.binanalyst.lib.calc.graph.decorator.AbstractBitOpsGraphCalculatorDecorator.*;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.tislib.binanalyst.lib.bit.Bit;
+import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
 
-public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDecorator {
+public class SimpleOptimizationDecorator extends OptimizerGraphCalculatorDecorator {
     public SimpleOptimizationDecorator(BitOpsGraphCalculator calculator) {
-        super(calculator);
+        super(chain(calculator));
     }
 
-    @Override
-    public Bit xor(Bit... bits) {
-        return optimize(Operation.XOR, bits);
-    }
-
-    @Override
-    public Bit and(Bit... bits) {
-        return optimize(Operation.AND, bits);
-    }
-
-    @Override
-    public Bit or(Bit... bits) {
-        return optimize(Operation.OR, bits);
-    }
-
-    @Override
-    public Bit not(Bit bit) {
-        return optimize(Operation.NOT, bit);
-    }
-
-    Bit optimize(Operation operation, Bit... bits) {
+    public Bit optimize(Operation operation, Bit... bits) {
         if (operation != Operation.XOR) {
             bits = distinct(bits);
+        }
+
+        Set<Bit> bitSet = new HashSet<>(Arrays.asList(bits));
+
+        if (bits.length != bitSet.size()) {
+            int modCount = bits.length - bitSet.size();
+            Bit[] newBits = bitSet.toArray(new Bit[0]);
+            if (operation != Operation.XOR || modCount % 2 == 0) {
+                return optimize(operation, newBits);
+            } else {
+                return not(optimize(operation, newBits));
+            }
         }
 
         if (isReversedBits(bits)) {
@@ -70,6 +67,8 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
                 bits = Optimizer.remove(bits, ONE);
                 if (bits.length == 0) {
                     return oneCount % 2 == 0 ? ZERO : ONE;
+                } else if (bits.length == 1) {
+                    return bits[0];
                 } else {
                     return oneCount % 2 == 0 ? super.xor(bits) : not(super.xor(bits));
                 }
@@ -85,6 +84,10 @@ public class SimpleOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
             return ZERO;
         }
         if (operation != Operation.NOT && bits.length == 1) {
+            if (bits[0] instanceof OperationalBit) {
+                OperationalBit operationalBit = (OperationalBit) bits[0];
+                return operation(operationalBit.getOperation(), operationalBit.getBits());
+            }
             return bits[0];
         }
 

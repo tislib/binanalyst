@@ -17,6 +17,11 @@ public class ReverseBit extends VarBit {
     }
 
     @Override
+    public String getType() {
+        return "reverse";
+    }
+
+    @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(" " + operation.getSign() + " ");
         for (NamedBit bit : bits) {

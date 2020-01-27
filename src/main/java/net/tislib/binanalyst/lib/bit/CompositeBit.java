@@ -19,6 +19,11 @@ public class CompositeBit implements Bit {
         return value;
     }
 
+    @Override
+    public String getType() {
+        return "composite";
+    }
+
     public void setValue(BinaryValue value) {
         this.value = value;
     }

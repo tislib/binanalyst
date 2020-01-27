@@ -23,6 +23,11 @@ public class OperationalBit extends VarBit implements Bit {
         this.bits = bits;
     }
 
+    @Override
+    public String getType() {
+        return "operational";
+    }
+
     public static String showFull(NamedBit bit) {
         if (bit instanceof OperationalBit) {
             if (((OperationalBit) bit).getOperation() != Operation.NOT) {

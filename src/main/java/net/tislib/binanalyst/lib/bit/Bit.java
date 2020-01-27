@@ -11,4 +11,6 @@ public interface Bit {
     default int intVal() {
         return getValue().isTrue() ? 1 : 0;
     }
+
+    String getType();
 }

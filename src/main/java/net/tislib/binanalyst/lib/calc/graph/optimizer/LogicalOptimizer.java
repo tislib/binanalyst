@@ -9,6 +9,7 @@ import net.tislib.binanalyst.lib.calc.graph.Operation;
  * Created by Taleh Ibrahimli on 2/9/18.
  * Email: me@talehibrahimli.com
  */
+@Deprecated
 public class LogicalOptimizer implements Optimizer {
 
     @Override

@@ -8,6 +8,7 @@ import net.tislib.binanalyst.lib.calc.graph.Layer;
  * Created by Taleh Ibrahimli on 2/9/18.
  * Email: me@talehibrahimli.com
  */
+@Deprecated
 public interface Transformer {
     void transform(Layer<? extends NamedBit> layer, GraphBitOpsCalculator.LayerType layerType);
 }

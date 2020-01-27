@@ -91,6 +91,15 @@ public class BinMulRec {
         return BinAdd.add(calculator, BinOps.shl(add2(calculator, ah, bh), l), add2(calculator, al, bl));
     }
 
+    public static Bit[] multiplyTree2Rec(BitOpsCalculator bitOpsCalculator, Bit[] bits, Bit[] bits1) {
+        return multiplyTree2Rec(bitOpsCalculator, bits, bits1, false);
+    }
+
+
+    public static Bit[] multiplyTree2RecAddTree(BitOpsCalculator bitOpsCalculator, Bit[] bits, Bit[] bits1) {
+        return multiplyTree2Rec(bitOpsCalculator, bits, bits1, true);
+    }
+
     private static class DivideBinArray2 {
         private Bit[] aBits;
         private Bit[] bBits;

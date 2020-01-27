@@ -7,6 +7,7 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
  * Created by Taleh Ibrahimli on 2/11/18.
  * Email: me@talehibrahimli.com
  */
+@Deprecated
 public class ConstantCleaner {
     public static void clean(GraphBitOpsCalculator calculator, OperationalBit bit) {
         throw new UnsupportedOperationException();

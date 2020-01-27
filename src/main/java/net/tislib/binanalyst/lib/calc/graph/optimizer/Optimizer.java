@@ -11,6 +11,7 @@ import net.tislib.binanalyst.lib.calc.graph.Operation;
  * Created by Taleh Ibrahimli on 2/9/18.
  * Email: me@talehibrahimli.com
  */
+@Deprecated
 public interface Optimizer {
     static Bit[] remove(Bit[] bits, Bit bit) {
         List<Bit> namedBits = new ArrayList<>();

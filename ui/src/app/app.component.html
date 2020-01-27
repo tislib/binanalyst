@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <ngb-tabset>
+    <ngb-tab>
+      <ng-template ngbTabTitle><b>Visual</b> calculator</ng-template>
+      <ng-template ngbTabContent>
+        <select class="form-control" [(ngModel)]="selectedCalculator">
+          <option selected></option>
+          <option *ngFor="let name of names">{{name}}</option>
+        </select>
+        <br>
+        <app-visual-graph-calculator *ngIf="data" [data]="data"></app-visual-graph-calculator>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="test1">
+      des
+    </ngb-tab>
+  </ngb-tabset>
+</div>

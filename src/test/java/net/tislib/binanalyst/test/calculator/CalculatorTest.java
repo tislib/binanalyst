@@ -160,15 +160,12 @@ public class CalculatorTest {
 
         calculator.setInputBits(aBits, bBits);
 
-        System.out.println("a: " + a);
-        System.out.println("b: " + b);
-
         Bit[] r = BinMul.multiply(calculator, aBits, bBits);
 
         calculator.setOutputBits(r);
 
 
-        GraphCalculatorSerializedData data = GraphCalculatorTools.serializeCalculator(calculator);
+        GraphCalculatorSerializedData data = GraphCalculatorTools.serializeCalculator(calculator, false);
 
         BitOpsGraphCalculator calculator2 = GraphCalculatorTools.deSerializeCalculator(data);
 
@@ -179,7 +176,6 @@ public class CalculatorTest {
         setVal(bBits2, b.longValue());
 
         calculator2.calculate();
-
 
         assertEquals(a.multiply(b), toLong(calculator2.getOutput().getBits().toArray(new Bit[0])));
     }
@@ -204,7 +200,7 @@ public class CalculatorTest {
         calculator.setOutputBits(r);
 
 
-        GraphCalculatorSerializedData data = GraphCalculatorTools.serializeCalculator(calculator);
+        GraphCalculatorSerializedData data = GraphCalculatorTools.serializeCalculator(calculator, false);
 
         ObjectMapper objectMapper = new ObjectMapper();
 

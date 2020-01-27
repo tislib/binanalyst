@@ -8,6 +8,8 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
+import java.util.function.Function;
+
 public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalculator {
 
     private final BitOpsGraphCalculator calculator;
@@ -124,5 +126,13 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
     @Override
     public Bit wrap(Number num) {
         return calculator.wrap(num);
+    }
+
+    public static BitOpsGraphCalculator chain(BitOpsGraphCalculator calculator, Function<BitOpsGraphCalculator, AbstractBitOpsGraphCalculatorDecorator>... decorators) {
+        BitOpsGraphCalculator result = calculator;
+        for (Function<BitOpsGraphCalculator, AbstractBitOpsGraphCalculatorDecorator> decorator : decorators) {
+            result = decorator.apply(result);
+        }
+        return result;
     }
 }
