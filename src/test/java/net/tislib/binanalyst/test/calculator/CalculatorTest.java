@@ -14,8 +14,9 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.Logical2OptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
@@ -126,6 +127,18 @@ public class CalculatorTest {
 
         calculator = new BinderOptimizationDecorator(calculator);
         calculator = new XorOrCalculatorDecorator(calculator, true);
+        calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new UnusedBitOptimizerDecorator(calculator);
+
+        check(calculator);
+    }
+
+    @Test
+    public void Logical2OptimizationDecorator() {
+
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+
+        calculator = new Logical2OptimizationDecorator(calculator);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
 

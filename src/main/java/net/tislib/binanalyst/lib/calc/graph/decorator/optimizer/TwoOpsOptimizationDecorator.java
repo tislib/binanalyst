@@ -1,8 +1,9 @@
-package net.tislib.binanalyst.lib.calc.graph.decorator;
+package net.tislib.binanalyst.lib.calc.graph.decorator.optimizer;
 
 
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.AbstractBitOpsGraphCalculatorDecorator;
 
 public class TwoOpsOptimizationDecorator extends AbstractBitOpsGraphCalculatorDecorator {
     private boolean ignoreHalfMiddle = true;

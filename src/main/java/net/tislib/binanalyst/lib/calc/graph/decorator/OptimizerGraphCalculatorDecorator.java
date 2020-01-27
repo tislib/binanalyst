@@ -5,8 +5,12 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 public abstract class OptimizerGraphCalculatorDecorator extends AbstractBitOpsGraphCalculatorDecorator {
-    public OptimizerGraphCalculatorDecorator(BitOpsGraphCalculator calculator) {
+
+    protected final BitOpsGraphCalculator original;
+
+    public OptimizerGraphCalculatorDecorator(final BitOpsGraphCalculator calculator) {
         super(calculator);
+        original = calculator;
     }
 
     @Override
@@ -30,5 +34,20 @@ public abstract class OptimizerGraphCalculatorDecorator extends AbstractBitOpsGr
     }
 
 
-    protected abstract Bit optimize(Operation xor, Bit... bits);
+    protected abstract Bit optimize(Operation operation, Bit... bits);
+
+    protected Bit delegate(Operation operation, Bit[] bits) {
+        switch (operation) {
+            case NOT:
+                return original.not(bits[0]);
+            case OR:
+                return original.or(bits);
+            case AND:
+                return original.and(bits);
+            case XOR:
+                return original.xor(bits);
+            default:
+                throw new RuntimeException("unsupported operation type");
+        }
+    }
 }

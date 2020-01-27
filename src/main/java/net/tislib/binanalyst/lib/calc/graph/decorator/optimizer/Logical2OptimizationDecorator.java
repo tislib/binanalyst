@@ -1,4 +1,4 @@
-package net.tislib.binanalyst.lib.calc.graph.decorator;
+package net.tislib.binanalyst.lib.calc.graph.decorator.optimizer;
 
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
@@ -11,6 +11,7 @@ import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
+import net.tislib.binanalyst.lib.calc.graph.decorator.AbstractBitOpsGraphCalculatorDecorator;
 
 @SuppressWarnings("ALL")
 public class Logical2OptimizationDecorator extends AbstractBitOpsGraphCalculatorDecorator {

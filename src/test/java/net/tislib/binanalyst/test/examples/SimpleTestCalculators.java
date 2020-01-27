@@ -6,6 +6,10 @@ import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.*;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.Logical2OptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.TwoOpsOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.operator.BinAdd;
 import net.tislib.binanalyst.lib.operator.BinMul;
 
@@ -50,6 +54,9 @@ public class SimpleTestCalculators {
             case "TWO_BIT":
                 calculator = new TwoOpsOptimizationDecorator(calculator);
                 break;
+            default:
+                calculator = new Logical2OptimizationDecorator(calculator);
+                calculator = new AndOrCalculatorDecorator(calculator, true);
         }
         switch (transformer) {
             case "ANDOR":

@@ -2,7 +2,6 @@ package net.tislib.binanalyst.lib.analyse;
 
 import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static net.tislib.binanalyst.lib.calc.graph.tools.NormalFormulaGenerator.toNormalFormul;
 
 import java.util.ArrayList;
@@ -22,8 +21,8 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.expression.BooleanExpression;
 import net.tislib.binanalyst.lib.calc.reverse.SingleBitReverser;
 

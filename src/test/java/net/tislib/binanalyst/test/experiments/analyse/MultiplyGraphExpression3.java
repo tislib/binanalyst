@@ -4,19 +4,15 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.tislib.binanalyst.lib.analyse.GraphExpressionNFTReverserLogic;
-import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogic;
-import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogicMulti;
-import net.tislib.binanalyst.lib.analyse.GraphExpressionReverserLogicMulti2;
 import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.Expression;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.UsageFinder;
-import net.tislib.binanalyst.lib.calc.graph.decorator.SimpleOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.TwoOpsOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.TwoOpsOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.test.reverser.TestData;
 
 /**

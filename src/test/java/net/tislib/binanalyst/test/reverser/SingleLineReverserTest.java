@@ -15,7 +15,7 @@
 //import net.tislib.binanalyst.lib.calc.Expression;
 //import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 //import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-//import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
+//import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 //import net.tislib.binanalyst.lib.calc.graph.expression.BooleanExpression;
 //import net.tislib.binanalyst.lib.calc.reverse.SingleBitReverser;
 //import org.junit.Assert;

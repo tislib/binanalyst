@@ -13,7 +13,7 @@
 //import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 //import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 //import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
-//import net.tislib.binanalyst.lib.calc.graph.decorator.UnusedBitOptimizerDecorator;
+//import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 //import net.tislib.binanalyst.lib.calc.graph.expression.GraphExpression;
 //import net.tislib.binanalyst.lib.calc.graph.optimizer.LogicalOptimizer;
 //import net.tislib.binanalyst.lib.calc.graph.optimizer.NfOptimizer;

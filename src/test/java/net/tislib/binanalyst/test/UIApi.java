@@ -26,15 +26,12 @@ public class UIApi {
     private static Map<String, BitOpsGraphCalculator> generateCalculators() {
         Map<String, BitOpsGraphCalculator> calculatorMap = new HashMap<>();
 //        calculatorMap.putAll(SimpleTestCalculators.simpleCalculators());
-        int bitCount = 3;
+        int bitCount = 2;
         BitOpsGraphCalculator twoBitMul = SimpleTestCalculators.nBitFunction(bitCount, BinMul::multiply, "NONE", "NONE");
         calculatorMap.put("multiplication", twoBitMul);
         BitOpsGraphCalculator twoBitMulMut;
         twoBitMulMut = new MutationOperation(twoBitMul.getInput().locate("a0")).transform(twoBitMul);
         twoBitMulMut = new MutationOperation(twoBitMul.getInput().locate("a1")).transform(twoBitMulMut);
-        twoBitMulMut = new MutationOperation(twoBitMul.getInput().locate("a2")).transform(twoBitMulMut);
-        twoBitMulMut = new MutationOperation(twoBitMul.getInput().locate("b0")).transform(twoBitMulMut);
-        twoBitMulMut = new MutationOperation(twoBitMul.getInput().locate("b1")).transform(twoBitMulMut);
         twoBitMulMut.calculate();
 
         calculatorMap.put("mutation", twoBitMulMut);
