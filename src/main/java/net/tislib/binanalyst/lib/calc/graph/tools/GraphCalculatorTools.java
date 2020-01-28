@@ -16,8 +16,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.tislib.binanalyst.lib.BinValueHelper;
+import net.tislib.binanalyst.lib.analyse.lk.BruteForceLogicKeeper;
+import net.tislib.binanalyst.lib.analyse.lk.NormalFormStringGenerator;
 import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
@@ -249,33 +252,35 @@ public class GraphCalculatorTools {
     }
 
     public static Set<Set<String>> toNormalForm(NamedBit namedBit) {
-        Set<Set<String>> res = new HashSet<>();
-        if (namedBit instanceof OperationalBit) {
-            OperationalBit operationalBit = (OperationalBit) namedBit;
-            if (operationalBit.getOperation() == Operation.NOT) {
-                res.add(new HashSet<>(Collections.singletonList(((OperationalBit) namedBit).showFull(false))));
-            } else if (operationalBit.getOperation() == Operation.AND) {
-                List<Set<Set<String>>> andInner = Arrays.stream(operationalBit.getBits())
-                        .map(GraphCalculatorTools::toNormalForm)
-                        .collect(Collectors.toList());
-                Set<String> res3 = new HashSet<>();
-//                for (Set<Set<String>> andVars : andInner) {
-//                    for (Set<String> orVars : andVars) {
-//                        res3.addAll(set1);
-//                    }
-//                }
-                throw new RuntimeException();
-//                res.add(res3);
-            } else if (operationalBit.getOperation() == Operation.OR) {
-                Set<Set<String>> res2 = toNormalForm(Arrays.asList(operationalBit.getBits()));
-                res.addAll(res2);
-            } else {
-                throw new UnsupportedOperationException(operationalBit.getOperation() + " not supported");
-            }
-        } else if (namedBit instanceof VarBit) {
-            res.add(new HashSet<>(Collections.singletonList(namedBit.getName())));
+        NormalFormStringGenerator normalFormStringGenerator = new NormalFormStringGenerator();
+        return normalFormStringGenerator.resolve(namedBit);
+    }
+
+    public static long calculateComplexity(OperationalBit bit) {
+        return calculateComplexity(bit, new HashMap<>());
+    }
+
+    public static long calculateComplexity(OperationalBit bit, Map<String, Long> cache) {
+        if (cache.containsKey(bit.getName())) {
+            return cache.get(bit.getName());
         }
-        return res;
+        Stream<Long> complexityCalculator = Arrays.stream(bit.getBits()).filter(item -> item instanceof OperationalBit)
+                .map(item -> GraphCalculatorTools.calculateComplexity((OperationalBit) item, cache));
+
+        long complexity = 0L;
+        switch (bit.getOperation()) {
+            case OR:
+            case NOT:
+            case XOR:
+                complexity = complexityCalculator.reduce(1L, Long::sum);
+                break;
+            case AND:
+                complexity = complexityCalculator.reduce(1L, (a, b) -> a * b);
+        }
+
+        cache.put(bit.getName(), complexity);
+
+        return complexity;
     }
 
     public static class GraphCalculatorReferenceFinder {

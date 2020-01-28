@@ -19,8 +19,6 @@ public class SimpleOptimizationDecorator extends OptimizerGraphCalculatorDecorat
     }
 
     protected Bit optimize(Operation operation, Bit... bits) {
-
-
         return delegate(operation, bits);
     }
 }

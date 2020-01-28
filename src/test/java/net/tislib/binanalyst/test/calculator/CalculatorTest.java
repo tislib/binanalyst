@@ -5,8 +5,10 @@ import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 import static org.junit.Assert.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.math.BigInteger;
 import java.util.Collection;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
@@ -15,10 +17,12 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.AndOrCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.Logical2OptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.NewOptimizerOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorOrCalculatorDecorator;
+import net.tislib.binanalyst.lib.calc.graph.operations.MutationOperation;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools.GraphCalculatorSerializedData;
 import net.tislib.binanalyst.lib.operator.BinMul;
@@ -135,7 +139,6 @@ public class CalculatorTest {
 
     @Test
     public void Logical2OptimizationDecorator() {
-
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
         calculator = new Logical2OptimizationDecorator(calculator);
@@ -144,6 +147,17 @@ public class CalculatorTest {
 
         check(calculator);
     }
+
+//    @Test
+//    public void NewOptimizerOptimizationDecorator() {
+//        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+//
+//        calculator = new NewOptimizerOptimizationDecorator(calculator);
+//        calculator = new SimpleOptimizationDecorator(calculator);
+//        calculator = new UnusedBitOptimizerDecorator(calculator);
+//
+//        check(calculator);
+//    }
 
     @Test
     public void constantOperationRemoverOptimizationDecorator() {
@@ -154,6 +168,23 @@ public class CalculatorTest {
 
         calculator = new BinderOptimizationDecorator(calculator);
         calculator = new XorOrCalculatorDecorator(calculator, true);
+        calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
+        calculator = new UnusedBitOptimizerDecorator(calculator);
+
+        check(calculator);
+    }
+
+    @Test
+    public void MutationOperation() {
+        if (a.longValue() > 100 || b.longValue() > 100) {
+            return;
+        }
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+
+        calculator = new MutationOperation(calculator.getInput().locate("a0")).transform(calculator);
+        calculator = new MutationOperation(calculator.getInput().locate("a1")).transform(calculator);
+        calculator = new AndOrCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);
