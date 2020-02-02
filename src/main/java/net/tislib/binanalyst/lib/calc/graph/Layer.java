@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
+import net.tislib.binanalyst.lib.bit.OperationalBit;
 
 /**
  * Created by Taleh Ibrahimli on 2/8/18.
@@ -96,7 +98,11 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     public void show(boolean showValues) {
         System.out.println(name.toUpperCase() + ":");
         for (NamedBit bit : this) {
-            System.out.println(bit.toString() + (showValues ? " => " + bit.getValue() : ""));
+            if (bit instanceof OperationalBit) {
+                System.out.println(((OperationalBit) bit).showFull() + (showValues ? " => " + bit.getValue() : ""));
+            } else {
+                System.out.println(bit.toString() + (showValues ? " => " + bit.getValue() : ""));
+            }
         }
     }
 
@@ -152,5 +158,13 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     public void setSingleBit(T truth) {
         this.bits.clear();
         addBits(truth);
+    }
+
+    public void replace(T oBit, T varBit) {
+        while (bits.contains(oBit)) {
+            int i = bits.indexOf(oBit);
+            bits.remove(oBit);
+            bits.add(i, varBit);
+        }
     }
 }

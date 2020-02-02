@@ -8,6 +8,7 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.OptimizerGraphCalculatorDe
 
 import java.util.Arrays;
 
+@Deprecated
 public class DoubleNotRemovalOptimizationDecorator extends OptimizerGraphCalculatorDecorator {
     public DoubleNotRemovalOptimizationDecorator(BitOpsGraphCalculator calculator) {
         super(calculator);

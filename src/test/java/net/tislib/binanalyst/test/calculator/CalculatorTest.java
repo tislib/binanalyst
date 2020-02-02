@@ -22,6 +22,7 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizati
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorAndCalculatorDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.XorOrCalculatorDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.pattern.PatternOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.operations.MutationOperation;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools.GraphCalculatorSerializedData;
@@ -168,6 +169,19 @@ public class CalculatorTest {
 
         calculator = new BinderOptimizationDecorator(calculator);
         calculator = new XorOrCalculatorDecorator(calculator, true);
+        calculator = new SimpleOptimizationDecorator(calculator);
+        calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
+        calculator = new UnusedBitOptimizerDecorator(calculator);
+
+        check(calculator);
+    }
+
+    @Test
+    public void PatternOptimizationDecorator() {
+        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
+
+        calculator = new PatternOptimizationDecorator(calculator);
+        calculator = new AndOrCalculatorDecorator(calculator, true);
         calculator = new SimpleOptimizationDecorator(calculator);
         calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new UnusedBitOptimizerDecorator(calculator);

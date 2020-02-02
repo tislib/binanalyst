@@ -9,6 +9,7 @@ import net.tislib.binanalyst.lib.bit.NamedBit;
 import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 
+@Deprecated
 public class ConstantOperationRemoverOptimizationDecorator extends AbstractBitOpsGraphCalculatorDecorator {
     public ConstantOperationRemoverOptimizationDecorator(BitOpsGraphCalculator calculator) {
         super(calculator);

@@ -8,3 +8,4 @@
  */
 
 rootProject.name = "BinAnalyst"
+include("core")

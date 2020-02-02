@@ -10,7 +10,7 @@ import net.tislib.binanalyst.test.examples.SimpleTestCalculators;
 public class Test23 {
 
     public static void main(String... args) {
-        int bitCount = 3;
+        int bitCount = 5;
         BitOpsGraphCalculator calculator = SimpleTestCalculators.nBitFunction(bitCount, BinMul::multiply, "NONE", "NONE");
 
         BitOpsGraphCalculator oldCalculator = calculator;
@@ -22,7 +22,7 @@ public class Test23 {
 //        calculator = new MutationOperation(calculator.getInput().locate("a4")).transform(calculator);
 //        calculator = new MutationOperation(calculator.getInput().locate("a5")).transform(calculator);
 
-        calculator.show();
+//        calculator.show();
 
         print(oldCalculator);
         print(calculator);

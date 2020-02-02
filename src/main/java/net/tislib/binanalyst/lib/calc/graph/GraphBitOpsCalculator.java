@@ -239,12 +239,13 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     }
 
     @Override
-    public void replaceBit(NamedBit namedBit, NamedBit varBit) {
+    public void replaceBit(NamedBit from, NamedBit to) {
         for (OperationalBit operationalBit : getMiddle()) {
-            if (operationalBit.hasBit(namedBit)) {
-                operationalBit.replaceBit(namedBit, varBit);
+            if (operationalBit.hasBit(from)) {
+                operationalBit.replaceBit(from, to);
             }
         }
+        getOutput().replace(from, to);
     }
 
     public enum LayerType {

@@ -5,10 +5,12 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphCalculatorOperation;
 import net.tislib.binanalyst.lib.calc.graph.UsageFinder;
+import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.NewOptimizerOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.pattern.PatternOptimizationDecorator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,9 @@ public class MutationOperation implements GraphCalculatorOperation {
         newCalculator = new ConstantOperationRemoverOptimizationDecorator(newCalculator);
         newCalculator = new SimpleOptimizationDecorator(newCalculator);
         newCalculator = new UnusedBitOptimizerDecorator(newCalculator);
-        newCalculator = new NewOptimizerOptimizationDecorator(newCalculator);
+//        newCalculator = new NewOptimizerOptimizationDecorator(newCalculator);
+        newCalculator = new PatternOptimizationDecorator(newCalculator);
+        newCalculator = new BinderOptimizationDecorator(newCalculator);
 
         newCalculator.setInputBits(calculator.getInput().getBits().toArray(new VarBit[0]));
 

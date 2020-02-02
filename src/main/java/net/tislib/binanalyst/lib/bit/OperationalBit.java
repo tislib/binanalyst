@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 /**
@@ -61,7 +62,7 @@ public class OperationalBit extends VarBit implements Bit {
     @Override
     public String toString() {
         if (operation == Operation.NOT) {
-            return getName() + " : " + "!" + bits[0].getName();
+            return "!" + bits[0].getName();
         }
         StringJoiner joiner = new StringJoiner(" " + getOperation().getSign() + " ");
         List<String> bitNames = new ArrayList<>();
@@ -72,7 +73,7 @@ public class OperationalBit extends VarBit implements Bit {
         for (String bitName : bitNames) {
             joiner.add(bitName);
         }
-        return getName() + " : " + joiner;
+        return joiner.toString();
     }
 
     public void calculate() {

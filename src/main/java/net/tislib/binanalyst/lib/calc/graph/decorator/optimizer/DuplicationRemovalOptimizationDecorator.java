@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+@Deprecated
 public class DuplicationRemovalOptimizationDecorator extends OptimizerGraphCalculatorDecorator {
     public DuplicationRemovalOptimizationDecorator(BitOpsGraphCalculator calculator) {
         super(calculator);
