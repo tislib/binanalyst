@@ -84,10 +84,7 @@ public class Test32_UnkBit_BruteDegreeChecker {
 
         aBits[i] = VarBit.wrap("", BinaryValue.TRUE);
         bBits[i] = VarBit.wrap("", BinaryValue.TRUE);
-        if (isCorrect.apply(aBits, bBits) && doBruteCheck(aBits, bBits, i - 1, isCorrect)) {
-            return true;
-        }
-        return false;
+        return isCorrect.apply(aBits, bBits) && doBruteCheck(aBits, bBits, i - 1, isCorrect);
     }
 
     private static boolean check(Bit[] r, Bit[] expectedValues) {

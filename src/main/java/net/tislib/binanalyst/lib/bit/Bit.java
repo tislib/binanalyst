@@ -6,7 +6,7 @@ package net.tislib.binanalyst.lib.bit;
  */
 public interface Bit {
 
-    public BinaryValue getValue();
+    BinaryValue getValue();
 
     default int intVal() {
         return getValue().isTrue() ? 1 : 0;

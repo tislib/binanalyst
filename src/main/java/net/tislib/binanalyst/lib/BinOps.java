@@ -109,7 +109,7 @@ public class BinOps {
     }
 
     public static Bit[] wrap(BitOpsCalculator calculator, byte... nums) {
-        Bit bits[] = new Bit[nums.length];
+        Bit[] bits = new Bit[nums.length];
         for (int i = 0; i < nums.length; i++) {
             bits[i] = wrap(calculator, nums[i]);
         }
@@ -117,7 +117,7 @@ public class BinOps {
     }
 
     public static Bit[] wrap(BitOpsCalculator calculator, Number... nums) {
-        Bit bits[] = new Bit[nums.length];
+        Bit[] bits = new Bit[nums.length];
         for (int i = 0; i < nums.length; i++) {
             bits[i] = wrap(calculator, nums[i].byteValue());
         }
@@ -129,7 +129,7 @@ public class BinOps {
     }
 
     public static byte[] convert(Bit... bits) {
-        byte nums[] = new byte[bits.length];
+        byte[] nums = new byte[bits.length];
         for (int i = 0; i < bits.length; i++) {
             nums[i] = convert(bits[i]);
         }

@@ -49,14 +49,16 @@ public class Test7 {
 
     }
 
-    private static Bit checkRecursive(long num[], int i) {
+    private static Bit checkRecursive(long[] num, int i) {
         Holder holder = new Holder();
         holder.num = num;
         holder.i = i;
         if (cache.containsKey(holder)) return cache.get(holder);
 
         int N = num.length;
-        Bit r[], ri[], si[] = new Bit[N - 1];
+        Bit[] r;
+        Bit[] ri;
+        Bit[] si = new Bit[N - 1];
 
         ri = getConstBits(num, i);
 
@@ -79,7 +81,7 @@ public class Test7 {
     }
 
 
-    public static Bit[] getConstBits(long nums[], int index) {
+    public static Bit[] getConstBits(long[] nums, int index) {
         Bit[] bits = new Bit[nums.length];
         for (int i = 0; i < nums.length; i++) {
             bits[i] = BinValueHelper.getConstBit(nums[i], index);
@@ -88,7 +90,7 @@ public class Test7 {
     }
 
     static class Holder {
-        public long num[];
+        public long[] num;
         public int i;
 
         @Override

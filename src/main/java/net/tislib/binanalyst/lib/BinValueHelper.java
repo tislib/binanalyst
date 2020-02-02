@@ -269,7 +269,7 @@ public class BinValueHelper {
     }
 
     private static Bit rasterize(Bit bit) {
-        if (bit instanceof ConstantBit) return (ConstantBit) bit;
+        if (bit instanceof ConstantBit) return bit;
         return bit.getValue().isTrue() ? ONE : ZERO;
     }
 

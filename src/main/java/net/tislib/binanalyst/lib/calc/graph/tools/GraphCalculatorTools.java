@@ -146,7 +146,7 @@ public class GraphCalculatorTools {
         GraphBitOpsCalculator calculator = new GraphBitOpsCalculator();
         calculator.setInputBits(data.input.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(VarBit[]::new));
         calculator.getMiddle().addBits(data.middle.stream().map(bitData -> deserializeBit(calculator, bitData)).toArray(OperationalBit[]::new));
-        calculator.setOutputBits(data.output.stream().map(bitData -> locateBit(calculator, (String) bitData.name)).toArray(NamedBit[]::new));
+        calculator.setOutputBits(data.output.stream().map(bitData -> locateBit(calculator, bitData.name)).toArray(NamedBit[]::new));
         return calculator;
     }
 

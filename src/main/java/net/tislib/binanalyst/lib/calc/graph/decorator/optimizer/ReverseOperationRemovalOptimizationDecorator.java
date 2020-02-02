@@ -45,9 +45,7 @@ public class ReverseOperationRemovalOptimizationDecorator extends OptimizerGraph
 
         if (bits[1] instanceof OperationalBit) {
             OperationalBit operationalBit = (OperationalBit) bits[1];
-            if (operationalBit.getOperation() == Operation.NOT && operationalBit.getBits()[0] == bits[0]) {
-                return true;
-            }
+            return operationalBit.getOperation() == Operation.NOT && operationalBit.getBits()[0] == bits[0];
         }
 
         return false;

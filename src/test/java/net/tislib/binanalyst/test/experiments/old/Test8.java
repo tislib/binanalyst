@@ -26,7 +26,7 @@ public class Test8 {
         System.out.print("Pre:");
 
 
-        Bit M[][] = BinMul.getMultiplicationMatrix(BitOpsCalculator.getDefault(), trim(getBits(BitOpsCalculator.getDefault(), a)), trim(getBits(BitOpsCalculator.getDefault(), b)));
+        Bit[][] M = BinMul.getMultiplicationMatrix(BitOpsCalculator.getDefault(), trim(getBits(BitOpsCalculator.getDefault(), a)), trim(getBits(BitOpsCalculator.getDefault(), b)));
 
         Bit[] r = BinAdd.add(BitOpsCalculator.getDefault(), M);
 

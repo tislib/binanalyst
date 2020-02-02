@@ -493,9 +493,9 @@ public class AES {
                 // temp = SubWord(RotWord(temp)) ^ Rcon[i/Nk]
                 old0 = t0;            // save old 1st byte value for t3 calc
                 t0 = (byte) (S[t1 & 0xFF] ^ rcon[i / Nk]);    // nb. constant XOR 1st byte only
-                t1 = (byte) (S[t2 & 0xFF]);
-                t2 = (byte) (S[t3 & 0xFF]);    // nb. RotWord done by reordering bytes used
-                t3 = (byte) (S[old0 & 0xFF]);
+                t1 = S[t2 & 0xFF];
+                t2 = S[t3 & 0xFF];    // nb. RotWord done by reordering bytes used
+                t3 = S[old0 & 0xFF];
             } else if ((Nk > 6) && (i % Nk == 4)) {
                 // temp = SubWord(temp)
                 t0 = S[t0 & 0xFF];
@@ -577,7 +577,7 @@ public class AES {
         String res = "";
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < data.length; i++) {
-            int n = (int) data[i];
+            int n = data[i];
             if (n < 0) n += 256;
             sb.append((char) n);
         }
@@ -608,12 +608,12 @@ public class AES {
 
     public String _cryptAll(String data, int mode) {
         AES aes = this;
-        if (data.length() / 16 > ((int) data.length() / 16)) {
-            int rest = data.length() - ((int) data.length() / 16) * 16;
+        if (data.length() / 16 > (data.length() / 16)) {
+            int rest = data.length() - (data.length() / 16) * 16;
             for (int i = 0; i < rest; i++)
                 data += " ";
         }
-        int nParts = (int) data.length() / 16;
+        int nParts = data.length() / 16;
         byte[] res = new byte[data.length()];
         String partStr = "";
         byte[] partByte = new byte[16];

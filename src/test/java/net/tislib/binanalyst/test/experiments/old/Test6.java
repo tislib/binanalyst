@@ -44,7 +44,9 @@ public class Test6 {
     public static Bit check(long a, long b, long c, long d, int i) {
 
         int N = 4;
-        Bit r[] = new Bit[N], ri[] = new Bit[N], si[] = new Bit[N - 1];
+        Bit[] r = new Bit[N];
+        Bit[] ri = new Bit[N];
+        Bit[] si = new Bit[N - 1];
 
 
         r[0] = getConstBit(a, i);

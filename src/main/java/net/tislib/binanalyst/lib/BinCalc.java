@@ -20,7 +20,7 @@ public class BinCalc {
         return xor(calculator, ai1, bi1, and(calculator, or(calculator, ai, bi), or(calculator, and(calculator, ai, bi), not(calculator, si))));
     }
 
-    public static Bit[] getAddMultiPosBit(BitOpsCalculator calculator, Bit ri[], Bit[] si, Bit ri1[]) {
+    public static Bit[] getAddMultiPosBit(BitOpsCalculator calculator, Bit[] ri, Bit[] si, Bit[] ri1) {
         if (ri.length != ri1.length) {
             throw new RuntimeException("incorrect parameter length");
         }
@@ -28,7 +28,7 @@ public class BinCalc {
             Bit res = getAddPosBit(calculator, ri[0], ri[1], si[0], ri1[0], ri1[1]);
             return new Bit[]{res};
         }
-        Bit xi[] = new Bit[ri.length - 1];
+        Bit[] xi = new Bit[ri.length - 1];
 
 
         xi[0] = getAddPosBit(calculator, ri[0], ri[1], si[0], ri1[0], ri1[1]);
