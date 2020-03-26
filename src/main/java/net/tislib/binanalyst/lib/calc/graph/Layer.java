@@ -98,11 +98,12 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     public void show(boolean showValues) {
         System.out.println(name.toUpperCase() + ":");
         for (NamedBit bit : this) {
-            if (bit instanceof OperationalBit) {
-                System.out.println(((OperationalBit) bit).showFull() + (showValues ? " => " + bit.getValue() : ""));
-            } else {
-                System.out.println(bit.toString() + (showValues ? " => " + bit.getValue() : ""));
-            }
+//            if (bit instanceof OperationalBit) {
+//                System.out.println(bit.getName() + ": " +bit.toString() + (showValues ? " => " + bit.getValue() : ""));
+//            } else {
+//                System.out.println(bit.getName() + ": " +bit.toString() + (showValues ? " => " + bit.getValue() : ""));
+//            }
+            System.out.println(bit.getName() + ": " +bit.toString() + (showValues ? " => " + bit.getValue() : ""));
         }
     }
 

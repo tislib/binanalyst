@@ -80,7 +80,14 @@ export class VisualGraphCalculatorComponent {
         }
       });
 
+      const bitNameSet: Set<string> = new Set<string>();
+
       this.data.middle.forEach(bitData => {
+        if (bitNameSet.has(bitData.name)) {
+          return;
+        }
+        bitNameSet.add(bitData.name);
+
         if (bitData.type == 'operational') {
 
           bitData.bits.forEach(otherBit => {

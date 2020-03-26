@@ -5,6 +5,7 @@ import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
+import net.tislib.binanalyst.lib.calc.graph.UsageFinder;
 import net.tislib.binanalyst.lib.calc.graph.decorator.*;
 import net.tislib.binanalyst.lib.calc.graph.operations.MutationOperation;
 import net.tislib.binanalyst.lib.operator.BinMul;
@@ -37,7 +38,30 @@ public class UIApi {
 
         calculatorMap.put("mutation", twoBitMulMut);
 
-        twoBitMulMut.show();
+        {
+            int bitCount2 = 3;
+            AbstractBitOpsGraphCalculatorDecorator calculator = (AbstractBitOpsGraphCalculatorDecorator) SimpleTestCalculators.nBitFunction(bitCount2, BinMul::multiply, "NMU", "TWO_BIT");
+
+            UsageFinder usageFinder = new UsageFinder(calculator.getInput(), calculator.getMiddle(), calculator.getOutput());
+            usageFinder.cleanUnusedMiddleBits();
+
+            calculator.calculate();
+            calculator.show();
+
+            calculatorMap.put("222", calculator);
+        }
+
+        {
+            AbstractBitOpsGraphCalculatorDecorator calculator = (AbstractBitOpsGraphCalculatorDecorator) SimpleTestCalculators.nBitFunction(3, BinMul::multiply, "ANDOR", "TWO_BIT");
+            calculatorMap.put("333", calculator);
+        }
+
+        {
+            AbstractBitOpsGraphCalculatorDecorator calculator = (AbstractBitOpsGraphCalculatorDecorator) SimpleTestCalculators.nBitFunction(3, BinMul::multiply, "ANDOR2", "TWO_BIT");
+            calculatorMap.put("444", calculator);
+        }
+
+//        twoBitMulMut.show();
 
         System.out.println(twoBitMul.getOperationCount());
         System.out.println(twoBitMulMut.getOperationCount());

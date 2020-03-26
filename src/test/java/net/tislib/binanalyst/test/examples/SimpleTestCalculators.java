@@ -62,6 +62,13 @@ public class SimpleTestCalculators {
             case "ANDOR":
                 calculator = new AndOrCalculatorDecorator(calculator, true);
                 break;
+            case "NMU":
+                calculator = new NotMoveUpCalculatorDecorator(calculator);
+                calculator = new AndOrCalculatorDecorator(calculator, true);
+                break;
+            case "ANDOR2":
+                calculator = new AndOrCalculatorDecorator(calculator, false);
+                break;
             case "ANDXOR":
                 calculator = new XorAndCalculatorDecorator(calculator, true);
                 break;
@@ -88,6 +95,10 @@ public class SimpleTestCalculators {
         calculator.setInputBits(aBits, bBits);
 
         Bit[] r = function.calc(calculator, aBits, bBits);
+
+        for (int i = 0; i < r.length; i++) {
+            r[i] = calculator.not(r[i]);
+        }
 
         calculator.setOutputBits(r);
 

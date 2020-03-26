@@ -36,4 +36,8 @@ public interface BitOpsGraphCalculator extends BitOpsCalculator {
     void show(boolean showValues);
 
     void optimize();
+
+    Bit locate(String name);
+
+    void replace(Bit from, Bit to);
 }

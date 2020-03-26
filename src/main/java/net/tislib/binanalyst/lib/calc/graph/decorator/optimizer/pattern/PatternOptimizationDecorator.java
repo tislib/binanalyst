@@ -90,6 +90,7 @@ public class PatternOptimizationDecorator extends OptimizerGraphCalculatorDecora
     }
 
     private boolean internal(Pattern.PatternStructure structure, NamedBit namedBit, Map<String, NamedBit> data) {
+        // @todo auto change structure items order to check other possibilities
         if (!(namedBit instanceof OperationalBit)) {
             return false;
         }
@@ -99,12 +100,6 @@ public class PatternOptimizationDecorator extends OptimizerGraphCalculatorDecora
         }
 
         Set<Integer> processedItems = new HashSet<>();
-
-        if (structure.flag == 'e') {
-            if (structure.items.size() != operationalBit.getBits().length) {
-                return false;
-            }
-        }
 
         for (int i = 0; i < structure.items.size(); i++) {
             boolean processed = false;

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.ConstantBit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
@@ -105,6 +106,31 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     public void optimize() {
         // unused method
+    }
+
+    @Override
+    public Bit locate(String name) {
+        if (name.startsWith("!")) {
+            return not(locate(name.substring(1)));
+        }
+        Bit bit = input.locate(name);
+        if (bit != null) {
+            return bit;
+        }
+
+        bit = middle.locate(name);
+
+        return bit;
+    }
+
+    @Override
+    public void replace(Bit from, Bit to) {
+        middle.replace((OperationalBit) from, (OperationalBit) to);
+        for (OperationalBit oBit : middle) {
+            if (oBit.hasBit((NamedBit) from)) {
+                oBit.replaceBit((NamedBit) from, (NamedBit) to);
+            }
+        }
     }
 
     @Override

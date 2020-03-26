@@ -17,26 +17,35 @@ public class LightServeApi {
         NanoHTTPD nanoHTTPD = new NanoHTTPD(15555) {
             @Override
             public Response serve(IHTTPSession session) {
-                Map<String, BitOpsGraphCalculator> calculatorMap = calculatorMapSupplier.get();
-                Map<String, GraphCalculatorTools.GraphCalculatorSerializedData> data = new HashMap<>();
-
-                calculatorMap.forEach((name, calculator) -> {
-                    GraphCalculatorTools.GraphCalculatorSerializedData serializedData = GraphCalculatorTools.serializeCalculator(calculator, true);
-                    data.put(name, serializedData);
-                });
-
-                ObjectMapper objectMapper = new ObjectMapper();
-                String dataStr = null;
                 try {
-                    dataStr = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(data);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
+                    Map<String, BitOpsGraphCalculator> calculatorMap = calculatorMapSupplier.get();
+                    Map<String, GraphCalculatorTools.GraphCalculatorSerializedData> data = new HashMap<>();
 
-                if (session.getMethod() == Method.GET && session.getUri().equals("/api/data")) {
-                    return newFixedLengthResponse(dataStr);
-                } else {
-                    return super.serve(session);
+                    calculatorMap.forEach((name, calculator) -> {
+                        try {
+                            GraphCalculatorTools.GraphCalculatorSerializedData serializedData = GraphCalculatorTools.serializeCalculator(calculator, true);
+                            data.put(name, serializedData);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String dataStr = null;
+                    try {
+                        dataStr = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(data);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (session.getMethod() == Method.GET && session.getUri().equals("/api/data")) {
+                        return newFixedLengthResponse(dataStr);
+                    } else {
+                        return super.serve(session);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
                 }
             }
         };

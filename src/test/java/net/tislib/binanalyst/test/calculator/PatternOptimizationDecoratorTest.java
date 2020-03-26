@@ -3,80 +3,52 @@ package net.tislib.binanalyst.test.calculator;
 import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.graph.UsageFinder;
-import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.DoubleNotRemovalOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.pattern.PatternOptimizationDecorator;
+import net.tislib.binanalyst.test.lib.CalculationTestRule;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class PatternOptimizationDecoratorTest {
 
-    @Test
-    public void notTest() {
-        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
-        calculator = new PatternOptimizationDecorator(calculator);
-//        calculator = new DoubleNotRemovalOptimizationDecorator(calculator);
+    @Rule
+    public CalculationTestRule calculationTestRule = new CalculationTestRule();
 
+    private BitOpsGraphCalculator calculator;
 
-        calculator = new UnusedBitOptimizerDecorator(calculator);
-
-        VarBit[] bits = VarBit.list("a", 1, ConstantBit.ZERO);
-
-        calculator.setInputBits(bits);
-
-        calculator.setOutputBits(new Bit[]{calculator.not(calculator.not(bits[0]))});
-
-        calculator.optimize();
-
-        Assert.assertEquals(calculator.getOutput().getBitL(0), bits[0]);
+    @Before
+    public void init() {
+        calculationTestRule.setOnUpdate(() -> {
+            calculator = new GraphBitOpsCalculator();
+            calculator = new PatternOptimizationDecorator(calculator);
+            calculator = new UnusedBitOptimizerDecorator(calculator);
+            calculationTestRule.setCalculator(calculator);
+        });
     }
 
     @Test
-    public void andTest() {
-        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
-        calculator = new PatternOptimizationDecorator(calculator);
+    public void basicTests() {
+        // double not
+        calculationTestRule.checkTransformation(item ->
+                        calculator.not(calculator.not(item)),
+                item -> item);
 
+        // a or not a
+        calculationTestRule.checkTransformationResult(item ->
+                        calculator.or(item, calculator.not(item)),
+                item -> "!0");
 
-        calculator = new UnusedBitOptimizerDecorator(calculator);
-//        calculator = new SimpleOptimizationDecorator(calculator);
+        // a or not aa and not a
+        calculationTestRule.checkTransformationResult(item ->
+                        calculator.and(item, calculator.not(item)),
+                item -> "0");
 
-        VarBit[] bits = VarBit.list("a", 1, ConstantBit.ZERO);
-
-        calculator.setInputBits(bits);
-
-        calculator.setOutputBits(new Bit[]{
-                calculator.or(bits[0], calculator.not(bits[0]))
-        });
-
-        calculator.optimize();
-
-        Assert.assertEquals(calculator.getOutput().getBitL(0).toString(), "!0");
-    }
-
-    @Test
-    public void orTest() {
-        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
-        calculator = new PatternOptimizationDecorator(calculator);
-
-
-        calculator = new UnusedBitOptimizerDecorator(calculator);
-//        calculator = new SimpleOptimizationDecorator(calculator);
-
-        VarBit[] bits = VarBit.list("a", 1, ConstantBit.ZERO);
-
-        calculator.setInputBits(bits);
-
-        calculator.setOutputBits(new Bit[]{
-                calculator.and(bits[0], calculator.not(bits[0])),
-                calculator.and(calculator.not(bits[0]), bits[0])
-        });
-
-        calculator.optimize();
-
-        Assert.assertEquals(calculator.getOutput().getBitL(0).toString(), "0");
-        Assert.assertEquals(calculator.getOutput().getBitL(1).toString(), "0");
+        // a or not aa and not a
+        calculationTestRule.checkTransformationResult(item ->
+                        calculator.and(calculator.not(item), item),
+                item -> "01");
     }
 
     @Test

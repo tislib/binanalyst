@@ -104,6 +104,16 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
     }
 
     @Override
+    public Bit locate(String name) {
+        return calculator.locate(name);
+    }
+
+    @Override
+    public void replace(Bit from, Bit to) {
+        calculator.replace(from, to);
+    }
+
+    @Override
     public Bit xor(Bit... bits) {
         return calculator.xor(bits);
     }
@@ -134,5 +144,12 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
             result = decorator.apply(result);
         }
         return result;
+    }
+
+    public BitOpsGraphCalculator getOriginal() {
+        if (calculator instanceof AbstractBitOpsGraphCalculatorDecorator) {
+            return ((AbstractBitOpsGraphCalculatorDecorator) calculator).getOriginal();
+        }
+        return calculator;
     }
 }
