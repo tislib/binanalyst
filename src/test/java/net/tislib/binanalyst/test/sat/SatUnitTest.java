@@ -14,7 +14,6 @@ public class SatUnitTest {
 
     @Test
     public void test1() {
-
         int bitCount = 2;
         int maxR = 1 << (bitCount * 2);
         for (int i = 0; i < maxR; i++) {
@@ -22,7 +21,6 @@ public class SatUnitTest {
             boolean res2 = buildFormula2(bitCount, i);
             Assert.assertEquals(res1, res2);
         }
-
     }
 
     private static boolean buildFormula1(int bitCount, int i) {

@@ -26,7 +26,7 @@ public class SatTest1 {
 
     public static void main(String... args) {
 
-        int bitCount = 2;
+        int bitCount = 3;
         int maxR = 1 << (bitCount * 2);
         for (int i = 0; i < maxR; i++) {
             boolean res1 = buildFormula1(bitCount, i);

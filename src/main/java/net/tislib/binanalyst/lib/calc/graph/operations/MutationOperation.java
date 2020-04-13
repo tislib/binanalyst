@@ -7,6 +7,7 @@ import net.tislib.binanalyst.lib.calc.graph.GraphCalculatorOperation;
 import net.tislib.binanalyst.lib.calc.graph.UsageFinder;
 import net.tislib.binanalyst.lib.calc.graph.decorator.BinderOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
+import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.Logical2OptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.NewOptimizerOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
@@ -27,11 +28,12 @@ public class MutationOperation implements GraphCalculatorOperation {
     public BitOpsGraphCalculator transform(final BitOpsGraphCalculator calculator) {
         BitOpsGraphCalculator newCalculator = new GraphBitOpsCalculator();
         newCalculator = new ConstantOperationRemoverOptimizationDecorator(newCalculator);
-        newCalculator = new SimpleOptimizationDecorator(newCalculator);
+//        newCalculator = new SimpleOptimizationDecorator(newCalculator);
         newCalculator = new UnusedBitOptimizerDecorator(newCalculator);
 //        newCalculator = new NewOptimizerOptimizationDecorator(newCalculator);
-        newCalculator = new PatternOptimizationDecorator(newCalculator);
+//        newCalculator = new PatternOptimizationDecorator(newCalculator);
         newCalculator = new BinderOptimizationDecorator(newCalculator);
+        newCalculator = new Logical2OptimizationDecorator(newCalculator);
 
         newCalculator.setInputBits(calculator.getInput().getBits().toArray(new VarBit[0]));
 
@@ -42,8 +44,8 @@ public class MutationOperation implements GraphCalculatorOperation {
             ));
         }
 
-        UsageFinder usageFinder = new UsageFinder(newCalculator.getInput(), newCalculator.getMiddle(), newCalculator.getOutput());
-        usageFinder.cleanUnusedMiddleBits();
+//        UsageFinder usageFinder = new UsageFinder(newCalculator.getInput(), newCalculator.getMiddle(), newCalculator.getOutput());
+//        usageFinder.cleanUnusedMiddleBits();
 
         return newCalculator;
     }

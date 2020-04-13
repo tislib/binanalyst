@@ -10,6 +10,8 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOp
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.Logical2OptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
+import net.tislib.binanalyst.lib.calc.graph.operations.MutationOperation;
+import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +27,36 @@ public class TSatBuilder {
     public boolean hasSolution(BitOpsGraphCalculator initialCalc, long r) {
         BitOpsGraphCalculator calc = buildSat(initialCalc, r);
 
+        print(calc);
+
+        String[] mutBits = new String[]{"a0R", "b0R", "M0R", "M1R", "M2R"};
+
+        int l = 0;
+
+        for (VarBit bit : calc.getInput().getBits()) {
+            String a = bit.getName();
+            MutationOperation mutationOperation = new MutationOperation((VarBit) calc.locate(a));
+            calc = mutationOperation.transform(calc);
+
+            if (l++ == 50) {
+                break;
+            }
+        }
+
+        print(calc);
+
+//        calc.show();
+
         return hasSolution(calc);
     }
 
     public BitOpsGraphCalculator buildSat(BitOpsGraphCalculator initialCalc, long r) {
         BitOpsGraphCalculator calc = SimpleSatTester.buildSat(initialCalc, r);
 
+        return transform(calc);
+    }
+
+    private BitOpsGraphCalculator transform(BitOpsGraphCalculator calc) {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
         calculator = new Logical2OptimizationDecorator(calculator);
@@ -64,7 +90,6 @@ public class TSatBuilder {
         main.add(inputMap.get(calc.getOutput().getBitL(0).getName()));
 
         calculator.setOutputBits(new Bit[]{calculator.and(main.toArray(new Bit[0]))});
-
         return calculator;
     }
 
@@ -72,5 +97,12 @@ public class TSatBuilder {
         VarBit varBit = new VarBit();
         varBit.setName(namedBit.getName() + "R");
         return varBit;
+    }
+
+    private static void print(BitOpsGraphCalculator calculator) {
+        System.out.println("##############################################");
+
+        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
+        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
     }
 }
