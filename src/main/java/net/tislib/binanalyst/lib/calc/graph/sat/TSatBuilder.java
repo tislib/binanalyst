@@ -6,7 +6,6 @@ import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.calc.graph.decorator.ConstantOperationRemoverOptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.Logical2OptimizationDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.SimpleOptimizationDecorator;
@@ -17,11 +16,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
-
 public class TSatBuilder {
 
-    public static BitOpsGraphCalculator buildSat(BitOpsGraphCalculator initialCalc, long r) {
+    boolean hasSolution(BitOpsGraphCalculator satCalculator) {
+        return SimpleSatTester.hasSolution(satCalculator);
+    }
+
+    public boolean hasSolution(BitOpsGraphCalculator initialCalc, long r) {
+        BitOpsGraphCalculator calc = buildSat(initialCalc, r);
+
+        return hasSolution(calc);
+    }
+
+    public BitOpsGraphCalculator buildSat(BitOpsGraphCalculator initialCalc, long r) {
         BitOpsGraphCalculator calc = SimpleSatTester.buildSat(initialCalc, r);
 
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();

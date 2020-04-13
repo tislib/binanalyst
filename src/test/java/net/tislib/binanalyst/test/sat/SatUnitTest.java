@@ -40,8 +40,8 @@ public class SatUnitTest {
     private static boolean buildFormula2(int bitLength, int num) {
         BitOpsGraphCalculator twoBitMul = SimpleTestCalculators.nBitFunction(bitLength, BinMul::multiply, "NONE", "ANDOR");
 
-        BitOpsGraphCalculator calculator = TSatBuilder.buildSat(twoBitMul, num);
+        TSatBuilder satBuilder = new TSatBuilder();
 
-        return hasSolution(calculator);
+        return satBuilder.hasSolution(twoBitMul, num);
     }
 }
