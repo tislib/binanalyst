@@ -28,6 +28,7 @@ import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools.GraphCalculatorSerializedData;
 import net.tislib.binanalyst.lib.operator.BinMul;
 import net.tislib.binanalyst.test.TestData;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -177,6 +178,7 @@ public class CalculatorTest {
     }
 
     @Test
+    @Ignore
     public void PatternOptimizationDecorator() {
         BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
 
@@ -190,6 +192,7 @@ public class CalculatorTest {
     }
 
     @Test
+    @Ignore
     public void MutationOperation() {
         if (a.longValue() > 100 || b.longValue() > 100) {
             return;

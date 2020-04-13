@@ -6,11 +6,9 @@ import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.pattern.PatternOptimizationDecorator;
 import net.tislib.binanalyst.test.lib.CalculationTestRule;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 
+@Ignore
 public class PatternOptimizationDecoratorTest {
 
     @Rule
