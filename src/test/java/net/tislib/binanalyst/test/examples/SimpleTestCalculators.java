@@ -55,8 +55,8 @@ public class SimpleTestCalculators {
                 calculator = new TwoOpsOptimizationDecorator(calculator);
                 break;
             default:
-                calculator = new Logical2OptimizationDecorator(calculator);
-                calculator = new AndOrCalculatorDecorator(calculator, true);
+//                calculator = new Logical2OptimizationDecorator(calculator);
+//                calculator = new AndOrCalculatorDecorator(calculator, true);
         }
         switch (transformer) {
             case "ANDOR":
@@ -95,10 +95,6 @@ public class SimpleTestCalculators {
         calculator.setInputBits(aBits, bBits);
 
         Bit[] r = function.calc(calculator, aBits, bBits);
-
-        for (int i = 0; i < r.length; i++) {
-            r[i] = calculator.not(r[i]);
-        }
 
         calculator.setOutputBits(r);
 

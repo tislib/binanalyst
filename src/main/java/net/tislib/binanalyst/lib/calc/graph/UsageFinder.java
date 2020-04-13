@@ -33,7 +33,7 @@ public class UsageFinder {
         cleanCount +=  this.input.getBits().stream().filter(item -> !markedBit.contains(item.getName())).count();
         List<VarBit> newInputBits = this.input.getBits().stream().filter(item -> markedBit.contains(item.getName())).collect(Collectors.toList());
         this.input.setBits(newInputBits);
-        System.out.println(cleanCount + " bits cleaned");
+//        System.out.println(cleanCount + " bits cleaned");
     }
 
     private void markBit(NamedBit bit) {

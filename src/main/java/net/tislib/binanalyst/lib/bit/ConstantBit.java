@@ -5,10 +5,10 @@ package net.tislib.binanalyst.lib.bit;
  * Email: me@talehibrahimli.com
  */
 public final class ConstantBit implements Bit, NamedBit {
-    public static final Bit ZERO = new ConstantBit(BinaryValue.FALSE);
-    public static final Bit UNKNOWN = new ConstantBit(BinaryValue.UNKNOWN);
-    public static final Bit UNSET = new ConstantBit(BinaryValue.UNSET);
-    public static final Bit ONE = new ConstantBit(BinaryValue.TRUE);
+    public static final ConstantBit ZERO = new ConstantBit(BinaryValue.FALSE);
+    public static final ConstantBit UNKNOWN = new ConstantBit(BinaryValue.UNKNOWN);
+    public static final ConstantBit UNSET = new ConstantBit(BinaryValue.UNSET);
+    public static final ConstantBit ONE = new ConstantBit(BinaryValue.TRUE);
 
     private final BinaryValue value;
 
