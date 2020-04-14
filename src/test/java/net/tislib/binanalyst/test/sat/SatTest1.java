@@ -26,11 +26,11 @@ public class SatTest1 {
 
     public static void main(String... args) {
 
-        int bitCount = 3;
-        int maxR = 1 << (bitCount * 2);
-        for (int i = 0; i < maxR; i++) {
-            boolean res1 = buildFormula1(bitCount, i);
+        int bitCount = 30;
+        long maxR = 1L << (bitCount * 2);
+        for (long i = 0; i < maxR; i++) {
             boolean res2 = buildFormula2(bitCount, i);
+            boolean res1 = buildFormula1(bitCount, i);
             System.out.println(res1 + " " + res2 + " " + i);
             if (res1 != res2) {
                 System.out.println("diff found");
@@ -39,19 +39,19 @@ public class SatTest1 {
 
     }
 
-    private static boolean buildFormula1(int bitCount, int i) {
+    private static boolean buildFormula1(int bitCount, long i) {
         BitOpsGraphCalculator calc = buildSat(bitCount, i);
 
         return hasSolution(calc);
     }
 
-    private static BitOpsGraphCalculator buildSat(int bitCount, int r) {
+    private static BitOpsGraphCalculator buildSat(int bitCount, long r) {
         BitOpsGraphCalculator twoBitMul = SimpleTestCalculators.nBitFunction(bitCount, BinMul::multiply, "NONE", "ANDOR");
 
         return SimpleSatTester.buildSat(twoBitMul, r);
     }
 
-    private static boolean buildFormula2(int bitLength, int num) {
+    private static boolean buildFormula2(int bitLength, long num) {
         BitOpsGraphCalculator twoBitMul = SimpleTestCalculators.nBitFunction(bitLength, BinMul::multiply, "NONE", "ANDOR");
 
         TSatBuilder satBuilder = new TSatBuilder();

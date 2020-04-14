@@ -23,7 +23,7 @@ public class LightServeApi {
 
                     calculatorMap.forEach((name, calculator) -> {
                         try {
-                            GraphCalculatorTools.GraphCalculatorSerializedData serializedData = GraphCalculatorTools.serializeCalculator(calculator, true);
+                            GraphCalculatorTools.GraphCalculatorSerializedData serializedData = GraphCalculatorTools.serializeCalculator(calculator, false);
                             data.put(name, serializedData);
                         } catch (Exception e) {
                             e.printStackTrace();

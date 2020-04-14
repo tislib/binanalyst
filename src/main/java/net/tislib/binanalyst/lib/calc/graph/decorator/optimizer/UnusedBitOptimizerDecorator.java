@@ -19,6 +19,9 @@ public class UnusedBitOptimizerDecorator extends AbstractBitOpsGraphCalculatorDe
     public void optimize() {
         UsageFinder usageFinder = new UsageFinder(getInput(), getMiddle(), getOutput());
         usageFinder.cleanUnusedMiddleBits();
+
         super.optimize();
+
+//        this.show();
     }
 }
