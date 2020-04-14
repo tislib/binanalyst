@@ -114,6 +114,11 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
     }
 
     @Override
+    public void remove(OperationalBit operationalBit) {
+        calculator.remove(operationalBit);
+    }
+
+    @Override
     public Bit xor(Bit... bits) {
         return calculator.xor(bits);
     }

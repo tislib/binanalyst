@@ -1,14 +1,9 @@
 package net.tislib.binanalyst.lib.calc.graph;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import net.tislib.binanalyst.lib.bit.Bit;
 import net.tislib.binanalyst.lib.bit.NamedBit;
-import net.tislib.binanalyst.lib.bit.OperationalBit;
+
+import java.util.*;
 
 /**
  * Created by Taleh Ibrahimli on 2/8/18.
@@ -18,6 +13,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     private final String name;
     private final List<T> bits;
     private String labelPrefix = "M";
+    private int bitIndex = 0;
 
     public Layer(String name) {
         this.name = name;
@@ -56,7 +52,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
             return foundBit;
         }
         if (bit.getName() == null || name.toCharArray()[0] != bit.getName().toCharArray()[0]) {
-            bit.setName(labelPrefix + (this.bits.size()));
+            bit.setName(labelPrefix + (bitIndex++));
         } else {
             bit.setName(bit.getName().replace("M", labelPrefix));
         }
@@ -108,9 +104,7 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
     }
 
     public void remove(T bit) {
-        if (!bits.remove(bit)) {
-            throw new RuntimeException("cannot remove bit: " + bit.getName());
-        }
+        bits.remove(bit);
     }
 
     public boolean contains(Bit bit2) {

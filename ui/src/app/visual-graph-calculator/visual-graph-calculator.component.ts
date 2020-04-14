@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input} from '@angular/core';
 import {Calculator} from "../model/calculator";
 import {BitData} from "../model/bit-data";
 
@@ -68,7 +68,6 @@ export class VisualGraphCalculatorComponent {
         } else {
           label = bitData.name;
         }
-
         const vertex = this.createBitDataVertex(graph, parent, bitData, label);
         bitVertexMap.set(bitData.name, vertex);
       });
@@ -88,8 +87,12 @@ export class VisualGraphCalculatorComponent {
         }
         bitNameSet.add(bitData.name);
 
-        if (bitData.type == 'operational') {
+        console.log(this, bitVertexMap);
 
+        if (bitData.type == 'operational') {
+          if (bitData.name == 'O') {
+            console.log(bitData);
+          }
           bitData.bits.forEach(otherBit => {
             graph.insertEdge(parent, null, '', bitVertexMap.get(otherBit), bitVertexMap.get(bitData.name));
           });

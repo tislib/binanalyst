@@ -40,4 +40,6 @@ public interface BitOpsGraphCalculator extends BitOpsCalculator {
     Bit locate(String name);
 
     void replace(Bit from, Bit to);
+
+    void remove(OperationalBit operationalBit);
 }

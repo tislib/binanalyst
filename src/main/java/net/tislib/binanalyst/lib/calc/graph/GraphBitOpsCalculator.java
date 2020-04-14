@@ -1,24 +1,15 @@
 package net.tislib.binanalyst.lib.calc.graph;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.tislib.binanalyst.lib.bit.Bit;
-import net.tislib.binanalyst.lib.bit.ConstantBit;
-import net.tislib.binanalyst.lib.bit.NamedBit;
-import net.tislib.binanalyst.lib.bit.OperationalBit;
-import net.tislib.binanalyst.lib.bit.VarBit;
+import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.ConstantCleaner;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Optimizer;
 import net.tislib.binanalyst.lib.calc.graph.optimizer.Transformer;
-import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
+
+import java.util.*;
+
+import static net.tislib.binanalyst.lib.BinValueHelper.printValues;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 /**
  * Created by Taleh Ibrahimli on 2/5/18.
@@ -125,12 +116,20 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
 
     @Override
     public void replace(Bit from, Bit to) {
-        middle.replace((OperationalBit) from, (OperationalBit) to);
+        if (from instanceof OperationalBit && to instanceof OperationalBit) {
+            middle.replace((OperationalBit) from, (OperationalBit) to);
+        }
         for (OperationalBit oBit : middle) {
             if (oBit.hasBit((NamedBit) from)) {
                 oBit.replaceBit((NamedBit) from, (NamedBit) to);
             }
         }
+    }
+
+    @Override
+    public void remove(OperationalBit operationalBit) {
+        middle.remove(operationalBit);
+        middleBitCache.remove(operationalBit.toString());
     }
 
     @Override
