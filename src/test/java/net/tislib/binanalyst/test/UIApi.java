@@ -3,6 +3,7 @@ package net.tislib.binanalyst.test;
 import api.LightServeApi;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.sat.TSatMutation;
+import net.tislib.binanalyst.lib.calc.graph.sat.TSatMutation2;
 import net.tislib.binanalyst.lib.operator.BinMul;
 import net.tislib.binanalyst.test.examples.SimpleTestCalculators;
 
@@ -81,7 +82,7 @@ public class UIApi {
         {
 //            BitOpsGraphCalculator calculator2Bit = SimpleTestCalculators.nBitFunction(3, BinMul::multiply, "NONE", "ANDOR");
             BitOpsGraphCalculator calculator2BitSat = buildSat(
-                    SimpleTestCalculators.nBitFunction(3, BinMul::multiply, "NONE", "ANDOR")
+                    SimpleTestCalculators.nBitFunction(2, BinMul::multiply, "NONE", "ANDOR")
                     , 2);
             BitOpsGraphCalculator calculator = SimpleTestCalculators.nBitFunction(3, BinMul::multiply, "NONE", "NONE");
 
@@ -118,6 +119,37 @@ public class UIApi {
                     "M38R",
                     "M36R",
                     "M40R",
+            }));
+        }
+
+        {
+            BitOpsGraphCalculator calculator = SimpleTestCalculators.nBitFunction(16, BinMul::multiply, "NONE", "NONE");
+
+            TSatMutation2 tSatMutation = new TSatMutation2();
+            calculatorMap.put("TSatBuilder4", tSatMutation.buildWithMutation(calculator, 2, new String[]{
+
+            }));
+        }
+
+        {
+            BitOpsGraphCalculator calculator = SimpleTestCalculators.nBitFunction(16, BinMul::multiply, "NONE", "NONE");
+
+            TSatMutation2 tSatMutation = new TSatMutation2();
+            calculatorMap.put("TSatBuilder4mut", tSatMutation.buildWithMutation(calculator, 2, new String[]{
+                    "a0R",
+                    "a1R",
+                    "b0R",
+                    "b1R",
+
+                    "M0R",
+                    "M1R",
+                    "M2R",
+                    "M3R",
+
+                    "M4R",
+                    "M5R",
+                    "M6R",
+                    "M7R",
             }));
         }
 

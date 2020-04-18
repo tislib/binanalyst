@@ -1,30 +1,21 @@
 package net.tislib.binanalyst.lib.calc.graph.tools;
 
-import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
-import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
-import static net.tislib.binanalyst.lib.util.MapUtil.computeIfAbsent;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import net.tislib.binanalyst.lib.BinValueHelper;
-import net.tislib.binanalyst.lib.analyse.lk.BruteForceLogicKeeper;
 import net.tislib.binanalyst.lib.analyse.lk.NormalFormStringGenerator;
 import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
+
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static net.tislib.binanalyst.lib.BinValueHelper.setVal;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
+import static net.tislib.binanalyst.lib.util.MapUtil.computeIfAbsent;
 
 public class GraphCalculatorTools {
     public static Bit[] findReferencedBits(BitOpsGraphCalculator calculator, int depth, NamedBit... bits) {
@@ -281,6 +272,23 @@ public class GraphCalculatorTools {
         cache.put(bit.getName(), complexity);
 
         return complexity;
+    }
+
+    public static void showComplexity(BitOpsGraphCalculator calculator) {
+        System.out.println("##############################################");
+
+        System.out.println("INPUT SIZE: " + calculator.getInput().getBits().size());
+        System.out.println("MIDDLE SIZE: " + calculator.getMiddle().getBits().size());
+        System.out.println("OUTPUT SIZE: " + calculator.getMiddle().getBits().size());
+        if (calculator.getOutput().getBitL(0) instanceof OperationalBit) {
+            OperationalBit operationalBit = (OperationalBit) calculator.getOutput().getBitL(0);
+            System.out.println("OUTPUT Length: " + operationalBit.getBits().length);
+        }
+        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
+    }
+
+    public static void showFormula(OperationalBit mBit) {
+        System.out.println(mBit.showFull());
     }
 
     public static class GraphCalculatorReferenceFinder {

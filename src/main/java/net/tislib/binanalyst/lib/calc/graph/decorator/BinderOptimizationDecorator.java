@@ -10,7 +10,7 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
 public class BinderOptimizationDecorator extends AbstractBitOpsGraphCalculatorDecorator {
-    private boolean ignoreHalfMiddle = true;
+    private boolean ignoreHalfMiddle = false;
 
     public BinderOptimizationDecorator(BitOpsGraphCalculator calculator) {
         super(calculator);
@@ -49,10 +49,10 @@ public class BinderOptimizationDecorator extends AbstractBitOpsGraphCalculatorDe
                 && ((OperationalBit) bit).getOperation() == operation
                 && (!ignoreHalfMiddle || !((OperationalBit) bit).testBits(a -> !(a instanceof OperationalBit)))
         ) {
-            if (depth > 5) {
-                newBits.addAll(Arrays.asList(((OperationalBit) bit).getBits()));
-                return newBits;
-            }
+//            if (depth > 5) {
+//                newBits.addAll(Arrays.asList(((OperationalBit) bit).getBits()));
+//                return newBits;
+//            }
             for (Bit bit2 : ((OperationalBit) bit).getBits()) {
                 newBits.addAll(explode(bit2, operation, depth + 1));
             }

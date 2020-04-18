@@ -2,12 +2,14 @@ package net.tislib.binanalyst.lib.calc.graph.sat;
 
 import net.tislib.binanalyst.lib.bit.*;
 import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
-import net.tislib.binanalyst.lib.calc.graph.GraphBitOpsCalculator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.DoubleNotRemovalOptimizationDecorator;
-import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 import net.tislib.binanalyst.lib.calc.graph.tools.GraphCalculatorTools;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static net.tislib.binanalyst.lib.calc.graph.logic.CommonLogicalOperations.hasBitDeep;
+import static net.tislib.binanalyst.lib.calc.graph.logic.CommonLogicalOperations.transformToLinearXorSat;
 
 public class TSatBuilder {
 
@@ -92,67 +94,11 @@ public class TSatBuilder {
         return namedBit;
     }
 
-    private boolean hasBitDeep(NamedBit namedBit, Bit mutation) {
-        if (namedBit == mutation) {
-            return true;
-        }
-        if (namedBit instanceof OperationalBit) {
-            boolean found = false;
-            for (NamedBit innerBit : ((OperationalBit) namedBit).getBits()) {
-                found |= hasBitDeep(innerBit, mutation);
-            }
-            return found;
-        } else {
-            return false;
-        }
-    }
-
 
     public BitOpsGraphCalculator buildSat(BitOpsGraphCalculator initialCalc, long r) {
         BitOpsGraphCalculator calc = SimpleSatTester.buildSat(initialCalc, r);
 
-        return transform(calc);
-    }
-
-    private BitOpsGraphCalculator transform(BitOpsGraphCalculator calc) {
-        BitOpsGraphCalculator calculator = new GraphBitOpsCalculator();
-
-        calculator = new UnusedBitOptimizerDecorator(calculator);
-        calculator = new DoubleNotRemovalOptimizationDecorator(calculator);
-
-        // collect inputs
-        Map<String, VarBit> inputMap = new HashMap<>();
-
-        List<Bit> main = new ArrayList<>();
-
-        for (OperationalBit operationalBit : calc.getMiddle()) {
-            inputMap.put(operationalBit.getName(), fromBit(operationalBit));
-            for (NamedBit namedBit : operationalBit.getBits()) {
-                inputMap.put(namedBit.getName(), fromBit(namedBit));
-            }
-        }
-
-        calculator.setInputBits(inputMap.values().toArray(new VarBit[0]));
-
-        for (OperationalBit operationalBit : calc.getMiddle()) {
-            NamedBit[] bits = new NamedBit[operationalBit.getBits().length];
-            for (int i = 0; i < operationalBit.getBits().length; i++) {
-                bits[i] = inputMap.get(operationalBit.getBits()[i].getName());
-            }
-            Bit newOp = calculator.operation(operationalBit.getOperation(), bits);
-
-            main.add(calculator.xor(inputMap.get(operationalBit.getName()), calculator.not(newOp)));
-        }
-        main.add(inputMap.get(calc.getOutput().getBitL(0).getName()));
-
-        calculator.setOutputBits(new Bit[]{calculator.and(main.toArray(new Bit[0]))});
-        return calculator;
-    }
-
-    private static VarBit fromBit(NamedBit namedBit) {
-        VarBit varBit = new VarBit();
-        varBit.setName(namedBit.getName() + "R");
-        return varBit;
+        return transformToLinearXorSat(calc);
     }
 
     private static void print(BitOpsGraphCalculator calculator) {
