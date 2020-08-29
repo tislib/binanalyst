@@ -8,6 +8,7 @@ import net.tislib.binanalyst.lib.calc.graph.BitOpsGraphCalculator;
 import net.tislib.binanalyst.lib.calc.graph.Layer;
 import net.tislib.binanalyst.lib.calc.graph.Operation;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalculator {
@@ -115,6 +116,11 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
 
     @Override
     public void remove(OperationalBit operationalBit) {
+        calculator.remove(operationalBit);
+    }
+
+    @Override
+    public void remove(List<OperationalBit> operationalBit) {
         calculator.remove(operationalBit);
     }
 

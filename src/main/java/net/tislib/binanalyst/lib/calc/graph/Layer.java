@@ -99,12 +99,16 @@ public class Layer<T extends NamedBit> implements Iterable<T> {
 //            } else {
 //                System.out.println(bit.getName() + ": " +bit.toString() + (showValues ? " => " + bit.getValue() : ""));
 //            }
-            System.out.println(bit.getName() + ": " +bit.toString() + (showValues ? " => " + bit.getValue() : ""));
+            System.out.println(bit.getName() + ": " + bit.toString() + (showValues ? " => " + bit.getValue() : ""));
         }
     }
 
     public void remove(T bit) {
         bits.remove(bit);
+    }
+
+    public void removeAll(List<T> list) {
+        bits.removeAll(list);
     }
 
     public boolean contains(Bit bit2) {

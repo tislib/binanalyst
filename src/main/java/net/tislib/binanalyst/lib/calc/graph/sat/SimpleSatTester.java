@@ -48,4 +48,26 @@ public class SimpleSatTester {
 
         return calc;
     }
+
+    public static BitOpsGraphCalculator buildNegSat(BitOpsGraphCalculator calc, long r) {
+        Layer<NamedBit> output = calc.getOutput();
+
+        VarBit[] resultO = VarBit.list("r", calc.getOutput().size(), ZERO);
+        Bit[] newOutput = new Bit[resultO.length];
+        setVal(resultO, r);
+
+        for (int i = 0; i < output.size(); i++) {
+            if (!resultO[output.size() - i - 1].getValue().isTrue()) {
+                newOutput[i] = output.getBitL(i);
+            } else {
+                newOutput[i] = calc.not(output.getBitL(i));
+            }
+        }
+
+        calc.setOutputBits(new Bit[]{calc.or(newOutput)});
+
+        calc.optimize();
+
+        return calc;
+    }
 }

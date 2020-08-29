@@ -133,6 +133,14 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     }
 
     @Override
+    public void remove(List<OperationalBit> list) {
+        middle.removeAll(list);
+        list.forEach(item -> {
+            middleBitCache.remove(item.toString());
+        });
+    }
+
+    @Override
     public Bit xor(Bit... bits) {
         return operation(Operation.XOR, resolveBits(bits));
     }

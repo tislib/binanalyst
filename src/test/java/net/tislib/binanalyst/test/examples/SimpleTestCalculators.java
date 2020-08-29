@@ -78,7 +78,7 @@ public class SimpleTestCalculators {
         }
         calculator = new ConstantOperationRemoverOptimizationDecorator(calculator);
         calculator = new SimpleOptimizationDecorator(calculator);
-        calculator = new UnusedBitOptimizerDecorator(calculator);
+//        calculator = new UnusedBitOptimizerDecorator(calculator);
 
         long a = 0;
         long b = 0;

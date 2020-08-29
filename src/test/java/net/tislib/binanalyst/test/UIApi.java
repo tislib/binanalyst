@@ -122,36 +122,36 @@ public class UIApi {
             }));
         }
 
-        {
-            BitOpsGraphCalculator calculator = SimpleTestCalculators.nBitFunction(16, BinMul::multiply, "NONE", "NONE");
-
-            TSatMutation2 tSatMutation = new TSatMutation2();
-            calculatorMap.put("TSatBuilder4", tSatMutation.buildWithMutation(calculator, 2, new String[]{
-
-            }));
-        }
-
-        {
-            BitOpsGraphCalculator calculator = SimpleTestCalculators.nBitFunction(16, BinMul::multiply, "NONE", "NONE");
-
-            TSatMutation2 tSatMutation = new TSatMutation2();
-            calculatorMap.put("TSatBuilder4mut", tSatMutation.buildWithMutation(calculator, 2, new String[]{
-                    "a0R",
-                    "a1R",
-                    "b0R",
-                    "b1R",
-
-                    "M0R",
-                    "M1R",
-                    "M2R",
-                    "M3R",
-
-                    "M4R",
-                    "M5R",
-                    "M6R",
-                    "M7R",
-            }));
-        }
+//        {
+//            BitOpsGraphCalculator calculator = SimpleTestCalculators.nBitFunction(16, BinMul::multiply, "NONE", "NONE");
+//
+//            TSatMutation2 tSatMutation = new TSatMutation2();
+//            calculatorMap.put("TSatBuilder4", tSatMutation.buildWithMutation(calculator, 2, new String[]{
+//
+//            }));
+//        }
+//
+//        {
+//            BitOpsGraphCalculator calculator = SimpleTestCalculators.nBitFunction(16, BinMul::multiply, "NONE", "NONE");
+//
+//            TSatMutation2 tSatMutation = new TSatMutation2();
+//            calculatorMap.put("TSatBuilder4mut", tSatMutation.buildWithMutation(calculator, 2, new String[]{
+//                    "a0R",
+//                    "a1R",
+//                    "b0R",
+//                    "b1R",
+//
+//                    "M0R",
+//                    "M1R",
+//                    "M2R",
+//                    "M3R",
+//
+//                    "M4R",
+//                    "M5R",
+//                    "M6R",
+//                    "M7R",
+//            }));
+//        }
 
 //        twoBitMulMut.show();
 

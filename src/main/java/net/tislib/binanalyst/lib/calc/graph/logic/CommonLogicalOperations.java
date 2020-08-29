@@ -8,7 +8,9 @@ import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.DoubleNotRemoval
 import net.tislib.binanalyst.lib.calc.graph.decorator.optimizer.UnusedBitOptimizerDecorator;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static net.tislib.binanalyst.lib.bit.ConstantBit.ONE;
 import static net.tislib.binanalyst.lib.bit.ConstantBit.ZERO;
 
 public class CommonLogicalOperations {
@@ -36,13 +38,47 @@ public class CommonLogicalOperations {
         if (namedBit instanceof OperationalBit) {
             OperationalBit operationalBit = (OperationalBit) namedBit;
             List<NamedBit> newBits = convertToCnfParts(operationalBit, calculator);
-            return calculator.and(newBits.toArray(new NamedBit[0]));
+            if (newBits.size() == 1) {
+                return newBits.get(0);
+            }
+
+            // check for collapsing
+            newBits = newBits.stream().map(item -> collapseCnf(calculator, item)).collect(Collectors.toList());
+
+            Bit res = calculator.and(newBits.toArray(new NamedBit[0]));
+            return res;
         } else {
             return namedBit;
         }
     }
 
-    private static List<NamedBit> convertToCnfParts(OperationalBit operationalBit, BitOpsGraphCalculator calculator) {
+    private static NamedBit collapseCnf(BitOpsGraphCalculator calculator, NamedBit item) {
+        List<NamedBit> newBits = new ArrayList<>();
+        if (item instanceof OperationalBit) {
+            OperationalBit operationalBit = (OperationalBit) item;
+            for (NamedBit namedBit : operationalBit.getBits()) {
+                if (newBits.contains(namedBit)) {
+                    continue;
+                }
+
+                if (newBits.contains(calculator.not(namedBit))) {
+                    return ONE;
+                } else {
+                    newBits.add(namedBit);
+                }
+            }
+        } else {
+            return item;
+        }
+        return item;
+//        return (NamedBit) calculator.or(newBits.toArray(new NamedBit[0]));
+    }
+
+    private static List<NamedBit> convertToCnfParts(NamedBit namedBit, BitOpsGraphCalculator calculator) {
+        if (!(namedBit instanceof OperationalBit)) {
+            return Collections.singletonList(namedBit);
+        }
+        OperationalBit operationalBit = (OperationalBit) namedBit;
         List<NamedBit> newBits = new ArrayList<>();
         switch (operationalBit.getOperation()) {
             case AND:
@@ -58,22 +94,24 @@ public class CommonLogicalOperations {
             case OR:
                 for (NamedBit bit : operationalBit.getBits()) {
                     Bit cnf = toCnf(bit, calculator);
+                    List<NamedBit> right;
                     if (cnf instanceof OperationalBit && ((OperationalBit) cnf).getOperation() == Operation.AND) {
-                        List<NamedBit> right = Arrays.asList(((OperationalBit) cnf).getBits());
-                        if (newBits.size() == 0) {
-                            newBits.addAll(right);
-                        } else {
-                            List<NamedBit> left = new ArrayList<>(newBits);
-                            newBits.clear();
+                        right = Arrays.asList(((OperationalBit) cnf).getBits());
+                    } else {
+                        right = Collections.singletonList((NamedBit) cnf);
+                    }
 
-                            for (NamedBit l : left) {
-                                for (NamedBit r : right) {
-                                    newBits.add((NamedBit) calculator.or(l, r));
-                                }
+                    if (newBits.size() == 0) {
+                        newBits.addAll(right);
+                    } else {
+                        List<NamedBit> left = new ArrayList<>(newBits);
+                        newBits.clear();
+
+                        for (NamedBit l : left) {
+                            for (NamedBit r : right) {
+                                newBits.add((NamedBit) calculator.or(l, r));
                             }
                         }
-                    } else {
-                        newBits.add((NamedBit) cnf);
                     }
                 }
                 break;
@@ -91,12 +129,21 @@ public class CommonLogicalOperations {
                         case NOT:
                             return Collections.singletonList(oCnf.getBits()[0]);
                         case AND:
+                            if (oCnf.getBits().length == 1) {
+                                return Collections.singletonList((NamedBit) calculator.not(cnf));
+                            }
                             return convertToCnfParts((OperationalBit) calculator.or(negatives), calculator);
                         case OR:
+                            if (oCnf.getBits().length == 1) {
+                                return Collections.singletonList((NamedBit) calculator.not(cnf));
+                            }
                             return convertToCnfParts((OperationalBit) calculator.and(negatives), calculator);
+                        default:
+                            cnf = toCnf(operationalBit.getBits()[0], calculator);
+                            return Collections.singletonList((NamedBit) calculator.not(cnf));
                     }
                 } else {
-                    return Collections.singletonList((NamedBit) cnf);
+                    return Collections.singletonList(operationalBit);
                 }
             case XOR:
                 NamedBit[] bits = operationalBit.getBits();
@@ -111,7 +158,7 @@ public class CommonLogicalOperations {
                 NamedBit l = (NamedBit) toCnf((NamedBit) calculator.xor(newBits2), calculator);
                 NamedBit r = bits[bits.length - 1];
 
-                return convertToCnfParts((OperationalBit) calculator.or(
+                return convertToCnfParts((NamedBit) calculator.or(
                         calculator.and(l, calculator.not(r)),
                         calculator.and(r, calculator.not(l))
                 ), calculator);

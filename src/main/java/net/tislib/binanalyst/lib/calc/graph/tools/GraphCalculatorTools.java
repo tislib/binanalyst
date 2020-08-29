@@ -283,12 +283,29 @@ public class GraphCalculatorTools {
         if (calculator.getOutput().getBitL(0) instanceof OperationalBit) {
             OperationalBit operationalBit = (OperationalBit) calculator.getOutput().getBitL(0);
             System.out.println("OUTPUT Length: " + operationalBit.getBits().length);
+            int longestSubOp = 0;
+            long avgSubOp = 0;
+            for (NamedBit namedBit : operationalBit.getBits()) {
+                if (namedBit instanceof OperationalBit) {
+                    if (((OperationalBit) namedBit).getBits().length > longestSubOp) {
+                        longestSubOp = ((OperationalBit) namedBit).getBits().length;
+                    }
+                    avgSubOp += ((OperationalBit) namedBit).getBits().length;
+                }
+            }
+            System.out.println("Longest cnf: " + longestSubOp);
+            System.out.println("Avg cnf: " + avgSubOp / operationalBit.getBits().length);
         }
-        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
+//        System.out.println("DEPTH: " + GraphCalculatorTools.getMaxDepth(calculator));
+        System.out.println("##############################################");
     }
 
-    public static void showFormula(OperationalBit mBit) {
-        System.out.println(mBit.showFull());
+    public static void showFormula(NamedBit mBit) {
+        if (mBit instanceof OperationalBit) {
+            System.out.println(((OperationalBit) mBit).showFull());
+        } else {
+            System.out.println(mBit);
+        }
     }
 
     public static class GraphCalculatorReferenceFinder {

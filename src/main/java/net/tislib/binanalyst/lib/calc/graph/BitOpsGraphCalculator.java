@@ -6,6 +6,8 @@ import net.tislib.binanalyst.lib.bit.OperationalBit;
 import net.tislib.binanalyst.lib.bit.VarBit;
 import net.tislib.binanalyst.lib.calc.BitOpsCalculator;
 
+import java.util.List;
+
 public interface BitOpsGraphCalculator extends BitOpsCalculator {
     Layer<VarBit> getInput();
 
@@ -42,4 +44,6 @@ public interface BitOpsGraphCalculator extends BitOpsCalculator {
     void replace(Bit from, Bit to);
 
     void remove(OperationalBit operationalBit);
+
+    void remove(List<OperationalBit> operationalBit);
 }

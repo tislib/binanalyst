@@ -12,7 +12,7 @@ public class Test2 {
 
         TSatMutation2 tSatMutation = new TSatMutation2();
 
-        BitOpsGraphCalculator calc = tSatMutation.buildWithMutation(calculator, 232134, new String[]{
+        BitOpsGraphCalculator calc = tSatMutation.buildWithMutation(calculator, 0, new String[]{
                 "full",
         });
     }

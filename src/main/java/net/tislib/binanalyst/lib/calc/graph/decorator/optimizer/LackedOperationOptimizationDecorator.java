@@ -38,7 +38,7 @@ public class LackedOperationOptimizationDecorator extends OptimizerGraphCalculat
                 if (bits.length == 0) {
                     return oneCount % 2 == 0 ? ZERO : ONE;
                 } else if (bits.length == 1) {
-                    return bits[0];
+                    return oneCount % 2 == 0 ? bits[0] : super.not(bits[0]);
                 } else {
                     return oneCount % 2 == 0 ? original.xor(bits) : not(original.xor(bits));
                 }
