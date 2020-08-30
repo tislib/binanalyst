@@ -46,4 +46,6 @@ public interface BitOpsGraphCalculator extends BitOpsCalculator {
     void remove(OperationalBit operationalBit);
 
     void remove(List<OperationalBit> operationalBit);
+
+    BitOpsGraphCalculator copy();
 }

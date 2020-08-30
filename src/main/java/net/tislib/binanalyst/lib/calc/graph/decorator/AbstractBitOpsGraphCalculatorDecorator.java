@@ -125,6 +125,11 @@ public class AbstractBitOpsGraphCalculatorDecorator implements BitOpsGraphCalcul
     }
 
     @Override
+    public BitOpsGraphCalculator copy() {
+        return calculator.copy();
+    }
+
+    @Override
     public Bit xor(Bit... bits) {
         return calculator.xor(bits);
     }

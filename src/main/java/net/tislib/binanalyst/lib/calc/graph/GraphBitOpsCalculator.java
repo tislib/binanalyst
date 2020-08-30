@@ -141,6 +141,15 @@ public class GraphBitOpsCalculator implements BitOpsGraphCalculator {
     }
 
     @Override
+    public BitOpsGraphCalculator copy() {
+        BitOpsGraphCalculator bitOpsGraphCalculator = new GraphBitOpsCalculator();
+        bitOpsGraphCalculator.setInputBits(input.getBits().toArray(new VarBit[0]));
+        bitOpsGraphCalculator.setOutputBits(output.getBits().toArray(new Bit[0]));
+        bitOpsGraphCalculator.getMiddle().addBits(middle.getBits().toArray(new OperationalBit[0]));
+        return bitOpsGraphCalculator;
+    }
+
+    @Override
     public Bit xor(Bit... bits) {
         return operation(Operation.XOR, resolveBits(bits));
     }
